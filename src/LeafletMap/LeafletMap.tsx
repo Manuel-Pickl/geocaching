@@ -15,52 +15,49 @@ enum MapType {
 }
 
 const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition }) => {
+  const maxZoom: number = 21;
   const minZoom: number = 3;
-  const maxZoom: number = 22;
   const startZoom: number = 13;
   
-  const mapHtmlElement = useRef<Map | null>(null);
-
+  const map = useRef<Map | null>(null);
+  const userMarker = useRef<L.CircleMarker | null>(null);
+  
   useEffect(() => {
     addMap();
-    addUserMarker();
-    
-    return () => { removeMap(); };
-  }, [position, startZoom]);
+  }, []);
+
+  useEffect(() => {
+    updateUserMarker();
+  }, [userPosition]);
 
   return <div id="map"></div>;
 
   function addMap() {
-    const map: L.Map = L.map('map').setView(toLatLngExpression(position), startZoom);
-    getTileLayer(MapType.Hybrid).addTo(map);
-    
-    mapHtmlElement.current = map;
-
-    return map;
-  }
-
-  function addUserMarker() {
-    if (!userPosition || !mapHtmlElement.current) {
-      return;
-    }
-    
-    const userMarker: L.CircleMarker = L.circleMarker(toLatLngExpression(userPosition), {
-      radius: 8,
-      color: 'white',
-      fillColor: 'blue',
-      fillOpacity: 1
-    });
-    userMarker.addTo(mapHtmlElement.current);
-
-    return userMarker;
-  }
-
-  function removeMap() {
-    if (!mapHtmlElement.current) {
+    if (map.current) {
       return;
     }
 
-    return mapHtmlElement.current.remove();
+    map.current = L.map('map').setView(toLatLngExpression(position), startZoom);
+    getTileLayer(MapType.Hybrid).addTo(map.current);
+  }
+
+  function updateUserMarker() {
+    if (!userPosition || !map.current) {
+      return;
+    }
+    
+    if (!userMarker.current) {
+      userMarker.current = L.circleMarker(toLatLngExpression(userPosition), {
+        radius: 8,
+        color: 'white',
+        fillColor: 'blue',
+        fillOpacity: 1,
+      });
+      
+      userMarker.current.addTo(map.current);
+    }
+
+    userMarker.current.setLatLng(toLatLngExpression(userPosition));
   }
 
   function toLatLngExpression(coordinates: [number, number]): LatLngExpression {
