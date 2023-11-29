@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './Map.css'
+import './LeafletMap.css'
 
-interface MapProps {
+interface LeafletMapProps {
   position: [number, number];
+  userPosition: [number, number] | null;
 }
 
 enum MapType {
@@ -13,31 +14,53 @@ enum MapType {
   Satellite
 }
 
-const Leaflet: React.FC<MapProps> = ({ position }) => {
-  const minZoom: number = 8;
+const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition }) => {
+  const minZoom: number = 3;
   const maxZoom: number = 22;
   const startZoom: number = 13;
   
   const mapHtmlElement = useRef<Map | null>(null);
 
   useEffect(() => {
-    const map: L.Map = initializeMap();
-
-    mapHtmlElement.current = map;
-    getTileLayer(MapType.Hybrid).addTo(mapHtmlElement.current);
-
-    return () => {
-      // Cleanup when the component unmounts
-      if (mapHtmlElement.current) {
-        mapHtmlElement.current.remove();
-      }
-    };
+    addMap();
+    addUserMarker();
+    
+    return () => { removeMap(); };
   }, [position, startZoom]);
 
   return <div id="map"></div>;
 
-  function initializeMap() {
-    return L.map('map').setView(toLatLngExpression(position), startZoom);
+  function addMap() {
+    const map: L.Map = L.map('map').setView(toLatLngExpression(position), startZoom);
+    getTileLayer(MapType.Hybrid).addTo(map);
+    
+    mapHtmlElement.current = map;
+
+    return map;
+  }
+
+  function addUserMarker() {
+    if (!userPosition || !mapHtmlElement.current) {
+      return;
+    }
+    
+    const userMarker: L.CircleMarker = L.circleMarker(toLatLngExpression(userPosition), {
+      radius: 8,
+      color: 'white',
+      fillColor: 'blue',
+      fillOpacity: 1
+    });
+    userMarker.addTo(mapHtmlElement.current);
+
+    return userMarker;
+  }
+
+  function removeMap() {
+    if (!mapHtmlElement.current) {
+      return;
+    }
+
+    return mapHtmlElement.current.remove();
   }
 
   function toLatLngExpression(coordinates: [number, number]): LatLngExpression {
@@ -72,4 +95,4 @@ const Leaflet: React.FC<MapProps> = ({ position }) => {
   }
 };
 
-export default Leaflet;
+export default LeafletMap;
