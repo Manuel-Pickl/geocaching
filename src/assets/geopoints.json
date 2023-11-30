@@ -1,0 +1,16 @@
+[
+  {
+    "name": "location 1",
+    "latitude": 49.4169693,
+    "longitude": 11.8820955,
+    "found": false,
+    "time": "Feb. 2022"
+  },
+  {
+    "name": "location 2",
+    "latitude": 49.4069693,
+    "longitude": 11.8820955,
+    "found": false,
+    "time": ""
+  }
+]

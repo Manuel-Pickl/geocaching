@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './LeafletMap.css'
+import markerImage from '../assets/marker.png';
+import { GeoPoint } from '../GeoPoint';
 
 interface LeafletMapProps {
   position: [number, number];
   userPosition: [number, number] | null;
+  geoPoints: GeoPoint[];
 }
 
 enum MapType {
@@ -14,10 +17,11 @@ enum MapType {
   Satellite
 }
 
-const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition }) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoints }) => {
   const maxZoom: number = 21;
   const minZoom: number = 3;
   const startZoom: number = 13;
+  const markerWidth: number = 25;
   
   const map = useRef<Map | null>(null);
   const userMarker = useRef<L.CircleMarker | null>(null);
@@ -29,6 +33,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition }) => {
   useEffect(() => {
     updateUserMarker();
   }, [userPosition]);
+
+  useEffect(() => {
+    updateFoundMarkers();
+  }, [geoPoints]);
 
   return <div id="map"></div>;
 
@@ -48,7 +56,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition }) => {
     
     if (!userMarker.current) {
       userMarker.current = L.circleMarker(toLatLngExpression(userPosition), {
-        radius: 8,
+        radius: markerWidth / 3,
         color: 'white',
         fillColor: 'blue',
         fillOpacity: 1,
@@ -58,6 +66,33 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition }) => {
     }
 
     userMarker.current.setLatLng(toLatLngExpression(userPosition));
+  }
+
+  function updateFoundMarkers() {
+    if (!geoPoints || !map.current) {
+      return;
+    }
+  
+    // Remove existing markers before updating
+    map.current.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        map.current?.removeLayer(layer);
+      }
+    });
+  
+    geoPoints.filter(geoPoint => geoPoint.found).forEach((geoPoint) => {
+      const icon = L.icon({
+        iconUrl: markerImage,
+        iconSize: [markerWidth, null as any]
+      });
+
+      const marker = L.marker(toLatLngExpression([geoPoint.latitude, geoPoint.longitude]), { icon: icon });
+      marker.addTo(map.current);
+
+      marker.bindPopup(`<b>${geoPoint.name}</b><br>${geoPoint.time}`).on('click', () => {
+        marker.openPopup();
+      });
+    });
   }
 
   function toLatLngExpression(coordinates: [number, number]): LatLngExpression {
