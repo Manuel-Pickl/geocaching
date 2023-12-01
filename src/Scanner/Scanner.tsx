@@ -1,0 +1,31 @@
+import './Scanner.css';
+import { QrReader } from 'react-qr-reader';
+
+interface ScannerProps {
+    onScanResult: (message: string) => void;
+}
+
+const Scanner: React.FC<ScannerProps> = ({ onScanResult }) => {
+    const handleScan = (qrData: any) => {
+        if (qrData) {
+            onScanResult(qrData.text);
+        };
+    }
+
+    const back = () => {
+        onScanResult("");
+    }
+
+    return (
+        <>
+            <button className='back' onClick={back}>{"<"}</button>
+            <QrReader
+                delay={300}
+                onResult={handleScan}
+                className='camera'
+            />
+        </>
+    );
+}
+
+export default Scanner;

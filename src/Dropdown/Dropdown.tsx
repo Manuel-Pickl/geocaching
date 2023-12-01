@@ -4,20 +4,17 @@ import { GeoPoint } from '../GeoPoint';
 
 interface DropdownProps {
   geoPoints: GeoPoint[];
-  onSelectChange: (geoPoint: GeoPoint) => void;
+  onSelectionChanged: (geoPointName: string) => void;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ geoPoints, onSelectChange }) => {
+const Dropdown: React.FC<DropdownProps> = ({ geoPoints, onSelectionChanged }) => {
   const [selectedOption, setSelectedOption] = useState<string>('');
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    const geoPoint: GeoPoint | undefined = geoPoints?.find((x) => x.name === selectedValue);
-    
-    if (geoPoint) {
-      onSelectChange(geoPoint);
-      setSelectedOption('');
-    }
+    const geoPointName = event.target.value;
+
+    onSelectionChanged(geoPointName);
+    setSelectedOption('');
   };
 
   return (

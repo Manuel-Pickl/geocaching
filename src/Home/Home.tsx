@@ -6,31 +6,21 @@ import { GeoPoint } from '../GeoPoint';
 import userPosition from '../locationFetcher';
 
 interface HomeProps {
+    geoPoints: GeoPoint[];
+    geoPointFound: (geoPointName: string) => void;
     onScan: () => void;
     onHide: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ onScan, onHide }) => {
+const Home: React.FC<HomeProps> = ({ geoPoints, geoPointFound, onScan, onHide }) => {
     // LGS-Gelände
     const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
-    const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
-
-    const geoPointFound = (geoPoint: GeoPoint) => {
-    geoPoint.found = !geoPoint.found;
-
-    GeoPoint.serializeGeoPoints(geoPoints);
-    setGeoPoints([...geoPoints])
-    };
-
-    useEffect(() => {
-        setGeoPoints(GeoPoint.getGeoPoints());
-    }, []);
     
     return (
         <>
             <Dropdown
                 geoPoints={geoPoints}
-                onSelectChange={geoPointFound}
+                onSelectionChanged={geoPointFound}
             />
             <LeafletMap
                 position={mapCenter}
