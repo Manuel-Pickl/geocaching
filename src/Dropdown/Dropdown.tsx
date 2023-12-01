@@ -16,7 +16,7 @@ const Dropdown: React.FC<DropdownProps> = ({ geoPoints, onSelectChange }) => {
     
     if (geoPoint) {
       onSelectChange(geoPoint);
-      setSelectedOption(''); // Clear the selected option
+      setSelectedOption('');
     }
   };
 
@@ -24,7 +24,7 @@ const Dropdown: React.FC<DropdownProps> = ({ geoPoints, onSelectChange }) => {
     <>
       <select value={selectedOption} onChange={handleSelectChange}>
         <option value="" disabled>
-          Select a GeoPoint
+          debug geopoints
         </option>
         {geoPoints?.map((geoPoint, index) => (
           <option

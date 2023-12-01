@@ -43,8 +43,17 @@ export class GeoPoint {
             }
             return JSON.parse(serializedData);
         } catch (error) {
-            console.error('Error getting from local storage:', error);
+            console.error('Error deserializing data:', error);
             return null;
+        }
+    }
+
+    static serializeGeoPoints(geoPoints: GeoPoint[]): void {
+        try {
+            const serializedData = JSON.stringify(geoPoints);
+            localStorage.setItem(key, serializedData);
+        } catch (error) {
+            console.error('Error serializing data:', error);
         }
     }
 }

@@ -43,7 +43,6 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
     const clickedLatLng = event.latlng;
     console.log(`"latitude": ${clickedLatLng.lat}, "longitude": ${clickedLatLng.lng},`);
   }
-  return <div id="map"></div>;
 
   function addMap() {
     if (map.current) {
@@ -141,6 +140,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
         });
     }
   }
+
+  return <div id="map"></div>;
 };
 
 export default LeafletMap;

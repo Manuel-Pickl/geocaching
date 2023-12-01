@@ -12,12 +12,15 @@ function App() {
 
   const geoPointFound = (geoPoint: GeoPoint) => {
     geoPoint.found = !geoPoint.found;
+
+    GeoPoint.serializeGeoPoints(geoPoints);
     setGeoPoints([...geoPoints])
   };
 
   useEffect(() => {
     setGeoPoints(GeoPoint.getGeoPoints());
   }, []);
+  
   return (
     <>
       <LeafletMap position={mapCenter} userPosition={userPosition()} geoPoints={geoPoints} />
