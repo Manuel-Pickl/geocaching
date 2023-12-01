@@ -1,9 +1,9 @@
 .buttons {
+    z-index: 10;
     position: absolute;
     --margin: 8px;
     inset: auto var(--margin) var(--margin) var(--margin);
     height: 50px;
-
     display: flex;
     gap: var(--margin);
 }

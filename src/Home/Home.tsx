@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Home.css';
 import LeafletMap from '../LeafletMap/LeafletMap';
-import Dropdown from '../Dropdown/Dropdown';
 import { GeoPoint } from '../GeoPoint';
 import userPosition from '../locationFetcher';
 
@@ -18,10 +17,6 @@ const Home: React.FC<HomeProps> = ({ geoPoints, geoPointFound, onScan, onHide })
     
     return (
         <>
-            <Dropdown
-                geoPoints={geoPoints}
-                onSelectionChanged={geoPointFound}
-            />
             <LeafletMap
                 position={mapCenter}
                 userPosition={userPosition()}

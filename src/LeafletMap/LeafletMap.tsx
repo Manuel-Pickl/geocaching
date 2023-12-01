@@ -141,7 +141,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
     }
   }
 
-  return <div id="map"></div>;
+  return (
+    <>
+      <div id="map"></div>
+    </>
+  );
 };
 
 export default LeafletMap;

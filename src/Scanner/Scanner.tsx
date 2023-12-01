@@ -17,14 +17,14 @@ const Scanner: React.FC<ScannerProps> = ({ onScanResult }) => {
     }
 
     return (
-        <>
+        <div className='scanner'>
             <button className='back' onClick={back}>{"<"}</button>
             <QrReader
                 delay={300}
                 onResult={handleScan}
                 className='camera'
             />
-        </>
+        </div>
     );
 }
 

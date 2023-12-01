@@ -2,10 +2,12 @@ import Scanner from './Scanner/Scanner';
 import Home from './Home/Home';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
+import Debugger from './Debugger/Debugger';
 
 function App() {
+  const debug = true;
   const [scanning, setScanning] = useState<boolean>(false);
-
+  
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const geoPointFound = (geoPointName: string) => {
     const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name == geoPointName);
@@ -14,6 +16,7 @@ function App() {
       }
       
       geoPoint.found = !geoPoint.found;
+      geoPoint.time = new Date().toLocaleDateString('de-DE');
 
       GeoPoint.serializeGeoPoints(geoPoints);
       setGeoPoints([...geoPoints])
@@ -38,6 +41,12 @@ function App() {
 
   return (
     <>
+      {debug &&
+        <Debugger
+          geoPoints={geoPoints}
+          geoPointFound={geoPointFound}
+        />
+      }
       {!scanning ? (
         <Home
           geoPoints={geoPoints}
