@@ -1,30 +1,34 @@
-import './App.css';
-import LeafletMap from './LeafletMap/LeafletMap';
-import userPosition from './locationFetcher';
-import { GeoPoint } from './GeoPoint';
-import { useEffect, useState } from 'react';
-import Dropdown from './Dropdown/Dropdown';
+import Scanner from './Scanner/Scanner';
+import Home from './Home/Home';
+import { useState } from 'react';
 
 function App() {
-  // LGS-Gelände
-  const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
-  const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
+  const [scanning, setScanning] = useState<boolean>(false);
 
-  const geoPointFound = (geoPoint: GeoPoint) => {
-    geoPoint.found = !geoPoint.found;
-
-    GeoPoint.serializeGeoPoints(geoPoints);
-    setGeoPoints([...geoPoints])
-  };
-
-  useEffect(() => {
-    setGeoPoints(GeoPoint.getGeoPoints());
-  }, []);
+  const onScan = () => {
+    setScanning(true);
+  }
   
+  const onHide = () => {
+    console.log("hide");
+  }
+
+  const onScanResult = () => {
+    setScanning(false);
+  }
+
   return (
     <>
-      <LeafletMap position={mapCenter} userPosition={userPosition()} geoPoints={geoPoints} />
-      <Dropdown geoPoints={geoPoints} onSelectChange={geoPointFound} />
+      {!scanning ? (
+        <Home
+          onScan={onScan}
+          onHide={onHide}
+        />
+      ) : (
+        <Scanner
+          onScanResult={onScanResult}
+        />
+      )}
     </>
   );
 }

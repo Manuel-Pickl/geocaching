@@ -1,6 +1,7 @@
 import geopointsJson from './assets/geopoints.json';
 
 const key: string = "geopoints";
+
 export class GeoPoint {
     name: string;
     latitude: number;
