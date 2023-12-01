@@ -13,6 +13,7 @@ const Scanner: React.FC<ScannerProps> = ({ onScanResult }) => {
         onScanResult("");
     }
 
+    // https://stackblitz.com/edit/react-ts-wjakwi?file=package.json
     useEffect(() => {
         if (!camera.current) {
             return;

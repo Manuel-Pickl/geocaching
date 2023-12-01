@@ -92,8 +92,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
         iconSize: [markerWidth, markerHeight],
         iconAnchor: [markerWidth / 2, markerHeight],
         html: `
-          <img src="src/assets/marker.png" class="marker-pin" alt="marker"/>
-          <img src="src/assets/landmarks/${geoPoint.name}.jpg" class="marker-image" alt=${geoPoint.name}/>
+          <img src="/marker.png" class="marker-pin" alt="marker pin"/>
+          <img src="/landmarks/${geoPoint.name}.jpg" class="marker-image" alt=${geoPoint.name}/>
         `
       });
 
