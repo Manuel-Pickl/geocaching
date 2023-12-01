@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './LeafletMap.css'
-import markerImage from '../assets/marker.png';
 import { GeoPoint } from '../GeoPoint';
 
 interface LeafletMapProps {
@@ -20,8 +19,9 @@ enum MapType {
 const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoints }) => {
   const maxZoom: number = 21;
   const minZoom: number = 3;
-  const startZoom: number = 13;
-  const markerWidth: number = 25;
+  const startZoom: number = 16;
+  const markerWidth: number = 30;
+  const markerHeight: number = markerWidth / 0.61;
   
   const map = useRef<Map | null>(null);
   const userMarker = useRef<L.CircleMarker | null>(null);
@@ -38,6 +38,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
     updateFoundMarkers();
   }, [geoPoints]);
 
+  // debug function
+  function handleMapClick(event: L.LeafletMouseEvent) {
+    const clickedLatLng = event.latlng;
+    console.log(`"latitude": ${clickedLatLng.lat}, "longitude": ${clickedLatLng.lng},`);
+  }
   return <div id="map"></div>;
 
   function addMap() {
@@ -47,6 +52,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
 
     map.current = L.map('map').setView(toLatLngExpression(position), startZoom);
     getTileLayer(MapType.Hybrid).addTo(map.current);
+
+    map.current.on('click', handleMapClick);
   }
 
   function updateUserMarker() {
@@ -81,17 +88,26 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
     });
   
     geoPoints.filter(geoPoint => geoPoint.found).forEach((geoPoint) => {
-      const icon = L.icon({
-        iconUrl: markerImage,
-        iconSize: [markerWidth, null as any]
+      const customIcon = L.divIcon({
+        className: 'marker',
+        iconSize: [markerWidth, markerHeight],
+        iconAnchor: [markerWidth / 2, markerHeight],
+        html: `
+          <img src="src/assets/marker.png" class="marker-pin" alt="marker"/>
+          <img src="src/assets/landmarks/${geoPoint.name}.jpg" class="marker-image" alt=${geoPoint.name}/>
+        `
       });
 
-      const marker = L.marker(toLatLngExpression([geoPoint.latitude, geoPoint.longitude]), { icon: icon });
+      const marker = L.marker(toLatLngExpression([geoPoint.latitude, geoPoint.longitude]), { icon: customIcon });
       marker.addTo(map.current);
 
-      marker.bindPopup(`<b>${geoPoint.name}</b><br>${geoPoint.time}`).on('click', () => {
-        marker.openPopup();
-      });
+      marker.bindPopup(`
+        <div class="popup">
+          <b>${geoPoint.name}</b>
+          <img src="src/assets/landmarks/${geoPoint.name}.jpg" class="popup-image" alt=${geoPoint.name}/>
+          ✪ ${geoPoint.time}
+        </div>
+      `).on('click', () => { marker.openPopup(); });
     });
   }
 
