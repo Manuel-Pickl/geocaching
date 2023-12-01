@@ -1,29 +1,41 @@
+import { useEffect, useRef } from 'react';
 import './Scanner.css';
-import { QrReader } from 'react-qr-reader';
+import QrScanner from 'qr-scanner';
 
 interface ScannerProps {
     onScanResult: (message: string) => void;
 }
 
 const Scanner: React.FC<ScannerProps> = ({ onScanResult }) => {
-    const handleScan = (qrData: any) => {
-        if (qrData) {
-            onScanResult(qrData.text);
-        };
-    }
+    const camera = useRef(null);
 
     const back = () => {
         onScanResult("");
     }
 
+    useEffect(() => {
+        if (!camera.current) {
+            return;
+        }
+
+        const qrScanner = new QrScanner(
+            camera.current,
+            (result) => { onScanResult(result.data); },
+            { highlightScanRegion: true }
+        );
+
+        qrScanner.start();
+    
+        return () => {
+          qrScanner.stop();
+          qrScanner.destroy();
+        };
+    }, []);
+
     return (
         <div className='scanner'>
             <button className='back' onClick={back}>{"<"}</button>
-            <QrReader
-                onResult={handleScan}
-                className='camera'
-                constraints={{}}
-            />
+            <video className="camera" ref={camera} />
         </div>
     );
 }
