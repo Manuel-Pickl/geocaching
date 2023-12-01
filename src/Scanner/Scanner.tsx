@@ -20,9 +20,9 @@ const Scanner: React.FC<ScannerProps> = ({ onScanResult }) => {
         <div className='scanner'>
             <button className='back' onClick={back}>{"<"}</button>
             <QrReader
-                delay={300}
                 onResult={handleScan}
                 className='camera'
+                constraints={{}}
             />
         </div>
     );

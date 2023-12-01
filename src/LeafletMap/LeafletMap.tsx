@@ -98,8 +98,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
       });
 
       const marker = L.marker(toLatLngExpression([geoPoint.latitude, geoPoint.longitude]), { icon: customIcon });
-      marker.addTo(map.current);
-
+      if (map.current) {
+        marker.addTo(map.current);
+      }
+      
       marker.bindPopup(`
         <div class="popup">
           <b>${geoPoint.name}</b>

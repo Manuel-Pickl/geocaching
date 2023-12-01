@@ -6,13 +6,12 @@ import userPosition from '../locationFetcher';
 
 interface HomeProps {
     geoPoints: GeoPoint[];
-    geoPointFound: (geoPointName: string) => void;
     onScan: () => void;
     onHide: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ geoPoints, geoPointFound, onScan, onHide }) => {
-    // LGS-Gelände
+const Home: React.FC<HomeProps> = ({ geoPoints, onScan, onHide }) => {
+    // LGS-GeländeFC
     const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
     
     return (

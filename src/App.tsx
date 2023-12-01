@@ -50,7 +50,6 @@ function App() {
       {!scanning ? (
         <Home
           geoPoints={geoPoints}
-          geoPointFound={geoPointFound}
           onScan={onScan}
           onHide={onHide}
         />
