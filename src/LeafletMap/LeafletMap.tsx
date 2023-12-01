@@ -105,7 +105,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoin
       marker.bindPopup(`
         <div class="popup">
           <b>${geoPoint.name}</b>
-          <img src="src/assets/landmarks/${geoPoint.name}.jpg" class="popup-image" alt=${geoPoint.name}/>
+          <img src="/landmarks/${geoPoint.name}.jpg" class="popup-image" alt=${geoPoint.name}/>
           ✪ ${geoPoint.time}
         </div>
       `).on('click', () => { marker.openPopup(); });
