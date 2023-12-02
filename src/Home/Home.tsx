@@ -1,17 +1,17 @@
 import React from 'react';
-import './Home.css';
-import LeafletMap from '../LeafletMap/LeafletMap';
+import './Home.scss';
+import LeafletMap from './LeafletMap/LeafletMap';
 import { GeoPoint } from '../GeoPoint';
 import userPosition from '../locationFetcher';
 
 interface HomeProps {
     geoPoints: GeoPoint[];
-    onScan: () => void;
-    onHide: () => void;
+    onOpenSearch: () => void;
+    onOpenHide: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ geoPoints, onScan, onHide }) => {
-    // LGS-GeländeFC
+const Home: React.FC<HomeProps> = ({ geoPoints, onOpenSearch: onScan, onOpenHide: onHide }) => {
+    // LGS-Gelände
     const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
     
     return (

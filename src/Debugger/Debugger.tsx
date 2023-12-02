@@ -1,7 +1,7 @@
 import React from 'react';
 import { GeoPoint } from '../GeoPoint';
-import Dropdown from '../Dropdown/Dropdown';
-import "./Debugger.css";
+import Dropdown from './Dropdown/Dropdown';
+import "./Debugger.scss";
 
 interface DebuggerProps {
   geoPoints: GeoPoint[];

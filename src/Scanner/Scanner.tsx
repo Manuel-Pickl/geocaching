@@ -1,44 +1,51 @@
-import { useEffect, useRef } from 'react';
-import './Scanner.css';
+import React, { useEffect, useRef } from 'react';
+import './Scanner.scss';
 import QrScanner from 'qr-scanner';
 
 interface ScannerProps {
-    onScanResult: (message: string) => void;
+    scannerOpen: boolean;
+    onCloseSearch: () => void;
+    onScanResult: (geoPoint: string) => void;
 }
 
-const Scanner: React.FC<ScannerProps> = ({ onScanResult }) => {
-    const camera = useRef(null);
+const Scanner: React.FC<ScannerProps> = ({ scannerOpen, onCloseSearch, onScanResult }) => {
+    const videoElement = useRef(null);
 
-    const back = () => {
-        onScanResult("");
-    }
-
-    // https://stackblitz.com/edit/react-ts-wjakwi?file=package.json
     useEffect(() => {
-        if (!camera.current) {
+        if (!videoElement.current) {
             return;
         }
 
         const qrScanner = new QrScanner(
-            camera.current,
-            (result) => { onScanResult(result.data); },
+            videoElement.current,
+            (result) => {
+                onScanResult(result.data);
+            },
             { highlightScanRegion: true }
         );
 
         qrScanner.start();
-    
+
         return () => {
-          qrScanner.stop();
-          qrScanner.destroy();
+            qrScanner.stop();
+            qrScanner.destroy();
         };
-    }, []);
+    }, [onScanResult]);
 
     return (
-        <div className='scanner'>
-            <button className='back' onClick={back}>{"<"}</button>
-            <video className="camera" ref={camera} />
-        </div>
+        <>
+            {scannerOpen &&
+                <div className='scanner'>
+                    <div className="backdrop" />
+                    <div className="scanModal">
+                        QR Code des Standorts
+                        <button className="close" onClick={onCloseSearch}>x</button>
+                        <video className="camera" ref={videoElement} />
+                    </div>
+                </div>
+            }
+        </>
     );
-}
+};
 
 export default Scanner;

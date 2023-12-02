@@ -3,19 +3,20 @@ import Home from './Home/Home';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
 import Debugger from './Debugger/Debugger';
+import "./App.scss";
 
 function App() {
   const debug = true;
-  const [scanning, setScanning] = useState<boolean>(false);
-  
+  const [scannerOpen, setScannerOpen] = useState<boolean>(false);
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
+  
   const geoPointFound = (geoPointName: string) => {
     const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name == geoPointName);
       if (!geoPoint) {
           return;
       }
       
-      geoPoint.found = !geoPoint.found;
+      geoPoint.found = true;
       geoPoint.time = new Date().toLocaleDateString('de-DE');
 
       GeoPoint.serializeGeoPoints(geoPoints);
@@ -26,39 +27,43 @@ function App() {
       setGeoPoints(GeoPoint.getGeoPoints());
   }, []);
   
-  const onScan = () => {
-    setScanning(true);
+  const onOpenSearch = () => {
+    setScannerOpen(true);
   }
-  
-  const onHide = () => {
+
+  const onCloseSearch = () => {
+    setScannerOpen(false);
+  }
+
+  const onScanResult = (geoPoint: string) => {
+    setScannerOpen(false);
+    geoPointFound(geoPoint);
+    alert(`Standort ${geoPoint} gefunden!`);
+  }
+
+  const onOpenHide = () => {
     console.log("hide");
   }
 
-  const onScanResult = (message: string) => {
-    setScanning(false);
-    geoPointFound(message);
-  }
-
   return (
-    <>
+    <div className="app">
       {debug &&
         <Debugger
           geoPoints={geoPoints}
           geoPointFound={geoPointFound}
         />
       }
-      {!scanning ? (
-        <Home
-          geoPoints={geoPoints}
-          onScan={onScan}
-          onHide={onHide}
-        />
-      ) : (
-        <Scanner
-          onScanResult={onScanResult}
-        />
-      )}
-    </>
+      <Home
+        geoPoints={geoPoints}
+        onOpenSearch={onOpenSearch}
+        onOpenHide={onOpenHide}
+      />
+      <Scanner
+        scannerOpen={scannerOpen}
+        onCloseSearch={onCloseSearch}
+        onScanResult={onScanResult}
+      />
+    </div>
   );
 }
 

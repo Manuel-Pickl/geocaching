@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GeoPoint } from '../GeoPoint';
+import { GeoPoint } from '../../GeoPoint';
 
 interface DropdownProps {
   geoPoints: GeoPoint[];

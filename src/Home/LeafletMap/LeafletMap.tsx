@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './LeafletMap.css'
-import { GeoPoint } from '../GeoPoint';
+import './LeafletMap.scss'
+import { GeoPoint } from '../../GeoPoint';
 
 interface LeafletMapProps {
   position: [number, number];
