@@ -19,7 +19,8 @@ function App() {
   const [settingsIsOpen, setSettingsIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-      setGeoPoints(geoPointManager.getGeoPoints());
+    askForPermissions();
+    setGeoPoints(geoPointManager.getGeoPoints());
   }, []);
 
   const onScanResult = (geoPointName: string) => {
@@ -33,6 +34,15 @@ function App() {
 
     setGeoPoints([...geoPoints])
   }
+
+  const askForPermissions = () => {
+    if ('geolocation' in navigator) {
+      (navigator as Navigator).geolocation.getCurrentPosition(() => {});
+    }
+    else if ('permissions' in navigator) {
+      (navigator as Navigator).permissions.query({ name: 'geolocation' });
+    }
+  };
 
   return (
     <div className="app">
