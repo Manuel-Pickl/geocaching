@@ -11,6 +11,7 @@ interface HomeProps {
     debug: boolean;
     direction: [number, number];
     radius: number;
+    voiceIsOn: boolean;
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -19,7 +20,8 @@ const Home: React.FC<HomeProps> = ({
     onSettingsOpen,
     debug,
     direction,
-    radius
+    radius,
+    voiceIsOn
 }) => {
     // LGS-Gelände
     const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
@@ -31,6 +33,7 @@ const Home: React.FC<HomeProps> = ({
                 userPosition={getUserPosition(debug, direction)}
                 geoPoints={geoPoints}
                 radius={radius}
+                voiceIsOn={voiceIsOn}
             />
             <div className="buttons">
                 <button className="search" onClick={onSearchOpen}>

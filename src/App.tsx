@@ -51,6 +51,7 @@ function App() {
         debug={debug}
         direction={direction}
         radius={radius}
+        voiceIsOn={voiceIsOn}
       />
 
       <Search

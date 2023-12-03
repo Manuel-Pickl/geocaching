@@ -11,6 +11,7 @@ interface LeafletMapProps {
   userPosition: [number, number] | null;
   geoPoints: GeoPoint[];
   radius: number;
+  voiceIsOn: boolean;
 }
 
 enum MapType {
@@ -23,7 +24,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   position,
   userPosition,
   geoPoints,
-  radius
+  radius,
+  voiceIsOn
 }) => {
   const maxZoom: number = 21;
   const minZoom: number = 3;
@@ -70,7 +72,9 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           
           console.log(message);
           // notification
-          read(message);
+          if (voiceIsOn) {
+            read(message);
+          }
         }
       } else {
         nearGeoPoints.delete(geoPoint.name);
