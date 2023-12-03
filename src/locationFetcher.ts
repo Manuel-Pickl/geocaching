@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 const updateInterval: number = 200;
 const debugMovement: number = 0.0001;
-var latitude: number = 49.4169693;
-var longitude: number = 11.8820955;
+var latitude: number = 49.43147747164053;
+var longitude: number = 11.86779512899449;
 
 const userPosition = (debug: boolean, direction: [number, number]) => {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);

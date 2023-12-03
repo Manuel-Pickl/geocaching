@@ -1,7 +1,7 @@
 import React from 'react';
 import './Home.scss';
 import LeafletMap from './LeafletMap/LeafletMap';
-import userPosition from '../locationFetcher';
+import getUserPosition from '../locationFetcher';
 import { GeoPoint } from '../GeoPoint';
 
 interface HomeProps {
@@ -10,6 +10,7 @@ interface HomeProps {
     onSettingsOpen: () => void;
     debug: boolean;
     direction: [number, number];
+    radius: number;
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -17,7 +18,8 @@ const Home: React.FC<HomeProps> = ({
     onSearchOpen,
     onSettingsOpen,
     debug,
-    direction
+    direction,
+    radius
 }) => {
     // LGS-Gelände
     const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
@@ -26,8 +28,9 @@ const Home: React.FC<HomeProps> = ({
         <div className="home">
             <LeafletMap
                 position={mapCenter}
-                userPosition={userPosition(debug, direction)}
+                userPosition={getUserPosition(debug, direction)}
                 geoPoints={geoPoints}
+                radius={radius}
             />
             <div className="buttons">
                 <button className="search" onClick={onSearchOpen}>

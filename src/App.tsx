@@ -9,7 +9,7 @@ import Settings from './Settings/Settings';
 
 function App() {
   const geoPointManager = new GeoPointManager();
-  
+
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [radius, setRadius] = useState<number>(50);
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
@@ -51,6 +51,7 @@ function App() {
         onSettingsOpen={() => setSettingsIsOpen(true)}
         debug={debug}
         direction={direction}
+        radius={radius}
       />
 
       <Search

@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './LeafletMap.scss'
 import { GeoPoint } from '../../GeoPoint';
+import * as geolib from 'geolib';
 
 interface LeafletMapProps {
   position: [number, number];
   userPosition: [number, number] | null;
   geoPoints: GeoPoint[];
+  radius: number;
 }
 
 enum MapType {
@@ -16,27 +18,62 @@ enum MapType {
   Satellite
 }
 
-const LeafletMap: React.FC<LeafletMapProps> = ({ position, userPosition, geoPoints }) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({
+  position,
+  userPosition,
+  geoPoints,
+  radius
+}) => {
   const maxZoom: number = 21;
   const minZoom: number = 3;
   const startZoom: number = 16;
   const markerWidth: number = 30;
   const markerHeight: number = markerWidth / 0.61;
-  
+
+  const [nearGeoPoints, _setNearGeoPoints] = useState<Set<String>>(new Set());;
   const map = useRef<Map | null>(null);
   const userMarker = useRef<L.CircleMarker | null>(null);
-  
+
   useEffect(() => {
     addMap();
   }, []);
 
   useEffect(() => {
+    checkForNearGeoPoints();
     updateUserMarker();
   }, [userPosition]);
 
   useEffect(() => {
     updateFoundMarkers();
   }, [geoPoints]);
+
+  const checkForNearGeoPoints = () => {
+    if (!userPosition) {
+      return;
+    }
+
+    geoPoints
+      .filter(geoPoint => !geoPoint.found)
+      .forEach(geoPoint => {
+      const distanceToGeoPoint = geolib.getDistance(
+        { latitude: userPosition[0], longitude: userPosition[1] },
+        { latitude: geoPoint.latitude, longitude: geoPoint.longitude }
+      );
+
+      const geoPointIsNear: boolean = distanceToGeoPoint <= radius;     
+      const firstTimeNearGeoPoint: boolean = !nearGeoPoints.has(geoPoint.name);
+      if (geoPointIsNear) {
+        if (firstTimeNearGeoPoint) {
+          nearGeoPoints.add(geoPoint.name);
+          console.log(geoPoint.name);
+          // voice
+          // notification
+        }
+      } else {
+        nearGeoPoints.delete(geoPoint.name);
+      }
+    });
+  }
 
   // debug function
   function handleMapClick(event: L.LeafletMouseEvent) {
