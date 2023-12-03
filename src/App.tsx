@@ -1,48 +1,33 @@
-import Scanner from './Scanner/Scanner';
+import Search from './Scanner/Search';
 import Home from './Home/Home';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
 import Debugger from './Debugger/Debugger';
 import "./App.scss";
+import { GeoPointManager } from './GeoPointManager';
 
 function App() {
   const debug = true;
-  const [scannerOpen, setScannerOpen] = useState<boolean>(false);
-  const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
-  
-  const geoPointFound = (geoPointName: string) => {
-    const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name == geoPointName);
-      if (!geoPoint) {
-          return;
-      }
-      
-      geoPoint.found = true;
-      geoPoint.time = new Date().toLocaleDateString('de-DE');
+  const geoPointManager = new GeoPointManager();
 
-      GeoPoint.serializeGeoPoints(geoPoints);
-      setGeoPoints([...geoPoints])
-    };
+  const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
+  const [searchIsOpen, setSearchIsOpen] = useState<boolean>(false);
+  // const [hideIsOpen, setHideIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-      setGeoPoints(GeoPoint.getGeoPoints());
+      setGeoPoints(geoPointManager.getGeoPoints());
   }, []);
   
-  const onOpenSearch = () => {
-    setScannerOpen(true);
-  }
+  const onScanResult = (geoPointName: string) => {
+    setSearchIsOpen(false);
+    
+    const result: boolean = geoPointManager.onGeoPointFound(geoPointName, geoPoints);
+    const message: string = result
+      ? `Herzlichen Glückwunsch! Du hast den Standort ${geoPointName} gefunden.`
+      : `Schade! Den Standort ${geoPointName} hast du bereits gefunden.`;
+    console.log(message);
 
-  const onCloseSearch = () => {
-    setScannerOpen(false);
-  }
-
-  const onScanResult = (geoPoint: string) => {
-    setScannerOpen(false);
-    geoPointFound(geoPoint);
-    alert(`Standort ${geoPoint} gefunden!`);
-  }
-
-  const onOpenHide = () => {
-    console.log("hide");
+    setGeoPoints([...geoPoints])
   }
 
   return (
@@ -50,17 +35,17 @@ function App() {
       {debug &&
         <Debugger
           geoPoints={geoPoints}
-          geoPointFound={geoPointFound}
+          // setGeoPoints={setGeoPoints}
         />
       }
       <Home
         geoPoints={geoPoints}
-        onOpenSearch={onOpenSearch}
-        onOpenHide={onOpenHide}
+        onSearchOpen={() => setSearchIsOpen(false)}
+        // onHideOpen={() => setHideIsOpen(true)}
       />
-      <Scanner
-        scannerOpen={scannerOpen}
-        onCloseSearch={onCloseSearch}
+      <Search
+        isOpen={searchIsOpen}
+        onClose={() => setSearchIsOpen(false)}
         onScanResult={onScanResult}
       />
     </div>

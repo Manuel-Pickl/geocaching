@@ -1,7 +1,3 @@
-import geopointsJson from './assets/geopoints.json';
-
-const key: string = "geopoints";
-
 export class GeoPoint {
     name: string;
     latitude: number;
@@ -15,46 +11,5 @@ export class GeoPoint {
         this.longitude = longitude;
         this.found = found;
         this.time = time;
-    }
-
-    static getGeoPoints(): GeoPoint[] {
-        var geopoints: GeoPoint[] | null = this.deserializeGeoPoints();
-        
-        if (!geopoints) {
-            console.log("initialize geopoints");
-            geopoints = geopointsJson.map((geopointJson: GeoPoint) => {
-                return new GeoPoint(
-                    geopointJson.name,
-                    geopointJson.latitude,
-                    geopointJson.longitude,
-                    geopointJson.found,
-                    geopointJson.time
-                );
-            });
-        }
-
-        return geopoints;
-    }
-
-    static deserializeGeoPoints(): GeoPoint[] | null {
-        try {
-            const serializedData = localStorage.getItem(key);
-            if (serializedData === null) {
-                return null;
-            }
-            return JSON.parse(serializedData);
-        } catch (error) {
-            console.error('Error deserializing data:', error);
-            return null;
-        }
-    }
-
-    static serializeGeoPoints(geoPoints: GeoPoint[]): void {
-        try {
-            const serializedData = JSON.stringify(geoPoints);
-            localStorage.setItem(key, serializedData);
-        } catch (error) {
-            console.error('Error serializing data:', error);
-        }
     }
 }
