@@ -1,0 +1,94 @@
+import React from 'react';
+import Switch from 'react-switch';
+import './Settings.scss';
+import { GeoPoint } from '../GeoPoint';
+
+interface SettingsProps {
+    isOpen: boolean;
+    onClose: () => void;
+    geoPoints: GeoPoint[];
+    radius: number; setRadius: (value: number) => void;
+    voiceIsOn: boolean; setVoiceIsOn: (value: boolean) => void;
+    debug: boolean; setDebug: (value: boolean) => void;
+}
+
+const Settings: React.FC<SettingsProps> = ({
+    isOpen,
+    onClose,
+    geoPoints,
+    radius, setRadius,
+    voiceIsOn, setVoiceIsOn,
+    debug, setDebug}) => {
+
+    const handleRadiusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        var newRadius: number = parseFloat(event.target.value);
+        if (isNaN(newRadius) || newRadius < 1) {
+            newRadius = 1;
+        }
+        
+        if (newRadius > 999) {
+            newRadius = 999
+        }
+
+        setRadius(newRadius);
+    };
+
+    return (
+        <>
+            {isOpen &&
+                <div className='tab'>
+                    <div className="backdrop" />
+                    <div className="modal">
+                        <button className="close" onClick={onClose}>x</button>
+                        Settings
+                        <ul>
+                            Gefunden
+                            {geoPoints
+                                .filter(geoPoint => geoPoint.found)
+                                .map((geoPoint, index) => (
+                                <li key={index}>
+                                    ✓ {geoPoint.name}: {geoPoint.time}
+                                </li>
+                            ))}
+                        </ul>
+                        <ul>
+                            Noch Entdecken
+                            {geoPoints
+                                .filter(geoPoint => !geoPoint.found)
+                                .map((geoPoint, index) => (
+                                <li key={index}>
+                                    ✗ {geoPoint.name}: {geoPoint.time}
+                                </li>
+                            ))}
+                        </ul>
+                        <div>
+                            <label htmlFor="radius">Radius:</label>
+                            <input
+                                value={radius}
+                                onChange={handleRadiusChange}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='voiceIsOn'>Voice:</label>
+                            <Switch
+                                id='voiceIsOn'
+                                checked={voiceIsOn}
+                                onChange={() => setVoiceIsOn(!voiceIsOn)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='debug'>Debug:</label>
+                            <Switch
+                                id='debug'
+                                checked={debug}
+                                onChange={() => setDebug(!debug)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            }
+        </>
+    );
+};
+
+export default Settings;

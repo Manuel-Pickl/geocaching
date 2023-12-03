@@ -1,24 +1,32 @@
-.buttons {
-    z-index: 10;
-    position: absolute;
-    --margin: 8px;
-    inset: auto var(--margin) var(--margin) var(--margin);
-    height: 50px;
-    display: flex;
-    gap: var(--margin);
-}
+.home {
+    --height: 50px;
 
-.buttons > * {
-    background-color: white;
-    color: black;
-    border: solid 1px lightgrey;
-    border-radius: 16px;
-}
+    .buttons {
+        z-index: 10;
+        position: absolute;
+        --margin: 8px;
+        inset: auto var(--margin) var(--margin) var(--margin);
+        height: var(--height);
+        display: flex;
+        gap: var(--margin);
+    }
 
-.scan {
-    flex-basis: 80%;
-}
+    .buttons > * {
+        background-color: white;
+        color: black;
+        border: solid 1px lightgrey;
+        border-radius: var(--height);
+    }
 
-.hide {
-    flex-basis: 20%;
+    .search {
+        flex-basis: calc(100% - 2* var(--height));
+    }
+
+    .hide {
+        flex-basis: var(--height);
+    }
+
+    .settings {
+        flex-basis: var(--height);
+    }
 }

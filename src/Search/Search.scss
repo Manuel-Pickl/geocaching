@@ -1,39 +1,5 @@
-.scanner {
-    z-index: 100;
-    position: absolute;
-    inset: 0;
-
-    .backdrop {
-        position: absolute;
-        inset: 0;
-        background-color: black;
-        opacity: 0.25;
-    }
-    
-    .scanModal {
-        position: absolute;
-        width: 90%;
-        aspect-ratio: 1;
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        padding: 30px;
-        
-        border-radius: 32px;
-        overflow: hidden;
-        background-color: white;
-        text-align: center;
-        border: solid 3px lightgrey;
-        
-        .close {
-            z-index: 102;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: black;
-            font-size: 24px;
-        }
-        
+.tab {
+    .modal {
         .camera {
             z-index: 101;
             width: 100%;

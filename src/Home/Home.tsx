@@ -7,31 +7,32 @@ import { GeoPoint } from '../GeoPoint';
 interface HomeProps {
     geoPoints: GeoPoint[];
     onSearchOpen: () => void;
-    // onHideOpen: () => void;
+    onSettingsOpen: () => void;
 }
 
-const Home: React.FC<HomeProps> = ({ geoPoints, onSearchOpen }) => {
+const Home: React.FC<HomeProps> = ({ geoPoints, onSearchOpen, onSettingsOpen }) => {
     // LGS-Gelände
     const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
     
     return (
-        <>
+        <div className="home">
             <LeafletMap
                 position={mapCenter}
                 userPosition={userPosition()}
                 geoPoints={geoPoints}
             />
             <div className="buttons">
-                <button className="scan" onClick={onSearchOpen}>
+                <button className="search" onClick={onSearchOpen}>
                     Scannen
                 </button>
-                <button className="create"
-                    // onClick={onHide}
-                >
-                    Verstecken
+                <button className="hide" onClick={onSettingsOpen}>
+                    H
+                </button>
+                <button className="settings" onClick={onSettingsOpen}>
+                    S
                 </button>
             </div>
-        </>
+        </div>
     );
 };
 

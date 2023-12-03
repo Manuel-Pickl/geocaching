@@ -1,28 +1,30 @@
 import React from 'react';
 import "./Debugger.scss";
 import { GeoPoint } from '../GeoPoint';
+import { GeoPointManager } from '../GeoPointManager';
+import CheckboxList from './CheckboxList/CheckboxList';
 
 interface DebuggerProps {
   geoPoints: GeoPoint[];
-//   setGeoPoints: (geoPoints: GeoPoint[]) => void;
+  setGeoPoints: (geoPoints: GeoPoint[]) => void;
+  geoPointManager: GeoPointManager;
 }
 
-const Debugger: React.FC<DebuggerProps> = ({ geoPoints }) => {
-    const showLocalStorage = () => {
-        const alertMessage = geoPoints.map(point => {
-            return `${point.found ? '✓' : '✗'} ${point.name}: ${point.time}`;
-        }).join('\n');
-        
-        alert(alertMessage);
-    };
+const Debugger: React.FC<DebuggerProps> = ({
+    geoPoints,
+    setGeoPoints,
+    geoPointManager }) => {
+    const clearLocalStorage = () => {
+        localStorage.clear();
+        setGeoPoints(geoPointManager.getGeoPoints());
+    }
     
     return (
         <div className='debugger'>
-            {/* <Dropdown
-                geoPoints={geoPoints}
-                onSelectionChanged={geoPointFound}
-            /> */}
-            <button onClick={showLocalStorage}>LocalStorage</button>
+            <button onClick={clearLocalStorage}>clear localstorage</button>
+            <CheckboxList
+                geoPointManager={geoPointManager}
+                geoPoints={geoPoints} setGeoPoints={setGeoPoints}/>
         </div>
     );
 };

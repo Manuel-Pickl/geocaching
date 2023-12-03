@@ -35,9 +35,9 @@ const Search: React.FC<SearchProps> = ({ isOpen, onClose, onScanResult }) => {
     return (
         <>
             {isOpen &&
-                <div className='scanner'>
+                <div className='tab'>
                     <div className="backdrop" />
-                    <div className="scanModal">
+                    <div className="modal">
                         QR Code des Standorts
                         <button className="close" onClick={onClose}>x</button>
                         <video className="camera" ref={videoElement} />

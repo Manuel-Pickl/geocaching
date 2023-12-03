@@ -14,7 +14,6 @@ export class GeoPointManager {
     }
 
     private getDefaultGeoPoints() {
-        console.log("initialize geopoints");
         const defaultGeoPoints: GeoPoint[] = geopointsJson.map((geopointJson: GeoPoint) => {
             return new GeoPoint(
                 geopointJson.name,
