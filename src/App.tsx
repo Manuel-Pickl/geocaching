@@ -1,4 +1,4 @@
-import Search from './Scanner/Search';
+import Search from './Search/Search';
 import Home from './Home/Home';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
@@ -7,7 +7,7 @@ import "./App.scss";
 import { GeoPointManager } from './GeoPointManager';
 
 function App() {
-  const debug = true;
+  const debug = false;
   const geoPointManager = new GeoPointManager();
 
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
