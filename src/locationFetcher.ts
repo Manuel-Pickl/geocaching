@@ -1,43 +1,36 @@
 import { useEffect, useState } from 'react';
 
+const updateInterval: number = 200;
+const debugMovement: number = 0.0001;
 var latitude: number = 49.4169693;
 var longitude: number = 11.8820955;
-const debug: boolean = true;
-const updateInterval: number = 200;
 
-const userPosition = () => {
+const userPosition = (debug: boolean, direction: [number, number]) => {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-
+  
   useEffect(() => {
     const getUserPosition = () => {
       if (debug) {
-        setUserPosition([latitude, longitude]);
-        latitude += 0.0001;
-      }
-      else {
+        latitude += direction[0] * debugMovement;
+        longitude += direction[1] * debugMovement;
+      } else {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const { latitude, longitude } = position.coords;
-            setUserPosition([latitude, longitude]);
-          },
-          (error) => {
-            console.error('Error getting user location:', error);
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
           }
         );
       }
+
+      setUserPosition([latitude, longitude]);
     };
 
-    // Initial location retrieval
-    getUserPosition();
-
-    // Set up interval to update user's location
     const intervalId = setInterval(() => {
       getUserPosition();
     }, updateInterval);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
-  }, [updateInterval]);
+  }, [debug, direction, updateInterval]);
 
   return userPosition;
 };

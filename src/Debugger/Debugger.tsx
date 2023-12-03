@@ -3,17 +3,20 @@ import "./Debugger.scss";
 import { GeoPoint } from '../GeoPoint';
 import { GeoPointManager } from '../GeoPointManager';
 import CheckboxList from './CheckboxList/CheckboxList';
+import Joystick from './Joystick/Joystick';
 
 interface DebuggerProps {
-  geoPoints: GeoPoint[];
-  setGeoPoints: (geoPoints: GeoPoint[]) => void;
-  geoPointManager: GeoPointManager;
+    geoPointManager: GeoPointManager;
+    geoPoints: GeoPoint[];
+    setGeoPoints: (geoPoints: GeoPoint[]) => void;
+    setDirection: (direction: [number, number]) => void;
 }
 
 const Debugger: React.FC<DebuggerProps> = ({
-    geoPoints,
-    setGeoPoints,
-    geoPointManager }) => {
+    geoPointManager,
+    geoPoints, setGeoPoints,
+    setDirection
+    }) => {
     const clearLocalStorage = () => {
         localStorage.clear();
         setGeoPoints(geoPointManager.getGeoPoints());
@@ -21,6 +24,7 @@ const Debugger: React.FC<DebuggerProps> = ({
     
     return (
         <div className='debugger'>
+            <Joystick setDirection={setDirection} />
             <button onClick={clearLocalStorage}>clear localstorage</button>
             <CheckboxList
                 geoPointManager={geoPointManager}

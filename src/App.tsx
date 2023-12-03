@@ -10,10 +10,11 @@ import Settings from './Settings/Settings';
 function App() {
   const geoPointManager = new GeoPointManager();
   
-  const [debug, setDebug] = useState<boolean>(true);
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [radius, setRadius] = useState<number>(50);
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
+  const [debug, setDebug] = useState<boolean>(true);
+  const [direction, setDirection] = useState<[number, number]>([0,0]);
 
   const [searchIsOpen, setSearchIsOpen] = useState<boolean>(false);
   const [settingsIsOpen, setSettingsIsOpen] = useState<boolean>(false);
@@ -38,8 +39,9 @@ function App() {
     <div className="app">
       {debug &&
         <Debugger
-          geoPoints={geoPoints} setGeoPoints={setGeoPoints}
           geoPointManager={geoPointManager}
+          geoPoints={geoPoints} setGeoPoints={setGeoPoints}
+          setDirection={setDirection}
         />
       }
 
@@ -47,6 +49,8 @@ function App() {
         geoPoints={geoPoints}
         onSearchOpen={() => setSearchIsOpen(true)}
         onSettingsOpen={() => setSettingsIsOpen(true)}
+        debug={debug}
+        direction={direction}
       />
 
       <Search
