@@ -3,7 +3,6 @@ import Home from './Home/Home';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
 import Debugger from './Debugger/Debugger';
-import "./App.scss";
 import { GeoPointManager } from './GeoPointManager';
 import Settings from './Settings/Settings';
 

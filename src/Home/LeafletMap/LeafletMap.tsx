@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import './LeafletMap.scss'
 import { GeoPoint } from '../../GeoPoint';
 import * as geolib from 'geolib';
+import { read } from '../SpeechSynthesis';
 
 interface LeafletMapProps {
   position: [number, number];
@@ -65,9 +66,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       if (geoPointIsNear) {
         if (firstTimeNearGeoPoint) {
           nearGeoPoints.add(geoPoint.name);
-          console.log(geoPoint.name);
-          // voice
+          const message: string = `Du bist in der Nähe vom Punkt: ${geoPoint.name}!`;
+          
+          console.log(message);
           // notification
+          read(message);
         }
       } else {
         nearGeoPoints.delete(geoPoint.name);
