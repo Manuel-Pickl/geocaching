@@ -40,7 +40,7 @@ function App() {
       }
       <Home
         geoPoints={geoPoints}
-        onSearchOpen={() => setSearchIsOpen(false)}
+        onSearchOpen={() => setSearchIsOpen(true)}
         // onHideOpen={() => setHideIsOpen(true)}
       />
       <Search
