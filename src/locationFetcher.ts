@@ -14,7 +14,11 @@ const getUserPosition = (debug = false, direction = [0, 0]) => {
     const updatePosition = () => {
       if (debug) {
         setUserPosition(prevPosition => {
-          if (!prevPosition) return null;
+          if (!prevPosition) {
+            const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
+            prevPosition = mapCenter;
+          }
+
           const [prevLatitude, prevLongitude] = prevPosition;
           return [prevLatitude + direction[0] * debugMovement, prevLongitude + direction[1] * debugMovement];
         });

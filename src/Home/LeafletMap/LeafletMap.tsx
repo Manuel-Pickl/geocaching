@@ -93,7 +93,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       return;
     }
 
-    map.current = L.map('map').setView(toLatLngExpression(position), startZoom);
+    map.current = L.map('map', {zoomControl: false}).setView(toLatLngExpression(position), startZoom);
     getTileLayer(MapType.Hybrid).addTo(map.current);
 
     map.current.on('click', handleMapClick);

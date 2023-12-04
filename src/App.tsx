@@ -26,15 +26,12 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("radius", radius.toString());
-    console.log({radius});
   }, [radius]);
   useEffect(() => {
     localStorage.setItem("voiceIsOn", voiceIsOn.toString());
-    console.log({voiceIsOn});
   }, [voiceIsOn]);
   useEffect(() => {
     localStorage.setItem("debug", debug.toString());
-    console.log({debug});
   }, [debug]);
 
   const onScanResult = (geoPointName: string) => {
