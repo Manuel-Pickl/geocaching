@@ -7,21 +7,35 @@ import { GeoPointManager } from './GeoPointManager';
 import Settings from './Settings/Settings';
 
 function App() {
-  const geoPointManager = new GeoPointManager();
-
-  const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [radius, setRadius] = useState<number>(50);
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
   const [debug, setDebug] = useState<boolean>(true);
+
+  const geoPointManager = new GeoPointManager();
+  const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [direction, setDirection] = useState<[number, number]>([0,0]);
 
   const [searchIsOpen, setSearchIsOpen] = useState<boolean>(false);
   const [settingsIsOpen, setSettingsIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    loadPersistentSettings();
     askForPermissions();
     setGeoPoints(geoPointManager.getGeoPoints());
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("radius", radius.toString());
+    console.log({radius});
+  }, [radius]);
+  useEffect(() => {
+    localStorage.setItem("voiceIsOn", voiceIsOn.toString());
+    console.log({voiceIsOn});
+  }, [voiceIsOn]);
+  useEffect(() => {
+    localStorage.setItem("debug", debug.toString());
+    console.log({debug});
+  }, [debug]);
 
   const onScanResult = (geoPointName: string) => {
     setSearchIsOpen(false);
@@ -35,6 +49,12 @@ function App() {
     setGeoPoints([...geoPoints])
   }
 
+  const loadPersistentSettings = () => {
+      setRadius(JSON.parse(localStorage.getItem("radius") ?? `${radius}`));
+      setVoiceIsOn(JSON.parse(localStorage.getItem("voiceIsOn") ?? `${voiceIsOn}`));
+      setDebug(JSON.parse(localStorage.getItem("debug") ?? `${debug}`));
+  }
+
   const askForPermissions = () => {
     if ('geolocation' in navigator) {
       (navigator as Navigator).geolocation.getCurrentPosition(() => {});
@@ -42,7 +62,7 @@ function App() {
     else if ('permissions' in navigator) {
       (navigator as Navigator).permissions.query({ name: 'geolocation' });
     }
-  };
+  }
 
   return (
     <div className="app">
