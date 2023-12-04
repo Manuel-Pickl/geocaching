@@ -20,19 +20,6 @@ const Settings: React.FC<SettingsProps> = ({
     voiceIsOn, setVoiceIsOn,
     debug, setDebug}) => {
 
-    const handleRadiusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        var newRadius: number = parseFloat(event.target.value);
-        if (isNaN(newRadius) || newRadius < 1) {
-            newRadius = 1;
-        }
-        
-        if (newRadius > 999) {
-            newRadius = 999
-        }
-
-        setRadius(newRadius);
-    };
-
     return (
         <>
             {isOpen &&
@@ -64,9 +51,14 @@ const Settings: React.FC<SettingsProps> = ({
                         <div>
                             <label htmlFor="radius">Radius:</label>
                             <input
+                                type="range"
+                                min={10}
+                                max={100}
+                                step={1}
                                 value={radius}
-                                onChange={handleRadiusChange}
+                                onChange={(event) => setRadius(parseFloat(event.target.value))}
                             />
+                            <span>{radius}</span>
                         </div>
                         <div>
                             <label htmlFor='voiceIsOn'>Voice:</label>
