@@ -1,12 +1,17 @@
 import Search from './Search/Search';
-import Home from './Home/Home';
+import Footer from './Footer/Footer';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
 import Debugger from './Debugger/Debugger';
 import { GeoPointManager } from './GeoPointManager';
 import Settings from './Settings/Settings';
+import LeafletMap from './LeafletMap/LeafletMap';
+import getUserPosition from './locationFetcher';
 
 function App() {
+  // LGS-Gelände
+  const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
+
   const [radius, setRadius] = useState<number>(50);
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
   const [debug, setDebug] = useState<boolean>(true);
@@ -15,7 +20,7 @@ function App() {
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [direction, setDirection] = useState<[number, number]>([0,0]);
 
-  const [searchIsOpen, setSearchIsOpen] = useState<boolean>(false);
+  const [scanIsOpen, setScanIsOpen] = useState<boolean>(false);
   const [settingsIsOpen, setSettingsIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,8 +39,13 @@ function App() {
     localStorage.setItem("debug", debug.toString());
   }, [debug]);
 
+  const onExploreClick = () => {
+    setScanIsOpen(false);
+    setSettingsIsOpen(false);
+  }
+
   const onScanResult = (geoPointName: string) => {
-    setSearchIsOpen(false);
+    setScanIsOpen(false);
     
     const result: boolean = geoPointManager.onGeoPointFound(geoPointName, geoPoints);
     const message: string = result
@@ -71,19 +81,24 @@ function App() {
         />
       }
 
-      <Home
-        geoPoints={geoPoints}
-        onSearchOpen={() => setSearchIsOpen(true)}
-        onSettingsOpen={() => setSettingsIsOpen(true)}
-        debug={debug}
-        direction={direction}
-        radius={radius}
-        voiceIsOn={voiceIsOn}
+      <LeafletMap
+          position={mapCenter}
+          userPosition={getUserPosition(debug, direction)}
+          geoPoints={geoPoints}
+          radius={radius}
+          voiceIsOn={voiceIsOn}
+      />
+      
+      <Footer
+        onExploreClick={onExploreClick}
+        onScanClick={() => setScanIsOpen(true)}
+        onContributeClick={() => {}}
+        onSettingsClick={() => setSettingsIsOpen(true)}
       />
 
       <Search
-        isOpen={searchIsOpen}
-        onClose={() => setSearchIsOpen(false)}
+        isOpen={scanIsOpen}
+        onClose={() => setScanIsOpen(false)}
         onScanResult={onScanResult}
       />
 

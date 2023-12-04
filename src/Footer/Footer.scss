@@ -1,0 +1,43 @@
+.footer {
+    z-index: 10;
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 72px;
+    background-color: var(--background-color);
+    display: flex;
+    align-items: center;
+    
+    button {
+        border: none;
+        background-color: transparent;
+        color: hsl(0, 0%, 90%);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        flex: 1;
+        align-items: center;
+        gap: 4px;
+        
+        div {
+            font-size: 24px;
+            width: 75%;
+            padding: 6px;
+        }
+
+        span {
+            font-size: 16px;
+        }
+    }
+
+    .active {
+        div {
+            background: var(--color-prime);
+            color: white;
+            border-radius: 16px;
+        }
+
+        span {
+            color: var(--color-prime);
+        }
+    }
+}

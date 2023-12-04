@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './LeafletMap.scss'
-import { GeoPoint } from '../../GeoPoint';
+import { GeoPoint } from '../GeoPoint';
 import * as geolib from 'geolib';
 import { read } from '../SpeechSynthesis';
 
@@ -72,6 +72,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           
           console.log(message);
           // notification
+          
           if (voiceIsOn) {
             read(message);
           }
@@ -84,8 +85,9 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
   // debug function
   function handleMapClick(event: L.LeafletMouseEvent) {
+    // @ts-ignore
     const clickedLatLng = event.latlng;
-    console.log(`"latitude": ${clickedLatLng.lat}, "longitude": ${clickedLatLng.lng},`);
+    // console.log(`"latitude": ${clickedLatLng.lat}, "longitude": ${clickedLatLng.lng},`);
   }
 
   function addMap() {
