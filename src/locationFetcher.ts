@@ -1,38 +1,38 @@
 import { useEffect, useState } from 'react';
 
-const updateInterval: number = 200;
-const debugMovement: number = 0.0001;
-var latitude: number = 49.43147747164053;
-var longitude: number = 11.86779512899449;
+const debugMovement = 0.0001;
 
-const userPosition = (debug: boolean, direction: [number, number]) => {
+const getUserPosition = (debug = false, direction = [0, 0]) => {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-  
-  useEffect(() => {
-    const getUserPosition = () => {
-      if (debug) {
-        latitude += direction[0] * debugMovement;
-        longitude += direction[1] * debugMovement;
-      } else {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            latitude = position.coords.latitude;
-            longitude = position.coords.longitude;
-          }
-        );
-      }
 
+  useEffect(() => {
+    const successCallback = (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords;
       setUserPosition([latitude, longitude]);
     };
 
-    const intervalId = setInterval(() => {
-      getUserPosition();
-    }, updateInterval);
+    const updatePosition = () => {
+      if (debug) {
+        setUserPosition(prevPosition => {
+          if (!prevPosition) return null;
+          const [prevLatitude, prevLongitude] = prevPosition;
+          return [prevLatitude + direction[0] * debugMovement, prevLongitude + direction[1] * debugMovement];
+        });
+      } else {
+        navigator.geolocation.getCurrentPosition(successCallback);
+      }
+    };
 
+    if (!debug) {
+      const watchId = navigator.geolocation.watchPosition(successCallback);
+      return () => navigator.geolocation.clearWatch(watchId);
+    }
+
+    const intervalId = setInterval(updatePosition, 200);
     return () => clearInterval(intervalId);
-  }, [debug, direction, updateInterval]);
+  }, [debug, direction]);
 
   return userPosition;
 };
 
-export default userPosition;
+export default getUserPosition;
