@@ -1,14 +1,15 @@
-// Joystick.jsx
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Direction } from '../../Direction';
 import "./Joystick.scss";
 
 interface JoystickProps {
-  setDirection: (value: [number, number]) => void;
+  userPosition: [number, number] | null;
+  setUserPosition: (value: [number, number]) => void;
 }
 
-const Joystick: React.FC<JoystickProps> = ({ setDirection }) => {
+const Joystick: React.FC<JoystickProps> = ({ userPosition, setUserPosition }) =>
+{
+  const debugMovement = 0.0001;
   const directions = [
     Direction.Up,
     Direction.Left,
@@ -16,25 +17,36 @@ const Joystick: React.FC<JoystickProps> = ({ setDirection }) => {
     Direction.Down
   ];
 
+  useEffect(() => {
+    if (userPosition) {
+      return;
+    }
+
+    setUserPosition([49.43306480206603, 11.86834899582829]);
+  }, []);
+
   const handleArrowClick = (direction: Direction) => {
+    if (!userPosition) {
+      return;
+    }
+
+    const currentLatitude = userPosition[0];
+    const currentLongitude = userPosition[1];
+
     switch (direction) {
       case Direction.Up:
-        setDirection([1, 0]);
-        break;
-      case Direction.Right:
-        setDirection([0, 1]);
+        setUserPosition([currentLatitude + debugMovement, currentLongitude]);
         break;
       case Direction.Down:
-        setDirection([-1, 0]);
+        setUserPosition([currentLatitude - debugMovement, currentLongitude]);
         break;
+      case Direction.Right:
+          setUserPosition([currentLatitude, currentLongitude + debugMovement]);
+          break;
       case Direction.Left:
-        setDirection([0, -1]);
+        setUserPosition([currentLatitude, currentLongitude - debugMovement]);
         break;
     }
-  };
-
-  const handleArrowRelease = () => {
-    setDirection([0, 0]);
   };
 
   return (
@@ -43,10 +55,7 @@ const Joystick: React.FC<JoystickProps> = ({ setDirection }) => {
         <div
           key={index}
           className={`button ${Direction[direction]}`}
-          onMouseDown={() => handleArrowClick(direction)}
-          onMouseUp={handleArrowRelease}
-          onTouchStart={() => handleArrowClick(direction)}
-          onTouchEnd={handleArrowRelease}
+          onClick={() => handleArrowClick(direction)}
         >
           {getArrowSymbol(direction)}
         </div>

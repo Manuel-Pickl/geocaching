@@ -6,7 +6,6 @@ import Debugger from './Debugger/Debugger';
 import { GeoPointManager } from './GeoPointManager';
 import Settings from './Settings/Settings';
 import LeafletMap from './LeafletMap/LeafletMap';
-import getUserPosition from './locationFetcher';
 
 function App() {
   // LGS-Gelände
@@ -14,12 +13,11 @@ function App() {
 
   const [radius, setRadius] = useState<number>(50);
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
-  const [debug, setDebug] = useState<boolean>(true);
+  const [debug, setDebug] = useState<boolean>(false);
 
   const geoPointManager = new GeoPointManager();
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
-  const [direction, setDirection] = useState<[number, number]>([0,0]);
-  const [permissionLocationAllowed, setPermissionLocationAllowed] = useState<boolean>(false);
+  const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
 
   const [scanIsOpen, setScanIsOpen] = useState<boolean>(false);
   const [settingsIsOpen, setSettingsIsOpen] = useState<boolean>(false);
@@ -27,7 +25,6 @@ function App() {
   useEffect(() => {
     loadPersistentSettings();
     askForPermissions();
-    setGeoPoints(geoPointManager.getGeoPoints());
   }, []);
 
   useEffect(() => {
@@ -39,6 +36,12 @@ function App() {
   useEffect(() => {
     localStorage.setItem("debug", debug.toString());
   }, [debug]);
+
+  const initializeLocationWatcher = () => {
+    navigator.geolocation.watchPosition((position: GeolocationPosition) => {
+      setUserPosition([position.coords.latitude, position.coords.longitude])
+    });
+  };
 
   const onExploreClick = () => {
     setScanIsOpen(false);
@@ -58,19 +61,20 @@ function App() {
   }
 
   const loadPersistentSettings = () => {
-      setRadius(JSON.parse(localStorage.getItem("radius") ?? `${radius}`));
-      setVoiceIsOn(JSON.parse(localStorage.getItem("voiceIsOn") ?? `${voiceIsOn}`));
-      setDebug(JSON.parse(localStorage.getItem("debug") ?? `${debug}`));
+    setGeoPoints(geoPointManager.getGeoPoints());
+    setRadius(JSON.parse(localStorage.getItem("radius") ?? `${radius}`));
+    setVoiceIsOn(JSON.parse(localStorage.getItem("voiceIsOn") ?? `${voiceIsOn}`));
+    setDebug(JSON.parse(localStorage.getItem("debug") ?? `${debug}`));
   }
 
   const askForPermissions = () => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        () => { setPermissionLocationAllowed(true); },
-        () => { setPermissionLocationAllowed(false); }
-      );
-    }
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      () => { initializeLocationWatcher(); },
+      () => { console.log("gps denied") },
+    );
   }
+}
 
   return (
     <div className="app">
@@ -78,13 +82,13 @@ function App() {
         <Debugger
           geoPointManager={geoPointManager}
           geoPoints={geoPoints} setGeoPoints={setGeoPoints}
-          setDirection={setDirection}
+          userPosition={userPosition} setUserPosition={setUserPosition}
         />
       }
 
       <LeafletMap
           position={mapCenter}
-          userPosition={getUserPosition(debug, direction, permissionLocationAllowed)}
+          userPosition={userPosition}
           geoPoints={geoPoints}
           radius={radius}
           voiceIsOn={voiceIsOn}

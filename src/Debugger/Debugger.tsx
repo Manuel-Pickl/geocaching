@@ -9,14 +9,12 @@ interface DebuggerProps {
     geoPointManager: GeoPointManager;
     geoPoints: GeoPoint[];
     setGeoPoints: (geoPoints: GeoPoint[]) => void;
-    setDirection: (direction: [number, number]) => void;
+    userPosition: [number, number] | null;
+    setUserPosition: (value: [number, number]) => void;
 }
 
-const Debugger: React.FC<DebuggerProps> = ({
-    geoPointManager,
-    geoPoints, setGeoPoints,
-    setDirection
-    }) => {
+const Debugger: React.FC<DebuggerProps> = ({geoPointManager, geoPoints, setGeoPoints, userPosition, setUserPosition }) =>
+{
     const clearLocalStorage = () => {
         localStorage.clear();
         setGeoPoints(geoPointManager.getGeoPoints());
@@ -24,11 +22,19 @@ const Debugger: React.FC<DebuggerProps> = ({
     
     return (
         <div className='debugger'>
-            <Joystick setDirection={setDirection} />
-            <button onClick={clearLocalStorage}>clear localstorage</button>
+            <Joystick
+                userPosition={userPosition}
+                setUserPosition={setUserPosition}
+            />
+            <button
+                onClick={clearLocalStorage}
+            >
+                clear localstorage
+            </button>
             <CheckboxList
                 geoPointManager={geoPointManager}
-                geoPoints={geoPoints} setGeoPoints={setGeoPoints}/>
+                geoPoints={geoPoints} setGeoPoints={setGeoPoints}
+            />
         </div>
     );
 };
