@@ -1,5 +1,5 @@
 .footer {
-    --height: 70px;
+    --height: 68px;
 
     z-index: 10;
     position: absolute;
@@ -13,7 +13,7 @@
     button {
         border: none;
         background-color: transparent;
-        color: hsl(0, 0%, 80%);
+        color: var(--color-font);
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -22,13 +22,13 @@
         gap: 4px;
         
         div {
-            font-size: 18px;
+            font-size: 20px;
             width: 80%;
-            padding: 3px;
+            padding: 4px;
         }
 
         span {
-            font-size: 12px;
+            font-size: 13px;
         }
     }
 

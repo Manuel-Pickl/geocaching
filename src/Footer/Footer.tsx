@@ -1,7 +1,7 @@
 import React from 'react';
 import './Footer.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCirclePlus, faGear, faLocationDot, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faCirclePlus, faGear, faLocationDot, faQrcode } from '@fortawesome/free-solid-svg-icons';
 
 interface FooterProps {
     onExploreClick: () => void;
@@ -39,7 +39,7 @@ const Footer: React.FC<FooterProps> = ({ onExploreClick, onScanClick, onContribu
             </button>
             <button>
                 <div>
-                    <FontAwesomeIcon icon={faGear}/>
+                    <FontAwesomeIcon icon={faBookOpen}/>
                 </div>
                 <span>Verweise</span>
             </button>

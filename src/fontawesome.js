@@ -3,12 +3,14 @@ import {
     faLocationDot,
     faQrcode,
     faCirclePlus,
-    faGear
+    faGear,
+    faBookOpen
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
     faLocationDot,
     faQrcode,
     faCirclePlus,
-    faGear
+    faGear,
+    faBookOpen
 );
