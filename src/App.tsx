@@ -1,4 +1,4 @@
-import Search from './Search/Search';
+import Scan from './Scan/Scan';
 import Footer from './Footer/Footer';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
@@ -6,6 +6,7 @@ import Debugger from './Debugger/Debugger';
 import { GeoPointManager } from './GeoPointManager';
 import Settings from './Settings/Settings';
 import LeafletMap from './LeafletMap/LeafletMap';
+import { Tab } from './Tabs';
 
 function App() {
   // LGS-Gelände
@@ -18,9 +19,7 @@ function App() {
   const geoPointManager = new GeoPointManager();
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-
-  const [scanIsOpen, setScanIsOpen] = useState<boolean>(false);
-  const [settingsIsOpen, setSettingsIsOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
 
   useEffect(() => {
     loadPersistentSettings();
@@ -43,13 +42,8 @@ function App() {
     });
   };
 
-  const onExploreClick = () => {
-    setScanIsOpen(false);
-    setSettingsIsOpen(false);
-  }
-
   const onScanResult = (geoPointName: string) => {
-    setScanIsOpen(false);
+    setActiveTab(Tab.Explore);
     
     const result: boolean = geoPointManager.onGeoPointFound(geoPointName, geoPoints);
     const message: string = result
@@ -95,21 +89,16 @@ function App() {
       />
       
       <Footer
-        onExploreClick={onExploreClick}
-        onScanClick={() => setScanIsOpen(true)}
-        onContributeClick={() => {}}
-        onSettingsClick={() => setSettingsIsOpen(true)}
+        setActiveTab={setActiveTab}
       />
 
-      <Search
-        isOpen={scanIsOpen}
-        onClose={() => setScanIsOpen(false)}
+      <Scan
+        isOpen={activeTab == Tab.Scan}
         onScanResult={onScanResult}
       />
 
       <Settings 
-        isOpen={settingsIsOpen}
-        onClose={() => setSettingsIsOpen(false)}
+        isOpen={activeTab == Tab.Settings}
         geoPoints={geoPoints}
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}

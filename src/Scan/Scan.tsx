@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import './Search.scss';
+import './Scan.scss';
 import QrScanner from 'qr-scanner';
 
-interface SearchProps {
+interface ScanProps {
     isOpen: boolean;
-    onClose: () => void;
     onScanResult: (geoPoint: string) => void;
 }
 
-const Search: React.FC<SearchProps> = ({ isOpen, onClose, onScanResult }) => {
+const Scan: React.FC<ScanProps> = ({ isOpen, onScanResult }) => {
     const videoElement = useRef(null);
 
     useEffect(() => {
@@ -36,16 +35,12 @@ const Search: React.FC<SearchProps> = ({ isOpen, onClose, onScanResult }) => {
         <>
             {isOpen &&
                 <div className='tab'>
-                    <div className="backdrop" />
-                    <div className="modal">
-                        QR Code des Standorts
-                        <button className="close" onClick={onClose}>x</button>
-                        <video className="camera" ref={videoElement} />
-                    </div>
+                    QR Code des Standorts
+                    <video className="camera" ref={videoElement} />
                 </div>
             }
         </>
     );
 };
 
-export default Search;
+export default Scan;
