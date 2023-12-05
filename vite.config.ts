@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'Geocaching',
         short_name: 'Geocaching',
         description: 'Erkunden Sie Ihre Umwelt!',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        theme_color: 'hsl(0, 0%, 10%)',
+        background_color: 'hsl(0, 0%, 10%)',
         display: 'standalone',
         start_url: '.',
         icons: [

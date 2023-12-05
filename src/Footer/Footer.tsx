@@ -37,6 +37,12 @@ const Footer: React.FC<FooterProps> = ({ onExploreClick, onScanClick, onContribu
                 </div>
                 <span>Einstellungen</span>
             </button>
+            <button>
+                <div>
+                    <FontAwesomeIcon icon={faGear}/>
+                </div>
+                <span>Verweise</span>
+            </button>
         </div>
     );
 };
