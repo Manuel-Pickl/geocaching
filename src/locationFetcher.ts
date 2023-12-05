@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 
 const debugMovement = 0.0001;
 
-const getUserPosition = (debug = false, direction = [0, 0]) => {
+const getUserPosition = (
+  debug = false,
+  direction = [0, 0],
+  permissionLocationAllowed = false) => 
+{
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
 
   useEffect(() => {
@@ -23,6 +27,10 @@ const getUserPosition = (debug = false, direction = [0, 0]) => {
           return [prevLatitude + direction[0] * debugMovement, prevLongitude + direction[1] * debugMovement];
         });
       } else {
+        if (!permissionLocationAllowed) {
+          return;
+        }
+        
         navigator.geolocation.getCurrentPosition(successCallback);
       }
     };

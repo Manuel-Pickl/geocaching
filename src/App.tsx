@@ -19,6 +19,7 @@ function App() {
   const geoPointManager = new GeoPointManager();
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [direction, setDirection] = useState<[number, number]>([0,0]);
+  const [permissionLocationAllowed, setPermissionLocationAllowed] = useState<boolean>(false);
 
   const [scanIsOpen, setScanIsOpen] = useState<boolean>(false);
   const [settingsIsOpen, setSettingsIsOpen] = useState<boolean>(false);
@@ -64,10 +65,10 @@ function App() {
 
   const askForPermissions = () => {
     if ('geolocation' in navigator) {
-      (navigator as Navigator).geolocation.getCurrentPosition(() => {});
-    }
-    else if ('permissions' in navigator) {
-      (navigator as Navigator).permissions.query({ name: 'geolocation' });
+      navigator.geolocation.getCurrentPosition(
+        () => { setPermissionLocationAllowed(true); },
+        () => { setPermissionLocationAllowed(false); }
+      );
     }
   }
 
@@ -83,7 +84,7 @@ function App() {
 
       <LeafletMap
           position={mapCenter}
-          userPosition={getUserPosition(debug, direction)}
+          userPosition={getUserPosition(debug, direction, permissionLocationAllowed)}
           geoPoints={geoPoints}
           radius={radius}
           voiceIsOn={voiceIsOn}
