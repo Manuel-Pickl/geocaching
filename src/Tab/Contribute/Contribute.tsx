@@ -1,19 +1,36 @@
 import React, { useState } from 'react';
 import './Contribute.scss';
 import QRCode from 'qrcode.react';
+import { GeoPointManager } from '../../GeoPointManager';
+import { GeoPoint } from '../../GeoPoint';
 
 interface ContributeProps {
     isOpen: boolean;
-    onContribute: (geoPointName: string) => void;
+    geoPointManager: GeoPointManager;
+    geoPoints: GeoPoint[];
+    setGeoPoints: (value: GeoPoint[]) => void;
+    userPosition: [number, number] | null;
 }
 
-const Contribute: React.FC<ContributeProps> = ({ isOpen, onContribute }) => {
+const Contribute: React.FC<ContributeProps> = ({ isOpen, geoPointManager, geoPoints, setGeoPoints, userPosition }) => {
     const geocacheMaxLength: number = 15
     const [geocacheName, setGeocacheName] = useState<string>("");
     const [qrCodeValue, setQRCodeValue] = useState<string>("");
 
-    const onContributeClick = () => {
-        onContribute(geocacheName);
+    const onContribute = () => {
+        const geoPointExists: boolean = geoPointManager.geoPointExists(geocacheName, geoPoints);
+        const message: string = geoPointExists
+            ? `Super! Du hast den Geocache ${geocacheName} angelegt.`
+            : `Halt stopp! Der Geocache ${geocacheName} existiert bereits.`;
+        console.log(message);
+
+        if (!geoPointExists) {
+            return;
+        }
+
+        geoPointManager.addGeoPoint(geoPoints, geocacheName, userPosition);
+        setGeoPoints([...geoPoints]);
+
         setQRCodeValue(geocacheName);
     }
 
@@ -26,7 +43,7 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, onContribute }) => {
         const url = canvas.toDataURL();
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'qrcode.jpg';
+        a.download = 'qrcode';
         a.click();
     };
 
@@ -44,7 +61,7 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, onContribute }) => {
                         />
                     </label>
                     <button
-                        onClick={onContributeClick}
+                        onClick={onContribute}
                         disabled={geocacheName.trim().length === 0}
                     >
                         Contribute

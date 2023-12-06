@@ -10,7 +10,6 @@ interface CheckboxListProps {
 }
 
 const CheckboxList: React.FC<CheckboxListProps> = ({
-  geoPointManager,
   geoPoints,
   setGeoPoints
 }) => {
@@ -25,7 +24,6 @@ const CheckboxList: React.FC<CheckboxListProps> = ({
 
     geoPoint.found = !geoPoint.found;
 
-    geoPointManager.serialize(geoPoints);
     setGeoPoints([...geoPoints]);
   };
 

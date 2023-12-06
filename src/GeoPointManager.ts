@@ -1,19 +1,8 @@
 import { GeoPoint } from './GeoPoint';
 import geopointsJson from './assets/geopoints.json';
 
-const key: string = "geopoints";
-
 export class GeoPointManager {
-    getGeoPoints(): GeoPoint[] {
-        var persistentGeoPoints: GeoPoint[] | null = this.deserialize();
-        if (persistentGeoPoints) {
-            return persistentGeoPoints;
-        }
-
-        return this.getDefaultGeoPoints();
-    }
-
-    private getDefaultGeoPoints() {
+    getDefaultGeoPoints(): GeoPoint[] {
         const defaultGeoPoints: GeoPoint[] = geopointsJson.map((geopointJson: GeoPoint) => {
             return new GeoPoint(
                 geopointJson.name,
@@ -27,21 +16,33 @@ export class GeoPointManager {
         return defaultGeoPoints;
     }
 
+    geoPointExists(geoPointName: string, geoPoints: GeoPoint[]) {
+        const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name == geoPointName);
+        const geoPointExists: boolean = geoPoint == null;
+        return geoPointExists;
+    }
+
+    geoPointAlreadyFound(geoPointName: string, geoPoints: GeoPoint[]): boolean {
+        const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name == geoPointName);
+        if (!geoPoint) {
+            return false;
+        }
+
+        return geoPoint.found
+    }
+
     onGeoPointFound(geoPointName: string, geoPoints: GeoPoint[]): boolean {
         const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name == geoPointName);
         if (!geoPoint) {
             return false;
         }
 
-        const geoPointAlreadyFound = geoPoint.found;
-        if (geoPointAlreadyFound) {
+        if (this.geoPointAlreadyFound(geoPointName, geoPoints)) {
             return false;
         }
 
         geoPoint.found = true;
         geoPoint.time = new Date().toLocaleDateString('de-DE');
-
-        this.serialize(geoPoints);
 
         return true;
     };
@@ -64,29 +65,5 @@ export class GeoPointManager {
             found,
             time
         ));
-
-        this.serialize(geoPoints);
-    }
-
-    deserialize(): GeoPoint[] | null {
-        try {
-            const serializedData = localStorage.getItem(key);
-            if (serializedData === null) {
-                return null;
-            }
-            return JSON.parse(serializedData);
-        } catch (error) {
-            console.error('Error deserializing data:', error);
-            return null;
-        }
-    }
-
-    serialize(geoPoints: GeoPoint[]): void {
-        try {
-            const serializedData = JSON.stringify(geoPoints);
-            localStorage.setItem(key, serializedData);
-        } catch (error) {
-            console.error('Error serializing data:', error);
-        }
     }
 }

@@ -17,7 +17,7 @@ const Debugger: React.FC<DebuggerProps> = ({geoPointManager, geoPoints, setGeoPo
 {
     const clearLocalStorage = () => {
         localStorage.clear();
-        setGeoPoints(geoPointManager.getGeoPoints());
+        setGeoPoints(geoPointManager.getDefaultGeoPoints());
     }
     
     return (

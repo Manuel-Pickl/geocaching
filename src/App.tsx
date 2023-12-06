@@ -8,6 +8,7 @@ import Settings from './Tab/Settings/Settings';
 import LeafletMap from './LeafletMap/LeafletMap';
 import { Tab } from './Tabs';
 import Contribute from './Tab/Contribute/Contribute';
+import { serialize, deserialize } from './JsonHelper';
 
 function App() {
   // LGS-Gelände
@@ -28,13 +29,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("radius", radius.toString());
+    serialize("geoPoints", geoPoints);
+  }, [geoPoints]);
+  useEffect(() => {
+    serialize("radius", radius);
   }, [radius]);
   useEffect(() => {
-    localStorage.setItem("voiceIsOn", voiceIsOn.toString());
+    serialize("voiceIsOn", voiceIsOn);
   }, [voiceIsOn]);
   useEffect(() => {
-    localStorage.setItem("debug", debug.toString());
+    serialize("debug", debug);
   }, [debug]);
 
   const initializeLocationWatcher = () => {
@@ -55,16 +59,11 @@ function App() {
     setGeoPoints([...geoPoints])
   }
 
-  const onContribute = (geoPointName: string) => {
-    geoPointManager.addGeoPoint(geoPoints, geoPointName, userPosition);
-    setGeoPoints([...geoPoints]);
-  }
-
   const loadPersistentSettings = () => {
-    setGeoPoints(geoPointManager.getGeoPoints());
-    setRadius(JSON.parse(localStorage.getItem("radius") ?? `${radius}`));
-    setVoiceIsOn(JSON.parse(localStorage.getItem("voiceIsOn") ?? `${voiceIsOn}`));
-    setDebug(JSON.parse(localStorage.getItem("debug") ?? `${debug}`));
+    setGeoPoints(deserialize("geoPoints") ?? geoPointManager.getDefaultGeoPoints());
+    setRadius(deserialize("radius") ?? radius);
+    setVoiceIsOn(deserialize("voiceIsOn") ?? voiceIsOn);
+    setDebug(deserialize("debug") ?? debug);
   }
 
   const askForPermissions = () => {
@@ -106,7 +105,10 @@ function App() {
 
       <Contribute
         isOpen={activeTab == Tab.Contribute}
-        onContribute={onContribute}
+        geoPointManager={geoPointManager}
+        geoPoints={geoPoints}
+        setGeoPoints={setGeoPoints}
+        userPosition={userPosition}
       />
       
       <Settings 
