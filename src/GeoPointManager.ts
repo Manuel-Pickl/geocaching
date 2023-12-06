@@ -18,7 +18,8 @@ export class GeoPointManager {
 
     geoPointExists(geoPointName: string, geoPoints: GeoPoint[]) {
         const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name == geoPointName);
-        const geoPointExists: boolean = geoPoint == null;
+        const geoPointExists: boolean = geoPoint != undefined;
+
         return geoPointExists;
     }
 

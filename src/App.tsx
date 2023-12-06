@@ -47,18 +47,6 @@ function App() {
     });
   };
 
-  const onScanResult = (geoPointName: string) => {
-    setActiveTab(Tab.Explore);
-    
-    const result: boolean = geoPointManager.onGeoPointFound(geoPointName, geoPoints);
-    const message: string = result
-      ? `Herzlichen Glückwunsch! Du hast den Standort ${geoPointName} gefunden.`
-      : `Schade! Den Standort ${geoPointName} hast du bereits gefunden.`;
-    console.log(message);
-
-    setGeoPoints([...geoPoints])
-  }
-
   const loadPersistentSettings = () => {
     setGeoPoints(deserialize("geoPoints") ?? geoPointManager.getDefaultGeoPoints());
     setRadius(deserialize("radius") ?? radius);
@@ -100,7 +88,10 @@ function App() {
       {/* tabs */}
       <Scan
         isOpen={activeTab == Tab.Scan}
-        onScanResult={onScanResult}
+        geoPointManager={geoPointManager}
+        geoPoints={geoPoints}
+        setGeoPoints={setGeoPoints}
+        setActiveTab={setActiveTab}
       />
 
       <Contribute

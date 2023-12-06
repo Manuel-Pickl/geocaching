@@ -17,14 +17,21 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, geoPointManager, geoPoi
     const [geocacheName, setGeocacheName] = useState<string>("");
     const [qrCodeValue, setQRCodeValue] = useState<string>("");
 
+    const contributeIsDisabled = (): boolean => {
+        const nameIsEmpty: boolean = geocacheName.trim().length === 0;
+        const nameIsAlreadyTaken: boolean = geoPointManager.geoPointExists(geocacheName, geoPoints);
+
+        return nameIsEmpty || nameIsAlreadyTaken;
+    }
+
     const onContribute = () => {
         const geoPointExists: boolean = geoPointManager.geoPointExists(geocacheName, geoPoints);
         const message: string = geoPointExists
-            ? `Super! Du hast den Geocache ${geocacheName} angelegt.`
-            : `Halt stopp! Der Geocache ${geocacheName} existiert bereits.`;
+            ? `Halt stopp! Der Geocache ${geocacheName} existiert bereits.`
+            : `Super! Du hast den Geocache ${geocacheName} angelegt.`;
         console.log(message);
 
-        if (!geoPointExists) {
+        if (geoPointExists) {
             return;
         }
 
@@ -62,7 +69,7 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, geoPointManager, geoPoi
                     </label>
                     <button
                         onClick={onContribute}
-                        disabled={geocacheName.trim().length === 0}
+                        disabled={contributeIsDisabled()}
                     >
                         Contribute
                     </button>
