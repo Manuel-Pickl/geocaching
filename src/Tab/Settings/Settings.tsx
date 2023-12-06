@@ -1,7 +1,7 @@
 import React from 'react';
 import Switch from 'react-switch';
 import './Settings.scss';
-import { GeoPoint } from '../GeoPoint';
+import { GeoPoint } from '../../GeoPoint';
 
 interface SettingsProps {
     isOpen: boolean;

@@ -46,6 +46,28 @@ export class GeoPointManager {
         return true;
     };
 
+    addGeoPoint(
+        geoPoints: GeoPoint[],
+        geoPointName: string,
+        position: [number, number] | null,
+        found: boolean = false,
+        time: string = "")
+    {
+        if (!position) {
+            return;
+        }
+
+        geoPoints.push(new GeoPoint(
+            geoPointName,
+            position[0],
+            position[1],
+            found,
+            time
+        ));
+
+        this.serialize(geoPoints);
+    }
+
     deserialize(): GeoPoint[] | null {
         try {
             const serializedData = localStorage.getItem(key);

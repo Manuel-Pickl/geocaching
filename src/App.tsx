@@ -1,12 +1,13 @@
-import Scan from './Scan/Scan';
+import Scan from './Tab/Scan/Scan';
 import Footer from './Footer/Footer';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './GeoPoint';
 import Debugger from './Debugger/Debugger';
 import { GeoPointManager } from './GeoPointManager';
-import Settings from './Settings/Settings';
+import Settings from './Tab/Settings/Settings';
 import LeafletMap from './LeafletMap/LeafletMap';
 import { Tab } from './Tabs';
+import Contribute from './Tab/Contribute/Contribute';
 
 function App() {
   // LGS-Gelände
@@ -54,6 +55,11 @@ function App() {
     setGeoPoints([...geoPoints])
   }
 
+  const onContribute = (geoPointName: string) => {
+    geoPointManager.addGeoPoint(geoPoints, geoPointName, userPosition);
+    setGeoPoints([...geoPoints]);
+  }
+
   const loadPersistentSettings = () => {
     setGeoPoints(geoPointManager.getGeoPoints());
     setRadius(JSON.parse(localStorage.getItem("radius") ?? `${radius}`));
@@ -89,14 +95,20 @@ function App() {
       />
       
       <Footer
-        setActiveTab={setActiveTab}
+        activeTab={activeTab} setActiveTab={setActiveTab}
       />
 
+      {/* tabs */}
       <Scan
         isOpen={activeTab == Tab.Scan}
         onScanResult={onScanResult}
       />
 
+      <Contribute
+        isOpen={activeTab == Tab.Contribute}
+        onContribute={onContribute}
+      />
+      
       <Settings 
         isOpen={activeTab == Tab.Settings}
         geoPoints={geoPoints}
