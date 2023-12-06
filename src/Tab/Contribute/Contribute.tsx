@@ -14,9 +14,21 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, onContribute }) => {
 
     const onContributeClick = () => {
         onContribute(geocacheName);
-        console.log(geocacheName)
         setQRCodeValue(geocacheName);
     }
+
+    const onDownloadClick = () => {
+        const canvas: HTMLCanvasElement | null = document.getElementById('qr-code') as HTMLCanvasElement | null;
+        if (!canvas) {
+            return;
+        }
+
+        const url = canvas.toDataURL();
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'qrcode.jpg';
+        a.click();
+    };
 
     return (
         <>
@@ -38,7 +50,13 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, onContribute }) => {
                         Contribute
                     </button>
                     {qrCodeValue != "" &&
-                        <QRCode value={qrCodeValue} />
+                        <>
+                            {qrCodeValue}
+                            <QRCode value={qrCodeValue} id="qr-code" />
+                            <button onClick={onDownloadClick}>
+                                Download QR Code
+                            </button>
+                        </>
                     }
                 </div>
             )}
