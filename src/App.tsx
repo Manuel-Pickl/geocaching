@@ -2,13 +2,13 @@ import Footer from './components/Footer/Footer';
 import { useEffect, useState } from 'react';
 import { GeoPoint } from './types/GeoPoint';
 import { GeoPointManager } from './services/GeoPointManager';
-import { Tab } from './types/Tabs';
+import { Tab } from './types/Tab';
 import { serialize, deserialize } from './services/JsonHelper';
 import Debugger from './components/Debugger/Debugger';
 import LeafletMap from './components/LeafletMap/LeafletMap';
-import Contribute from './components/Tab/Contribute/Contribute';
-import Scan from './components/Tab/Scan/Scan';
-import Settings from './components/Tab/Settings/Settings';
+import Contribute from './components/Tabs/Contribute/Contribute';
+import Scan from './components/Tabs/Scan/Scan';
+import Settings from './components/Tabs/Settings/Settings';
 
 function App() {
   // LGS-Gelände

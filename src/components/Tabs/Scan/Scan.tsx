@@ -3,7 +3,7 @@ import './Scan.scss';
 import QrScanner from 'qr-scanner';
 import { GeoPointManager } from '../../../services/GeoPointManager';
 import { GeoPoint } from '../../../types/GeoPoint';
-import { Tab } from '../../../types/Tabs';
+import { Tab } from '../../../types/Tab';
 
 interface ScanProps {
     isOpen: boolean;
