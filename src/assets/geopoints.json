@@ -4,20 +4,23 @@
     "latitude": 49.43145,
     "longitude": 11.86854,
     "found": false,
-    "time": ""
+    "time": "",
+    "isDefault": true
   },
   {
     "name": "Kanu-Einstieg",
     "latitude": 49.433282501768716,
     "longitude": 11.86905718619528,
     "found": false,
-    "time": ""
+    "time": "",
+    "isDefault": true
   },
   {
     "name": "Wasserrad",
     "latitude": 49.434093799799335,
     "longitude": 11.867049516461618,
     "found": false,
-    "time": ""
+    "time": "",
+    "isDefault": true
   }
 ]

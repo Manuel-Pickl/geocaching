@@ -120,6 +120,36 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     userMarker.current.setLatLng(toLatLngExpression(userPosition));
   }
 
+  function getIconHtml(geoPoint: GeoPoint): string {
+    const markerImage: string = geoPoint.isDefault
+      ? "<img src='/markers/marker.png' class='marker-pin' alt='marker pin'/>"
+      : `<img src='/markers/marker${Math.floor(Math.random() * 5) + 1}.png' class='marker-pin' alt='marker pin'/>`;
+    const geocacheImage: string = geoPoint.isDefault
+      ? `<img src="/landmarks/${geoPoint.name}.jpg" class="marker-image" alt=${geoPoint.name}/>`
+      : "";
+    const iconHtml: string = `
+      ${markerImage}
+      ${geocacheImage}
+    `;
+  
+    return iconHtml;
+  }
+
+  function getPopupHtml(geoPoint: GeoPoint): string {
+    const geocacheImage: string = geoPoint.isDefault
+      ? `<img src="/landmarks/${geoPoint.name}.jpg" class="popup-image" alt=${geoPoint.name}/>`
+      : "";
+      const popupHtml: string = `
+      <div class="popup">
+        <b>${geoPoint.name}</b>
+        ${geocacheImage}
+        ✪ ${geoPoint.time}
+      </div>
+    `;
+
+    return popupHtml;
+  }
+
   function updateFoundMarkers() {
     if (!geoPoints || !map.current) {
       return;
@@ -137,10 +167,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         className: 'marker',
         iconSize: [markerWidth, markerHeight],
         iconAnchor: [markerWidth / 2, markerHeight],
-        html: `
-          <img src="/marker.png" class="marker-pin" alt="marker pin"/>
-          <img src="/landmarks/${geoPoint.name}.jpg" class="marker-image" alt=${geoPoint.name}/>
-        `
+        html: getIconHtml(geoPoint)
       });
 
       const marker = L.marker(toLatLngExpression([geoPoint.latitude, geoPoint.longitude]), { icon: customIcon });
@@ -148,13 +175,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         marker.addTo(map.current);
       }
       
-      marker.bindPopup(`
-        <div class="popup">
-          <b>${geoPoint.name}</b>
-          <img src="/landmarks/${geoPoint.name}.jpg" class="popup-image" alt=${geoPoint.name}/>
-          ✪ ${geoPoint.time}
-        </div>
-      `).on('click', () => { marker.openPopup(); });
+      marker.bindPopup(getPopupHtml(geoPoint))
+        .on('click', () => { marker.openPopup(); });
     });
   }
 

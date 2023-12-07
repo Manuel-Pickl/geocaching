@@ -9,7 +9,8 @@ export class GeoPointManager {
                 geopointJson.latitude,
                 geopointJson.longitude,
                 geopointJson.found,
-                geopointJson.time
+                geopointJson.time,
+                geopointJson.isDefault
             );
         });
 
@@ -64,7 +65,8 @@ export class GeoPointManager {
             position[0],
             position[1],
             found,
-            time
+            time,
+            false
         ));
     }
 }

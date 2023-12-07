@@ -23,6 +23,9 @@ const CheckboxList: React.FC<CheckboxListProps> = ({
     }
 
     geoPoint.found = !geoPoint.found;
+    geoPoint.time = geoPoint.found 
+      ? new Date().toLocaleDateString('de-DE')
+      : "";
 
     setGeoPoints([...geoPoints]);
   };
