@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { GeoPoint } from '../../GeoPoint';
-import { GeoPointManager } from '../../GeoPointManager';
 import "./CheckboxList.scss"
+import { GeoPointManager } from '../../../services/GeoPointManager';
+import { GeoPoint } from '../../../types/GeoPoint';
 
 interface CheckboxListProps {
   geoPointManager: GeoPointManager;

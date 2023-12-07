@@ -2,7 +2,7 @@ import React from 'react';
 import './Footer.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faCirclePlus, faGear, faLocationDot, faQrcode } from '@fortawesome/free-solid-svg-icons';
-import { Tab } from '../Tabs';
+import { Tab } from '../../types/Tabs';
 
 interface FooterProps {
     activeTab: Tab;

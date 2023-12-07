@@ -1,5 +1,5 @@
-import { GeoPoint } from './GeoPoint';
-import geopointsJson from './assets/geopoints.json';
+import { GeoPoint } from '../types/GeoPoint';
+import geopointsJson from '../assets/geopoints.json';
 
 export class GeoPointManager {
     getDefaultGeoPoints(): GeoPoint[] {

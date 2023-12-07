@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './LeafletMap.scss'
-import { GeoPoint } from '../GeoPoint';
 import * as geolib from 'geolib';
-import { read } from '../SpeechSynthesis';
+import { read } from '../../services/SpeechSynthesis';
+import { GeoPoint } from '../../types/GeoPoint';
 
 interface LeafletMapProps {
   position: [number, number];

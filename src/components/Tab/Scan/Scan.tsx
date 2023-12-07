@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import './Scan.scss';
 import QrScanner from 'qr-scanner';
-import { Tab } from '../../Tabs';
-import { GeoPoint } from '../../GeoPoint';
-import { GeoPointManager } from '../../GeoPointManager';
+import { GeoPointManager } from '../../../services/GeoPointManager';
+import { GeoPoint } from '../../../types/GeoPoint';
+import { Tab } from '../../../types/Tabs';
 
 interface ScanProps {
     isOpen: boolean;

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Contribute.scss';
 import QRCode from 'qrcode.react';
-import { GeoPointManager } from '../../GeoPointManager';
-import { GeoPoint } from '../../GeoPoint';
+import { GeoPointManager } from '../../../services/GeoPointManager';
+import { GeoPoint } from '../../../types/GeoPoint';
 
 interface ContributeProps {
     isOpen: boolean;

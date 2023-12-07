@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Direction } from '../../Direction';
 import "./Joystick.scss";
+import { Direction } from '../../../types/Direction';
 
 interface JoystickProps {
   userPosition: [number, number] | null;

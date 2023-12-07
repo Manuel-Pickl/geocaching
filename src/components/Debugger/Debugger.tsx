@@ -1,9 +1,9 @@
 import React from 'react';
 import "./Debugger.scss";
-import { GeoPoint } from '../GeoPoint';
-import { GeoPointManager } from '../GeoPointManager';
 import CheckboxList from './CheckboxList/CheckboxList';
 import Joystick from './Joystick/Joystick';
+import { GeoPointManager } from '../../services/GeoPointManager';
+import { GeoPoint } from '../../types/GeoPoint';
 
 interface DebuggerProps {
     geoPointManager: GeoPointManager;
