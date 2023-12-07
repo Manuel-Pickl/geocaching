@@ -23,6 +23,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/fontawesome.js"],
+  "include": ["src", "src/services/fontawesome.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
