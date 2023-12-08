@@ -23,6 +23,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/services/Fontawesome.js"],
+  "include": ["src", "src/services/Fontawesome.js", "public/ServiceWorker.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

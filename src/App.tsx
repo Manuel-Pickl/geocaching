@@ -25,7 +25,8 @@ function App() {
 
   useEffect(() => {
     loadPersistentSettings();
-    askForPermissions();
+    requestPermissionGPS();
+    requestPermissionNotification();
   }, []);
 
   useEffect(() => {
@@ -54,13 +55,30 @@ function App() {
     setDebug(deserialize("debug") ?? debug);
   }
 
-  const askForPermissions = () => {
+  const requestPermissionGPS = () => {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
-      () => { initializeLocationWatcher(); },
-      () => { console.log("gps denied") },
+      () => { 
+        console.log("'GPS' permission granted")
+        initializeLocationWatcher();
+      },
+      () => { console.log("'GPS' permission denied") },
     );
   }
+}
+
+const requestPermissionNotification = () => {
+  if ('Notification' in window) {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        console.log("'Notification' permission granted");
+      }
+      else {
+        console.log("'Notification' permission denied");
+      }
+    });
+  }
+  
 }
 
   return (
