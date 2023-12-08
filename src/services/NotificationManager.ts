@@ -20,28 +20,26 @@ navigator.serviceWorker.ready
   })
   .then(() => {
     console.log('Push subscription succeded');
+    alert('Push subscription succeded');
   })
   .catch((error) => {
-    console.error('Push subscription failed:', error);
+    console.error(`Push subscription failed: ${error}`);
+    alert(`Push subscription failed: ${error}`);
   });
 
 
 export const sendPushMessage = (
   title: string,
+  icon: string = "./globe.svg",
   message: string = "") =>
 {
-  navigator.serviceWorker.ready.then((registration) => {
-    if (message != "") {
-      registration.showNotification(title, { body: message });
-    }
-    else {
-      registration.showNotification(
-        title, {
-          icon: "./markers/marker1.png",
-          image: "./markers/marker2.png",
-          badge: "./markers/marker3.png"
-        }
-      );
-    }
+  navigator.serviceWorker.ready.then((registration) =>
+  {
+    registration.showNotification(
+      title, {
+        icon: icon,
+        body: message
+      }
+    );
   });
 }
