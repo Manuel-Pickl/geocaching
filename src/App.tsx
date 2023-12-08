@@ -26,8 +26,6 @@ function App() {
   useEffect(() => {
     loadPersistentSettings();
     askForPermissions();
-
-    setInterval(sendPushMessage, 5000);
   }, []);
 
   useEffect(() => {
@@ -42,18 +40,6 @@ function App() {
   useEffect(() => {
     serialize("debug", debug);
   }, [debug]);
-
-  var counter: number = 1;
-  function sendPushMessage() {
-    const title = 'Title';
-    const options = {
-      body: counter.toString(),
-    };
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.showNotification(title, options);
-    });
-    counter++;
-  }
   
   const initializeLocationWatcher = () => {
     navigator.geolocation.watchPosition((position: GeolocationPosition) => {

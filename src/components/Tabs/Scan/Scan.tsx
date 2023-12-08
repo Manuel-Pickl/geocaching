@@ -4,6 +4,7 @@ import QrScanner from 'qr-scanner';
 import { GeoPointManager } from '../../../services/GeoPointManager';
 import { GeoPoint } from '../../../types/GeoPoint';
 import { Tab } from '../../../types/Tab';
+import { sendPushMessage } from '../../../services/NotificationManager';
 
 interface ScanProps {
     isOpen: boolean;
@@ -23,8 +24,8 @@ const Scan: React.FC<ScanProps> = ({ isOpen, geoPointManager, geoPoints, setGeoP
         const message: string = result
         ? `Herzlichen Glückwunsch! Du hast den Standort ${geoPointName} gefunden.`
         : `Schade! Den Standort ${geoPointName} hast du bereits gefunden.`;
-        console.log(message);
-
+        sendPushMessage(message);
+        
         setGeoPoints([...geoPoints])
     }
     

@@ -5,6 +5,7 @@ import './LeafletMap.scss'
 import * as geolib from 'geolib';
 import { read } from '../../services/SpeechSynthesis';
 import { GeoPoint } from '../../types/GeoPoint';
+import { sendPushMessage } from '../../services/NotificationManager';
 
 interface LeafletMapProps {
   position: [number, number];
@@ -70,9 +71,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           nearGeoPoints.add(geoPoint.name);
           const message: string = `Du bist in der Nähe vom Punkt: ${geoPoint.name}!`;
           
-          console.log(message);
-          // notification
-          
+          sendPushMessage(message);
+                    
           if (voiceIsOn) {
             read(message);
           }
