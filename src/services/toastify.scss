@@ -1,0 +1,22 @@
+#root {
+    // react-toastify
+    --toastify-color-light: var(--background-color);
+    --toastify-text-color-light: white;
+}
+
+.toast {
+    --margin: 10px;
+
+    inset: var(--margin) var(--margin) auto var(--margin);
+    width: auto;
+    border-radius: 24px;
+    overflow: hidden;
+    
+    img {
+        width: 32px;
+    }
+    
+    .toast-content {
+        margin: var(--margin);
+    }
+}

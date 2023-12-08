@@ -9,6 +9,9 @@ import LeafletMap from './components/LeafletMap/LeafletMap';
 import Contribute from './components/Tabs/Contribute/Contribute';
 import Scan from './components/Tabs/Scan/Scan';
 import Settings from './components/Tabs/Settings/Settings';
+import { Flip, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import logo from "../public/globe.svg";
 
 function App() {
   // LGS-Gelände
@@ -26,7 +29,6 @@ function App() {
   useEffect(() => {
     loadPersistentSettings();
     requestPermissionGPS();
-    requestPermissionNotification();
   }, []);
 
   useEffect(() => {
@@ -56,30 +58,16 @@ function App() {
   }
 
   const requestPermissionGPS = () => {
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      () => { 
-        console.log("'GPS' permission granted")
-        initializeLocationWatcher();
-      },
-      () => { console.log("'GPS' permission denied") },
-    );
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        () => { 
+          console.log("'GPS' permission granted")
+          initializeLocationWatcher();
+        },
+        () => { console.log("'GPS' permission denied") },
+      );
+    }
   }
-}
-
-const requestPermissionNotification = () => {
-  if ('Notification' in window) {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log("'Notification' permission granted");
-      }
-      else {
-        console.log("'Notification' permission denied");
-      }
-    });
-  }
-  
-}
 
   return (
     <div className="app">
@@ -126,6 +114,21 @@ const requestPermissionNotification = () => {
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}
         debug={debug} setDebug={setDebug}
+      />
+      
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick={false}
+        closeButton={false}
+        pauseOnFocusLoss={false}
+        draggable
+        transition={Flip}
+        className={"toast"}
+        bodyClassName={"toast-content"}
+        icon={<img src={logo} alt="logo" />}
       />
     </div>
   );
