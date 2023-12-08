@@ -4,6 +4,7 @@ import QRCode from 'qrcode.react';
 import { GeoPointManager } from '../../../services/GeoPointManager';
 import { GeoPoint } from '../../../types/GeoPoint';
 import { toast } from 'react-toastify';
+import { sendPushMessage } from '../../../services/NotificationManager';
 
 interface ContributeProps {
     isOpen: boolean;
@@ -31,6 +32,7 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, geoPointManager, geoPoi
             ? `Halt stopp! Der Geocache ${geocacheName} existiert bereits.`
             : `Super! Du hast den Geocache ${geocacheName} angelegt.`;
         toast(message);
+        sendPushMessage(message);
 
         if (geoPointExists) {
             return;
