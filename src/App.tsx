@@ -29,6 +29,7 @@ function App() {
   useEffect(() => {
     loadPersistentSettings();
     requestPermissionGPS();
+    requestPermissionNotification();
   }, []);
 
   useEffect(() => {
@@ -67,6 +68,22 @@ function App() {
         () => { console.log("'GPS' permission denied") },
       );
     }
+  }
+
+  const requestPermissionNotification = () => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+          console.log("'Notification' permission granted");
+          alert("granted");
+        }
+        else {
+          console.log("'Notification' permission denied");
+          alert("denied");
+        }
+      });
+    }
+    
   }
 
   return (
