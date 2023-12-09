@@ -6,17 +6,19 @@
 
 .toast {
     --margin: 10px;
-
-    inset: var(--margin) var(--margin) auto var(--margin);
-    width: auto;
+    margin: var(--margin);
+    width: calc(100% - var(--margin)*2);
+    max-width: 400px;
     border-radius: 24px;
     overflow: hidden;
     
     img {
-        width: 32px;
+        width: 40px;
+        margin-left: calc(var(--margin)*-2);
     }
     
     .toast-content {
         margin: var(--margin);
+        margin-left: calc(var(--margin)*3);
     }
 }
