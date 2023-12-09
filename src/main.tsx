@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.scss'
-import './services/Fontawesome.js';
+import './services/fontawesome.js';
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
