@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './Scan.scss';
+import "../tabs.scss";
 import QrScanner from 'qr-scanner';
 import { GeoPointManager } from '../../../services/GeoPointManager';
 import { GeoPoint } from '../../../types/GeoPoint';

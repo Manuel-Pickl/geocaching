@@ -1,6 +1,7 @@
 import React from 'react';
 import Switch from 'react-switch';
 import './Settings.scss';
+import "../tabs.scss";
 import { GeoPoint } from '../../../types/GeoPoint';
 
 interface SettingsProps {

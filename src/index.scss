@@ -11,14 +11,3 @@
     margin: 0;
     padding: 0;
 }
-
-.tab {
-    z-index: 100;
-    position: absolute;
-    width: 100%;
-    left: 0;
-    bottom: var(--footer-height);
-    color: var(--color-font);
-    background-color: var(--background-color);
-    padding: 16px;
-}
