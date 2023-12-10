@@ -1,2 +1,49 @@
-.tab {
+.settings {
+    font-size: 1.2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ul {
+        background-color: hsl(0, 0%, 10%);
+        padding: 16px;
+        border-radius: 16px;
+        height: 150px;
+        overflow-y: scroll;
+
+        li {
+            font-size: 1.2rem;
+    
+            display: flex;
+            gap: 16px;
+    
+            .name {
+                flex: 1
+            }
+        }
+    }
+
+    .setting {
+        display: flex;
+        gap: 8px;
+
+        .name {
+            flex: 1;
+        }
+
+        button {
+            font-size: 1rem;
+            color: white;
+            background-color: red;
+            padding-block: 8px;
+            padding-inline: 16px;
+            border-radius: 16px;
+            border: none;
+        }
+
+        .allowed {
+            color: greenyellow;
+        }
+    }
 }

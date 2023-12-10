@@ -5,6 +5,8 @@ import QRCode from 'qrcode.react';
 import { GeoPointManager } from '../../../services/GeoPointManager';
 import { GeoPoint } from '../../../types/GeoPoint';
 import { toast } from 'react-toastify';
+import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ContributeProps {
     isOpen: boolean;
@@ -59,30 +61,35 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, geoPointManager, geoPoi
     return (
         <>
             {isOpen && (
-                <div className='tab'>
-                    <label>
-                        Geocache Name:
+                <div className='tab contribute'>
+                    <p>
+                        Trage zum Netzwerk bei!<br/>
+                        Erstelle einen Geocache und hänge den QR Code aus.
+                    </p>
+                    <div className="variables">
+                        <span>Geocache:</span>
                         <input
                             type='text'
                             value={geocacheName}
                             onChange={(e) => setGeocacheName(e.target.value)}
                             maxLength={geocacheMaxLength}
                         />
-                    </label>
-                    <button
-                        onClick={onContribute}
-                        disabled={contributeIsDisabled()}
-                    >
-                        Contribute
-                    </button>
+                        <button
+                            onClick={onContribute}
+                            disabled={contributeIsDisabled()}
+                        >
+                            <FontAwesomeIcon icon={faUpload} />
+                        </button>
+                    </div>
                     {qrCodeValue != "" &&
-                        <>
-                            {qrCodeValue}
+                        <div className="code">
                             <QRCode value={qrCodeValue} id="qr-code" />
+                            {qrCodeValue}
                             <button onClick={onDownloadClick}>
-                                Download QR Code
+                                <span>Download </span>
+                                <FontAwesomeIcon icon={faDownload} />
                             </button>
-                        </>
+                        </div>
                     }
                 </div>
             )}

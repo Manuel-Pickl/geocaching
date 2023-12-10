@@ -16,30 +16,33 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, geoPoints, radius, setRadiu
     return (
         <>
             {isOpen &&
-                <div className='tab'>
-                    Settings
+                <div className="tab settings">
+                    <span><b>Geochaches</b></span>
                     <ul>
-                        Gefunden
                         {geoPoints
                             .filter(geoPoint => geoPoint.found)
                             .map((geoPoint, index) => (
-                            <li key={index}>
-                                ✓ {geoPoint.name}: {geoPoint.time}
+                            <li key={index} className="found">
+                                <div>✓</div>
+                                <div className="name">{geoPoint.name}</div>
+                                <div>{geoPoint.time}</div>
                             </li>
                         ))}
-                    </ul>
-                    <ul>
-                        Noch Entdecken
                         {geoPoints
                             .filter(geoPoint => !geoPoint.found)
                             .map((geoPoint, index) => (
                             <li key={index}>
-                                ✗ {geoPoint.name}: {geoPoint.time}
+                                <div>✗</div>
+                                <div className="name">{geoPoint.name}</div>
+                                <div>{geoPoint.time}</div>
                             </li>
                         ))}
                     </ul>
-                    <div>
-                        <label htmlFor="radius">Radius:</label>
+
+                    <hr/>
+                    <span><b>Settings</b></span>
+                    <div className="setting">
+                        <span className="name">Radius:</span>
                         <input
                             type="range"
                             min={10}
@@ -50,21 +53,40 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, geoPoints, radius, setRadiu
                         />
                         <span>{radius}</span>
                     </div>
-                    <div>
-                        <label htmlFor='voiceIsOn'>Voice:</label>
+                    <div className="setting">
+                        <span className="name">Voice:</span>
                         <Switch
                             id='voiceIsOn'
                             checked={voiceIsOn}
                             onChange={() => setVoiceIsOn(!voiceIsOn)}
                         />
                     </div>
-                    <div>
-                        <label htmlFor='debug'>Debug:</label>
+                    <div className="setting">
+                        <span className="name">Debug:</span>
                         <Switch
                             id='debug'
                             checked={debug}
                             onChange={() => setDebug(!debug)}
                         />
+                    </div>
+                    
+                    <hr/>
+                    <span><b>Permissions</b></span>
+                    <div className="setting">
+                        <span className="name">GPS:</span>
+                        <button>Erlauben</button>
+                    </div>
+                    <div className="setting">
+                        <span className="name">Kamera:</span>
+                        <span className="allowed">✓ Erlaubt</span>
+                    </div>
+                    <div className="setting">
+                        <span className="name">Audio:</span>
+                        <span className="allowed">✓ Erlaubt</span>
+                    </div>
+                    <div className="setting">
+                        <span className="name">Dateien:</span>
+                        <button>Erlauben</button>
                     </div>
                 </div>
             }

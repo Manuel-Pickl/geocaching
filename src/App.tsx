@@ -11,7 +11,7 @@ import Scan from './components/Tabs/Scan/Scan';
 import Settings from './components/Tabs/Settings/Settings';
 import { Flip, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logo from "../public/globe.svg";
+import logoFromAssets from "./assets/globe.svg";
 
 function App() {
   // LGS-Gelände
@@ -24,7 +24,7 @@ function App() {
   const geoPointManager = new GeoPointManager();
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.Settings);
 
   useEffect(() => {
     loadPersistentSettings();
@@ -124,11 +124,11 @@ function App() {
         closeOnClick={false}
         closeButton={false}
         pauseOnFocusLoss={false}
-        draggable
+        draggable={false}
         transition={Flip}
         className={"toast"}
         bodyClassName={"toast-content"}
-        icon={<img src={logo} alt="logo" />}
+        icon={<img src={logoFromAssets} alt="logo" />}
       />
     </div>
   );

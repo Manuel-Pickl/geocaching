@@ -6,6 +6,8 @@ import { GeoPointManager } from '../../../services/GeoPointManager';
 import { GeoPoint } from '../../../types/GeoPoint';
 import { Tab } from '../../../types/Tab';
 import { toast } from 'react-toastify';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ScanProps {
     isOpen: boolean;
@@ -40,7 +42,7 @@ const Scan: React.FC<ScanProps> = ({ isOpen, geoPointManager, geoPoints, setGeoP
             (result) => {
                 onScanResult(result.data);
             },
-            { highlightScanRegion: true }
+            {}
         );
 
         qrScanner.start();
@@ -54,9 +56,21 @@ const Scan: React.FC<ScanProps> = ({ isOpen, geoPointManager, geoPoints, setGeoP
     return (
         <>
             {isOpen &&
-                <div className='tab'>
-                    QR Code des Standorts
-                    <video className="camera" ref={videoElement} />
+                <div className='tab scan'>
+                    <p>
+                        Du hast einen Geocache gefunden?<br/>
+                        Scanne ihn ein, um den Punkt zu speichern.
+                    </p>
+                    <div className="camera">
+                        <video className="camera" ref={videoElement} />
+                        <div className="scanRegion">
+                            <div className="top left"></div>
+                            <div className="top right"></div>
+                            <div className="bottom right"></div>
+                            <div className="bottom left"></div>
+                        </div>
+                        <FontAwesomeIcon icon={faCamera} />
+                    </div>
                 </div>
             }
         </>

@@ -4,7 +4,10 @@ import {
     faQrcode,
     faCirclePlus,
     faGear,
-    faBookOpen
+    faBookOpen,
+    faCamera,
+    faUpload,
+    faDownload
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -12,5 +15,8 @@ library.add(
     faQrcode,
     faCirclePlus,
     faGear,
-    faBookOpen
+    faBookOpen,
+    faCamera,
+    faUpload,
+    faDownload
 );
