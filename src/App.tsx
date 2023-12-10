@@ -24,7 +24,7 @@ function App() {
   const geoPointManager = new GeoPointManager();
   const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>(Tab.Settings);
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
 
   useEffect(() => {
     loadPersistentSettings();
