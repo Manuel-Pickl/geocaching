@@ -1,11 +1,11 @@
-import React from 'react';
 import "./Debugger.scss";
 import CheckboxList from './CheckboxList/CheckboxList';
 import Joystick from './Joystick/Joystick';
 import { GeocacheManager } from '../../services/GeocacheManager';
 import { Geocache } from '../../types/Geocache';
 
-interface DebuggerProps {
+interface DebuggerProps
+{
     geocacheManager: GeocacheManager;
     geocaches: Geocache[];
     setGeocaches: (geocaches: Geocache[]) => void;
@@ -13,9 +13,10 @@ interface DebuggerProps {
     setUserPosition: (value: [number, number]) => void;
 }
 
-const Debugger: React.FC<DebuggerProps> = ({geocacheManager, geocaches, setGeocaches, userPosition, setUserPosition }) =>
+function Debugger({geocacheManager, geocaches, setGeocaches, userPosition, setUserPosition }: DebuggerProps)
 {
-    const clearLocalStorage = () => {
+    function clearLocalStorage()
+    {
         localStorage.clear();
         setGeocaches(geocacheManager.getDefaultGeocaches());
     }
@@ -32,7 +33,6 @@ const Debugger: React.FC<DebuggerProps> = ({geocacheManager, geocaches, setGeoca
                 clear localstorage
             </button>
             <CheckboxList
-                geocacheManager={geocacheManager}
                 geocaches={geocaches} setGeocaches={setGeocaches}
             />
         </div>

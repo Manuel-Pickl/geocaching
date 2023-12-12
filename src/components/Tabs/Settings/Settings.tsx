@@ -1,10 +1,10 @@
-import React from 'react';
 import Switch from 'react-switch';
 import './Settings.scss';
 import "../tabs.scss";
 import { Geocache } from '../../../types/Geocache';
 
-interface SettingsProps {
+interface SettingsProps
+{
     isOpen: boolean;
     geocaches: Geocache[];
     radius: number; setRadius: (value: number) => void;
@@ -12,7 +12,8 @@ interface SettingsProps {
     debug: boolean; setDebug: (value: boolean) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }) => {
+function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }: SettingsProps)
+{
     return (
         <>
             {isOpen &&

@@ -1,4 +1,5 @@
-export enum Tab {
+export enum Tab
+{
     Explore,
     Scan,
     Contribute,

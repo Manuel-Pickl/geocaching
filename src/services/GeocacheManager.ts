@@ -1,9 +1,12 @@
 import { Geocache } from '../types/Geocache';
 import geocachesJson from '../assets/geocaches.json';
 
-export class GeocacheManager {
-    getDefaultGeocaches(): Geocache[] {
-        const defaultGeocaches: Geocache[] = geocachesJson.map((geocacheJson: Geocache) => {
+export class GeocacheManager
+{
+    public getDefaultGeocaches(): Geocache[]
+    {
+        const defaultGeocaches: Geocache[] = geocachesJson.map((geocacheJson: Geocache) =>
+        {
             return new Geocache(
                 geocacheJson.name,
                 geocacheJson.latitude,
@@ -17,29 +20,35 @@ export class GeocacheManager {
         return defaultGeocaches;
     }
 
-    geocacheExists(geocacheName: string, geocaches: Geocache[]) {
+    public geocacheExists(geocacheName: string, geocaches: Geocache[]): boolean
+    {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
         const geocacheExists: boolean = geocache != undefined;
 
         return geocacheExists;
     }
 
-    geocacheAlreadyFound(geocacheName: string, geocaches: Geocache[]): boolean {
+    public geocacheAlreadyFound(geocacheName: string, geocaches: Geocache[]): boolean
+    {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
-        if (!geocache) {
+        if (!geocache)
+        {
             return false;
         }
 
         return geocache.found
     }
 
-    onGeocacheFound(geocacheName: string, geocaches: Geocache[]): boolean {
+    public onGeocacheFound(geocacheName: string, geocaches: Geocache[]): boolean
+    {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
-        if (!geocache) {
+        if (!geocache)
+        {
             return false;
         }
 
-        if (this.geocacheAlreadyFound(geocacheName, geocaches)) {
+        if (this.geocacheAlreadyFound(geocacheName, geocaches))
+        {
             return false;
         }
 
@@ -49,14 +58,15 @@ export class GeocacheManager {
         return true;
     };
 
-    addGeocache(
+    public addGeocache(
         geocaches: Geocache[],
         geocacheName: string,
         position: [number, number] | null,
         found: boolean = false,
-        time: string = "")
+        time: string = ""): void
     {
-        if (!position) {
+        if (!position)
+        {
             return;
         }
 

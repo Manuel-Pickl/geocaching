@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './Contribute.scss';
 import "../tabs.scss";
 import QRCode from 'qrcode.react';
@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface ContributeProps {
+interface ContributeProps
+{
     isOpen: boolean;
     geocacheManager: GeocacheManager;
     geocaches: Geocache[];
@@ -16,26 +17,30 @@ interface ContributeProps {
     userPosition: [number, number] | null;
 }
 
-const Contribute: React.FC<ContributeProps> = ({ isOpen, geocacheManager, geocaches, setGeocaches, userPosition }) => {
+function Contribute({ isOpen, geocacheManager, geocaches, setGeocaches, userPosition }: ContributeProps)
+{
     const geocacheMaxLength: number = 15
     const [geocacheName, setGeocacheName] = useState<string>("");
     const [qrCodeValue, setQRCodeValue] = useState<string>("");
 
-    const contributeIsDisabled = (): boolean => {
+    function contributeIsDisabled(): boolean
+    {
         const nameIsEmpty: boolean = geocacheName.trim().length === 0;
         const nameIsAlreadyTaken: boolean = geocacheManager.geocacheExists(geocacheName, geocaches);
 
         return nameIsEmpty || nameIsAlreadyTaken;
     }
 
-    const onContribute = () => {
+    function onContribute()
+    {
         const geocacheExists: boolean = geocacheManager.geocacheExists(geocacheName, geocaches);
         const message: string = geocacheExists
             ? `Halt stopp! Der Geocache ${geocacheName} existiert bereits.`
             : `Super! Du hast den Geocache ${geocacheName} angelegt.`;
         toast(message);
 
-        if (geocacheExists) {
+        if (geocacheExists)
+        {
             return;
         }
 
@@ -45,9 +50,11 @@ const Contribute: React.FC<ContributeProps> = ({ isOpen, geocacheManager, geocac
         setQRCodeValue(geocacheName);
     }
 
-    const onDownloadClick = () => {
+    function onDownloadClick(): void
+    {
         const canvas: HTMLCanvasElement | null = document.getElementById('qr-code') as HTMLCanvasElement | null;
-        if (!canvas) {
+        if (!canvas)
+        {
             return;
         }
 

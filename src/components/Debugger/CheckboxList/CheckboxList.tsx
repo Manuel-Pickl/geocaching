@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
 import "./CheckboxList.scss"
-import { GeocacheManager as GeocacheManager } from '../../../services/GeocacheManager';
 import { Geocache } from '../../../types/Geocache';
 
-interface CheckboxListProps {
-  geocacheManager: GeocacheManager;
+interface CheckboxListProps
+{
   geocaches: Geocache[];
   setGeocaches: (value: Geocache[]) => void;
 }
 
-const CheckboxList: React.FC<CheckboxListProps> = ({
-  geocaches,
-  setGeocaches
-}) => {
+function CheckboxList({geocaches, setGeocaches }: CheckboxListProps)
+{
   const [listVisible, setListVisible] = useState<boolean>(true);
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function onChange(event: React.ChangeEvent<HTMLInputElement>): void
+  {
     const geocacheName = event.target.name;
     const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name === geocacheName);
-    if (!geocache) {
-        return false;
+    if (!geocache)
+    {
+        return;
     }
 
     geocache.found = !geocache.found;
@@ -27,7 +26,7 @@ const CheckboxList: React.FC<CheckboxListProps> = ({
       ? new Date().toLocaleDateString('de-DE')
       : "";
 
-      setGeocaches([...geocaches]);
+    setGeocaches([...geocaches]);
   };
 
   return (

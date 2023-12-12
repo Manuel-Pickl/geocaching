@@ -13,7 +13,8 @@ import { Flip, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logoFromAssets from "./assets/globe.svg";
 
-function App() {
+function App()
+{
   // LGS-Gelände
   const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
 
@@ -26,27 +27,23 @@ function App() {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     loadPersistentSettings();
     requestPermissionGPS();
   }, []);
 
-  useEffect(() => {
-    serialize("geocaches", geocaches);
-  }, [geocaches]);
-  useEffect(() => {
-    serialize("radius", radius);
-  }, [radius]);
-  useEffect(() => {
-    serialize("voiceIsOn", voiceIsOn);
-  }, [voiceIsOn]);
-  useEffect(() => {
-    serialize("debug", debug);
-  }, [debug]);
+  useEffect(() => { serialize("geocaches", geocaches)}, [geocaches]);
+  useEffect(() => {serialize("radius", radius); }, [radius]);
+  useEffect(() => { serialize("voiceIsOn", voiceIsOn); }, [voiceIsOn]);
+  useEffect(() => { serialize("debug", debug); }, [debug]);
   
-  const initializeLocationWatcher = () => {
-    navigator.geolocation.watchPosition((position: GeolocationPosition) => {
-      if (debug) {
+  function initializeLocationWatcher()
+  {
+    navigator.geolocation.watchPosition((position: GeolocationPosition) =>
+    {
+      if (debug)
+      {
         return;
       }
       
@@ -54,23 +51,28 @@ function App() {
     });
   };
 
-  const loadPersistentSettings = () => {
+  function loadPersistentSettings()
+  {
     setGeocaches(deserialize("geocaches") ?? geocacheManager.getDefaultGeocaches());
     setRadius(deserialize("radius") ?? radius);
     setVoiceIsOn(deserialize("voiceIsOn") ?? voiceIsOn);
     setDebug(deserialize("debug") ?? debug);
   }
 
-  const requestPermissionGPS = () => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        () => { 
-          console.log("'GPS' permission granted")
-          initializeLocationWatcher();
-        },
-        () => { console.log("'GPS' permission denied") },
-      );
+  function requestPermissionGPS()
+  {
+    if (!('geolocation' in navigator))
+    {
+      return;
     }
+    
+    navigator.geolocation.getCurrentPosition(
+      () => { 
+        console.log("'GPS' permission granted")
+        initializeLocationWatcher();
+      },
+      () => { console.log("'GPS' permission denied") },
+    );
   }
 
   return (

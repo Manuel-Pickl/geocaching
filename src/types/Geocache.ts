@@ -1,4 +1,5 @@
-export class Geocache {
+export class Geocache
+{
     name: string;
     latitude: number;
     longitude: number;
@@ -6,7 +7,8 @@ export class Geocache {
     time: string;
     isDefault: boolean;
   
-    constructor(name: string, latitude: number, longitude: number, found: boolean, time: string, isDefault: boolean) {
+    constructor(name: string, latitude: number, longitude: number, found: boolean, time: string, isDefault: boolean)
+    {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;

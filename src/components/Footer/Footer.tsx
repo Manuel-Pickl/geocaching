@@ -1,16 +1,18 @@
-import React from 'react';
 import './Footer.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faCirclePlus, faGear, faLocationDot, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { Tab } from '../../types/Tab';
 
-interface FooterProps {
+interface FooterProps
+{
     activeTab: Tab;
     setActiveTab: (value: Tab) => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ activeTab, setActiveTab }) => {
-    const isTabActive = (tab: Tab) => {
+function Footer({ activeTab, setActiveTab }: FooterProps)
+{
+    function isTabActive(tab: Tab): string
+    {
         return tab === activeTab
             ? "active"
             : "";

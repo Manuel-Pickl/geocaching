@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './Scan.scss';
 import "../tabs.scss";
 import QrScanner from 'qr-scanner';
@@ -9,7 +9,8 @@ import { toast } from 'react-toastify';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface ScanProps {
+interface ScanProps
+{
     isOpen: boolean;
     geocacheManager: GeocacheManager;
     geocaches: Geocache[];
@@ -17,10 +18,12 @@ interface ScanProps {
     setActiveTab: (value: Tab) => void;
 }
 
-const Scan: React.FC<ScanProps> = ({ isOpen, geocacheManager, geocaches, setGeocaches, setActiveTab }) => {
+function Scan({ isOpen, geocacheManager, geocaches, setGeocaches, setActiveTab }: ScanProps)
+{
     const videoElement = useRef(null);
 
-    const onScanResult = (geocacheName: string) => {
+    function onScanResult(geocacheName: string): void
+    {
         setActiveTab(Tab.Explore);
     
         const result: boolean = geocacheManager.onGeocacheFound(geocacheName, geocaches);
@@ -32,14 +35,17 @@ const Scan: React.FC<ScanProps> = ({ isOpen, geocacheManager, geocaches, setGeoc
         setGeocaches([...geocaches])
     }
     
-    useEffect(() => {
-        if (!videoElement.current) {
+    useEffect(() =>
+    {
+        if (!videoElement.current)
+        {
             return;
         }
 
         const qrScanner = new QrScanner(
             videoElement.current,
-            (result) => {
+            (result) =>
+            {
                 onScanResult(result.data);
             },
             {}
@@ -47,7 +53,8 @@ const Scan: React.FC<ScanProps> = ({ isOpen, geocacheManager, geocaches, setGeoc
 
         qrScanner.start();
 
-        return () => {
+        return () =>
+        {
             qrScanner.stop();
             qrScanner.destroy();
         };

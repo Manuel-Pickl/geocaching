@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import "./Joystick.scss";
 import { Direction } from '../../../types/Direction';
 
-interface JoystickProps {
+interface JoystickProps
+{
   userPosition: [number, number] | null;
   setUserPosition: (value: [number, number]) => void;
 }
 
-const Joystick: React.FC<JoystickProps> = ({ userPosition, setUserPosition }) =>
+function Joystick({ userPosition, setUserPosition }: JoystickProps)
 {
   const debugMovement = 0.0001;
   const directions = [
@@ -17,23 +18,45 @@ const Joystick: React.FC<JoystickProps> = ({ userPosition, setUserPosition }) =>
     Direction.Down
   ];
 
-  useEffect(() => {
-    if (userPosition) {
+  useEffect(() =>
+  {
+    if (userPosition)
+    {
       return;
     }
 
     setUserPosition([49.43306480206603, 11.86834899582829]);
   }, []);
 
-  const handleArrowClick = (direction: Direction) => {
-    if (!userPosition) {
+  function getArrowSymbol(direction: Direction): string
+  {
+    switch (direction)
+    {
+      case Direction.Up:
+        return "↑";
+      case Direction.Right:
+        return "→";
+      case Direction.Down:
+        return "↓";
+      case Direction.Left:
+        return "←";
+      default:
+        return "";
+    }
+  };
+
+  function handleArrowClick(direction: Direction): void
+  {
+    if (!userPosition)
+    {
       return;
     }
 
     const currentLatitude = userPosition[0];
     const currentLongitude = userPosition[1];
 
-    switch (direction) {
+    switch (direction)
+    {
       case Direction.Up:
         setUserPosition([currentLatitude + debugMovement, currentLongitude]);
         break;
@@ -62,21 +85,6 @@ const Joystick: React.FC<JoystickProps> = ({ userPosition, setUserPosition }) =>
       ))}
     </div>
   );
-};
-
-const getArrowSymbol = (direction: Direction) => {
-  switch (direction) {
-    case Direction.Up:
-      return '↑';
-    case Direction.Right:
-      return '→';
-    case Direction.Down:
-      return '↓';
-    case Direction.Left:
-      return '←';
-    default:
-      return '';
-  }
 };
 
 export default Joystick;

@@ -1,4 +1,5 @@
-export enum Direction {
+export enum Direction
+{
     None,
     Up,
     Right,
