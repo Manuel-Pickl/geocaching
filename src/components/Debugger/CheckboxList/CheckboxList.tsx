@@ -1,53 +1,53 @@
 import React, { useState } from 'react';
 import "./CheckboxList.scss"
-import { GeoPointManager } from '../../../services/GeoPointManager';
-import { GeoPoint } from '../../../types/GeoPoint';
+import { GeocacheManager as GeocacheManager } from '../../../services/GeocacheManager';
+import { Geocache } from '../../../types/Geocache';
 
 interface CheckboxListProps {
-  geoPointManager: GeoPointManager;
-  geoPoints: GeoPoint[];
-  setGeoPoints: (value: GeoPoint[]) => void;
+  geocacheManager: GeocacheManager;
+  geocaches: Geocache[];
+  setGeocaches: (value: Geocache[]) => void;
 }
 
 const CheckboxList: React.FC<CheckboxListProps> = ({
-  geoPoints,
-  setGeoPoints
+  geocaches,
+  setGeocaches
 }) => {
   const [listVisible, setListVisible] = useState<boolean>(true);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const geoPointName = event.target.name;
-    const geoPoint: GeoPoint | undefined = geoPoints.find(x => x.name === geoPointName);
-    if (!geoPoint) {
+    const geocacheName = event.target.name;
+    const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name === geocacheName);
+    if (!geocache) {
         return false;
     }
 
-    geoPoint.found = !geoPoint.found;
-    geoPoint.time = geoPoint.found 
+    geocache.found = !geocache.found;
+    geocache.time = geocache.found 
       ? new Date().toLocaleDateString('de-DE')
       : "";
 
-    setGeoPoints([...geoPoints]);
+      setGeocaches([...geocaches]);
   };
 
   return (
     <div className="checkboxList">
       <div>
         <button onClick={() => {setListVisible(!listVisible)}}>
-          debug geopoints
+          debug geocaches
         </button>
         {listVisible && (
           <ul>
-            {geoPoints?.map((geoPoint, index) => (
+            {geocaches?.map((geocache, index) => (
               <li key={index}>
                 <label>
                   <input
                     type="checkbox"
-                    name={geoPoint.name}
-                    checked={geoPoint.found}
+                    name={geocache.name}
+                    checked={geocache.found}
                     onChange={onChange}
                   />
-                  <span>{geoPoint.name}</span>
+                  <span>{geocache.name}</span>
                 </label>
               </li>
             ))}

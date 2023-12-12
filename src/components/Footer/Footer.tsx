@@ -10,60 +10,35 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ activeTab, setActiveTab }) => {
-    const getTabButtonClass = (tab: Tab) => {
+    const isTabActive = (tab: Tab) => {
         return tab === activeTab
             ? "active"
             : "";
     };
 
+    const footerInfos = [
+        { tab: Tab.Explore,     icon: faLocationDot,    text: "Entdecken" },
+        { tab: Tab.Scan,        icon: faQrcode,         text: "Scannen" },
+        { tab: Tab.Contribute,  icon: faCirclePlus,     text: "Beitragen" },
+        { tab: Tab.Settings,    icon: faGear,           text: "Einstellungen" },
+        { tab: Tab.Credits,     icon: faBookOpen,       text: "Verweise" }
+    ];
+
     return (
         <div className="footer">
-            <button
-                className={getTabButtonClass(Tab.Explore)}
-                onClick={() => setActiveTab(Tab.Explore)}
-            >
-                <div>
-                    <FontAwesomeIcon icon={faLocationDot} />
-                </div>
-                <span>Entdecken</span>
-            </button>
-            <button
-                className={getTabButtonClass(Tab.Scan)}
-                onClick={() => setActiveTab(Tab.Scan)}
-            >
-                <div>
-                    <FontAwesomeIcon icon={faQrcode} />
-                </div>
-                <span>Scannen</span>
-            </button>
-            <button
-                className={getTabButtonClass(Tab.Contribute)}
-                onClick={() => setActiveTab(Tab.Contribute)}
-            >
-                <div>
-                    <FontAwesomeIcon icon={faCirclePlus} />
-                </div>
-                <span>Beitragen</span>
-            </button>
-            <button
-                className={getTabButtonClass(Tab.Settings)}
-                onClick={() => setActiveTab(Tab.Settings)}
-            >
-                <div>
-                    <FontAwesomeIcon icon={faGear} />
-                </div>
-                <span>Einstellungen</span>
-            </button>
-            <button
-                className={getTabButtonClass(Tab.Credits)}
-                onClick={() => setActiveTab(Tab.Credits)}
-            >
-                <div>
-                    <FontAwesomeIcon icon={faBookOpen} />
-                </div>
-                <span>Verweise</span>
-            </button>
-        </div>
+            {footerInfos.map(footerInfo => (
+                <button
+                    key={footerInfo.tab}
+                    className={isTabActive(footerInfo.tab)}
+                    onClick={() => setActiveTab(footerInfo.tab)}
+                >
+                    <div>
+                        <FontAwesomeIcon icon={footerInfo.icon} />
+                    </div>
+                    <span>{footerInfo.text}</span>
+                </button>
+            ))}
+    </div>
     );
 };
 

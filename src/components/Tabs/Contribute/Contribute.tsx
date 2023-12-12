@@ -2,45 +2,45 @@ import React, { useState } from 'react';
 import './Contribute.scss';
 import "../tabs.scss";
 import QRCode from 'qrcode.react';
-import { GeoPointManager } from '../../../services/GeoPointManager';
-import { GeoPoint } from '../../../types/GeoPoint';
+import { GeocacheManager } from '../../../services/GeocacheManager';
+import { Geocache } from '../../../types/Geocache';
 import { toast } from 'react-toastify';
 import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ContributeProps {
     isOpen: boolean;
-    geoPointManager: GeoPointManager;
-    geoPoints: GeoPoint[];
-    setGeoPoints: (value: GeoPoint[]) => void;
+    geocacheManager: GeocacheManager;
+    geocaches: Geocache[];
+    setGeocaches: (value: Geocache[]) => void;
     userPosition: [number, number] | null;
 }
 
-const Contribute: React.FC<ContributeProps> = ({ isOpen, geoPointManager, geoPoints, setGeoPoints, userPosition }) => {
+const Contribute: React.FC<ContributeProps> = ({ isOpen, geocacheManager, geocaches, setGeocaches, userPosition }) => {
     const geocacheMaxLength: number = 15
     const [geocacheName, setGeocacheName] = useState<string>("");
     const [qrCodeValue, setQRCodeValue] = useState<string>("");
 
     const contributeIsDisabled = (): boolean => {
         const nameIsEmpty: boolean = geocacheName.trim().length === 0;
-        const nameIsAlreadyTaken: boolean = geoPointManager.geoPointExists(geocacheName, geoPoints);
+        const nameIsAlreadyTaken: boolean = geocacheManager.geocacheExists(geocacheName, geocaches);
 
         return nameIsEmpty || nameIsAlreadyTaken;
     }
 
     const onContribute = () => {
-        const geoPointExists: boolean = geoPointManager.geoPointExists(geocacheName, geoPoints);
-        const message: string = geoPointExists
+        const geocacheExists: boolean = geocacheManager.geocacheExists(geocacheName, geocaches);
+        const message: string = geocacheExists
             ? `Halt stopp! Der Geocache ${geocacheName} existiert bereits.`
             : `Super! Du hast den Geocache ${geocacheName} angelegt.`;
         toast(message);
 
-        if (geoPointExists) {
+        if (geocacheExists) {
             return;
         }
 
-        geoPointManager.addGeoPoint(geoPoints, geocacheName, userPosition);
-        setGeoPoints([...geoPoints]);
+        geocacheManager.addGeocache(geocaches, geocacheName, userPosition);
+        setGeocaches([...geocaches]);
 
         setQRCodeValue(geocacheName);
     }

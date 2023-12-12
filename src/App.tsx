@@ -1,7 +1,7 @@
 import Footer from './components/Footer/Footer';
 import { useEffect, useState } from 'react';
-import { GeoPoint } from './types/GeoPoint';
-import { GeoPointManager } from './services/GeoPointManager';
+import { Geocache } from './types/Geocache';
+import { GeocacheManager } from './services/GeocacheManager';
 import { Tab } from './types/Tab';
 import { serialize, deserialize } from './services/JsonHelper';
 import Debugger from './components/Debugger/Debugger';
@@ -21,8 +21,8 @@ function App() {
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
   const [debug, setDebug] = useState<boolean>(false);
 
-  const geoPointManager = new GeoPointManager();
-  const [geoPoints, setGeoPoints] = useState<GeoPoint[]>([]);
+  const geocacheManager = new GeocacheManager();
+  const [geocaches, setGeocaches] = useState<Geocache[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
 
@@ -32,8 +32,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    serialize("geoPoints", geoPoints);
-  }, [geoPoints]);
+    serialize("geocaches", geocaches);
+  }, [geocaches]);
   useEffect(() => {
     serialize("radius", radius);
   }, [radius]);
@@ -46,12 +46,16 @@ function App() {
   
   const initializeLocationWatcher = () => {
     navigator.geolocation.watchPosition((position: GeolocationPosition) => {
+      if (debug) {
+        return;
+      }
+      
       setUserPosition([position.coords.latitude, position.coords.longitude])
     });
   };
 
   const loadPersistentSettings = () => {
-    setGeoPoints(deserialize("geoPoints") ?? geoPointManager.getDefaultGeoPoints());
+    setGeocaches(deserialize("geocaches") ?? geocacheManager.getDefaultGeocaches());
     setRadius(deserialize("radius") ?? radius);
     setVoiceIsOn(deserialize("voiceIsOn") ?? voiceIsOn);
     setDebug(deserialize("debug") ?? debug);
@@ -73,8 +77,8 @@ function App() {
     <div className="app">
       {debug &&
         <Debugger
-          geoPointManager={geoPointManager}
-          geoPoints={geoPoints} setGeoPoints={setGeoPoints}
+          geocacheManager={geocacheManager}
+          geocaches={geocaches} setGeocaches={setGeocaches}
           userPosition={userPosition} setUserPosition={setUserPosition}
         />
       }
@@ -82,7 +86,7 @@ function App() {
       <LeafletMap
           position={mapCenter}
           userPosition={userPosition}
-          geoPoints={geoPoints}
+          geocaches={geocaches}
           radius={radius}
           voiceIsOn={voiceIsOn}
       />
@@ -94,23 +98,23 @@ function App() {
       {/* tabs */}
       <Scan
         isOpen={activeTab == Tab.Scan}
-        geoPointManager={geoPointManager}
-        geoPoints={geoPoints}
-        setGeoPoints={setGeoPoints}
+        geocacheManager={geocacheManager}
+        geocaches={geocaches}
+        setGeocaches={setGeocaches}
         setActiveTab={setActiveTab}
       />
 
       <Contribute
         isOpen={activeTab == Tab.Contribute}
-        geoPointManager={geoPointManager}
-        geoPoints={geoPoints}
-        setGeoPoints={setGeoPoints}
+        geocacheManager={geocacheManager}
+        geocaches={geocaches}
+        setGeocaches={setGeocaches}
         userPosition={userPosition}
       />
       
       <Settings 
         isOpen={activeTab == Tab.Settings}
-        geoPoints={geoPoints}
+        geocaches={geocaches}
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}
         debug={debug} setDebug={setDebug}

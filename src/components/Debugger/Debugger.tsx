@@ -2,22 +2,22 @@ import React from 'react';
 import "./Debugger.scss";
 import CheckboxList from './CheckboxList/CheckboxList';
 import Joystick from './Joystick/Joystick';
-import { GeoPointManager } from '../../services/GeoPointManager';
-import { GeoPoint } from '../../types/GeoPoint';
+import { GeocacheManager } from '../../services/GeocacheManager';
+import { Geocache } from '../../types/Geocache';
 
 interface DebuggerProps {
-    geoPointManager: GeoPointManager;
-    geoPoints: GeoPoint[];
-    setGeoPoints: (geoPoints: GeoPoint[]) => void;
+    geocacheManager: GeocacheManager;
+    geocaches: Geocache[];
+    setGeocaches: (geocaches: Geocache[]) => void;
     userPosition: [number, number] | null;
     setUserPosition: (value: [number, number]) => void;
 }
 
-const Debugger: React.FC<DebuggerProps> = ({geoPointManager, geoPoints, setGeoPoints, userPosition, setUserPosition }) =>
+const Debugger: React.FC<DebuggerProps> = ({geocacheManager, geocaches, setGeocaches, userPosition, setUserPosition }) =>
 {
     const clearLocalStorage = () => {
         localStorage.clear();
-        setGeoPoints(geoPointManager.getDefaultGeoPoints());
+        setGeocaches(geocacheManager.getDefaultGeocaches());
     }
     
     return (
@@ -32,8 +32,8 @@ const Debugger: React.FC<DebuggerProps> = ({geoPointManager, geoPoints, setGeoPo
                 clear localstorage
             </button>
             <CheckboxList
-                geoPointManager={geoPointManager}
-                geoPoints={geoPoints} setGeoPoints={setGeoPoints}
+                geocacheManager={geocacheManager}
+                geocaches={geocaches} setGeocaches={setGeocaches}
             />
         </div>
     );

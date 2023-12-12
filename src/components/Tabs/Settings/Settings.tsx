@@ -2,39 +2,39 @@ import React from 'react';
 import Switch from 'react-switch';
 import './Settings.scss';
 import "../tabs.scss";
-import { GeoPoint } from '../../../types/GeoPoint';
+import { Geocache } from '../../../types/Geocache';
 
 interface SettingsProps {
     isOpen: boolean;
-    geoPoints: GeoPoint[];
+    geocaches: Geocache[];
     radius: number; setRadius: (value: number) => void;
     voiceIsOn: boolean; setVoiceIsOn: (value: boolean) => void;
     debug: boolean; setDebug: (value: boolean) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ isOpen, geoPoints, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }) => {
+const Settings: React.FC<SettingsProps> = ({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }) => {
     return (
         <>
             {isOpen &&
                 <div className="tab settings">
                     <span><b>Geochaches</b></span>
                     <ul>
-                        {geoPoints
-                            .filter(geoPoint => geoPoint.found)
-                            .map((geoPoint, index) => (
+                        {geocaches
+                            .filter(geocache => geocache.found)
+                            .map((geocache, index) => (
                             <li key={index} className="found">
                                 <div>✓</div>
-                                <div className="name">{geoPoint.name}</div>
-                                <div>{geoPoint.time}</div>
+                                <div className="name">{geocache.name}</div>
+                                <div>{geocache.time}</div>
                             </li>
                         ))}
-                        {geoPoints
-                            .filter(geoPoint => !geoPoint.found)
-                            .map((geoPoint, index) => (
+                        {geocaches
+                            .filter(geocache => !geocache.found)
+                            .map((geocache, index) => (
                             <li key={index}>
                                 <div>✗</div>
-                                <div className="name">{geoPoint.name}</div>
-                                <div>{geoPoint.time}</div>
+                                <div className="name">{geocache.name}</div>
+                                <div>{geocache.time}</div>
                             </li>
                         ))}
                     </ul>

@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import './Scan.scss';
 import "../tabs.scss";
 import QrScanner from 'qr-scanner';
-import { GeoPointManager } from '../../../services/GeoPointManager';
-import { GeoPoint } from '../../../types/GeoPoint';
+import { GeocacheManager } from '../../../services/GeocacheManager';
+import { Geocache } from '../../../types/Geocache';
 import { Tab } from '../../../types/Tab';
 import { toast } from 'react-toastify';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
@@ -11,25 +11,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ScanProps {
     isOpen: boolean;
-    geoPointManager: GeoPointManager;
-    geoPoints: GeoPoint[];
-    setGeoPoints: (value: GeoPoint[]) => void;
+    geocacheManager: GeocacheManager;
+    geocaches: Geocache[];
+    setGeocaches: (value: Geocache[]) => void;
     setActiveTab: (value: Tab) => void;
 }
 
-const Scan: React.FC<ScanProps> = ({ isOpen, geoPointManager, geoPoints, setGeoPoints, setActiveTab }) => {
+const Scan: React.FC<ScanProps> = ({ isOpen, geocacheManager, geocaches, setGeocaches, setActiveTab }) => {
     const videoElement = useRef(null);
 
-    const onScanResult = (geoPointName: string) => {
+    const onScanResult = (geocacheName: string) => {
         setActiveTab(Tab.Explore);
     
-        const result: boolean = geoPointManager.onGeoPointFound(geoPointName, geoPoints);
+        const result: boolean = geocacheManager.onGeocacheFound(geocacheName, geocaches);
         const message: string = result
-        ? `Herzlichen Glückwunsch! Du hast den Standort ${geoPointName} gefunden.`
-        : `Schade! Den Standort ${geoPointName} hast du bereits gefunden.`;
+        ? `Herzlichen Glückwunsch! Du hast den Geocache ${geocacheName} gefunden.`
+        : `Schade! Den Geocache ${geocacheName} hast du bereits gefunden.`;
         toast(message);
         
-        setGeoPoints([...geoPoints])
+        setGeocaches([...geocaches])
     }
     
     useEffect(() => {

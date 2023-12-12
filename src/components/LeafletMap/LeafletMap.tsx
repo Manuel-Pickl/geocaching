@@ -4,13 +4,13 @@ import 'leaflet/dist/leaflet.css';
 import './LeafletMap.scss'
 import * as geolib from 'geolib';
 import { read } from '../../services/SpeechSynthesis';
-import { GeoPoint } from '../../types/GeoPoint';
+import { Geocache } from '../../types/Geocache';
 import { toast } from 'react-toastify';
 
 interface LeafletMapProps {
   position: [number, number];
   userPosition: [number, number] | null;
-  geoPoints: GeoPoint[];
+  geocaches: Geocache[];
   radius: number;
   voiceIsOn: boolean;
 }
@@ -24,7 +24,7 @@ enum MapType {
 const LeafletMap: React.FC<LeafletMapProps> = ({
   position,
   userPosition,
-  geoPoints,
+  geocaches,
   radius,
   voiceIsOn
 }) => {
@@ -34,7 +34,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   const markerWidth: number = 30;
   const markerHeight: number = markerWidth / 0.61;
 
-  const [nearGeoPoints, _setNearGeoPoints] = useState<Set<String>>(new Set());;
+  const [nearGeocaches, _setNearGeocaches] = useState<Set<String>>(new Set());;
   const map = useRef<Map | null>(null);
   const userMarker = useRef<L.CircleMarker | null>(null);
 
@@ -43,34 +43,34 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   }, []);
 
   useEffect(() => {
-    checkForNearGeoPoints();
+    checkForNearGeocaches();
     updateUserMarker();
   }, [userPosition]);
 
   useEffect(() => {
     updateFoundMarkers();
-  }, [geoPoints]);
+  }, [geocaches]);
 
-  const checkForNearGeoPoints = () => {
+  const checkForNearGeocaches = () => {
     if (!userPosition) {
       return;
     }
 
-    geoPoints
-      .filter(geoPoint => !geoPoint.found)
-      .forEach(geoPoint => {
-      const distanceToGeoPoint = geolib.getDistance(
+    geocaches
+      .filter(geocache => !geocache.found)
+      .forEach(geocache => {
+      const distanceToGeocache = geolib.getDistance(
         { latitude: userPosition[0], longitude: userPosition[1] },
-        { latitude: geoPoint.latitude, longitude: geoPoint.longitude }
+        { latitude: geocache.latitude, longitude: geocache.longitude }
       );
 
-      const geoPointIsNear: boolean = distanceToGeoPoint <= radius;     
-      const firstTimeNearGeoPoint: boolean = !nearGeoPoints.has(geoPoint.name);
-      if (geoPointIsNear) {
-        if (firstTimeNearGeoPoint) {
-          nearGeoPoints.add(geoPoint.name);
-          const message: string = `Du bist in der Nähe vom Punkt: ${geoPoint.name}!`;
-          
+      const geocacheIsNear: boolean = distanceToGeocache <= radius;     
+      const firstTimeNearGeocache: boolean = !nearGeocaches.has(geocache.name);
+      if (geocacheIsNear) {
+        if (firstTimeNearGeocache) {
+          nearGeocaches.add(geocache.name);
+
+          const message: string = `Du bist in der Nähe vom Geocache: ${geocache.name}!`;
           toast(message);
                     
           if (voiceIsOn) {
@@ -78,7 +78,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           }
         }
       } else {
-        nearGeoPoints.delete(geoPoint.name);
+        nearGeocaches.delete(geocache.name);
       }
     });
   }
@@ -120,12 +120,12 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     userMarker.current.setLatLng(toLatLngExpression(userPosition));
   }
 
-  function getIconHtml(geoPoint: GeoPoint): string {
-    const markerImage: string = geoPoint.isDefault
+  function getIconHtml(geocache: Geocache): string {
+    const markerImage: string = geocache.isDefault
       ? "<img src='/markers/marker.png' class='marker-pin' alt='marker pin'/>"
       : `<img src='/markers/marker${Math.floor(Math.random() * 5) + 1}.png' class='marker-pin' alt='marker pin'/>`;
-    const geocacheImage: string = geoPoint.isDefault
-      ? `<img src="/landmarks/${geoPoint.name}.jpg" class="marker-image" alt=${geoPoint.name}/>`
+    const geocacheImage: string = geocache.isDefault
+      ? `<img src="/landmarks/${geocache.name}.jpg" class="marker-image" alt=${geocache.name}/>`
       : "";
     const iconHtml: string = `
       ${markerImage}
@@ -135,15 +135,15 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     return iconHtml;
   }
 
-  function getPopupHtml(geoPoint: GeoPoint): string {
-    const geocacheImage: string = geoPoint.isDefault
-      ? `<img src="/landmarks/${geoPoint.name}.jpg" class="popup-image" alt=${geoPoint.name}/>`
+  function getPopupHtml(geocache: Geocache): string {
+    const geocacheImage: string = geocache.isDefault
+      ? `<img src="/landmarks/${geocache.name}.jpg" class="popup-image" alt=${geocache.name}/>`
       : "";
       const popupHtml: string = `
       <div class="popup">
-        <b>${geoPoint.name}</b>
+        <b>${geocache.name}</b>
         ${geocacheImage}
-        ✪ ${geoPoint.time}
+        ✪ ${geocache.time}
       </div>
     `;
 
@@ -151,7 +151,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   }
 
   function updateFoundMarkers() {
-    if (!geoPoints || !map.current) {
+    if (!geocaches || !map.current) {
       return;
     }
   
@@ -162,20 +162,21 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       }
     });
   
-    geoPoints.filter(geoPoint => geoPoint.found).forEach((geoPoint) => {
+    geocaches.filter(geocache => geocache.found).forEach(geocache =>
+    {
       const customIcon = L.divIcon({
         className: 'marker',
         iconSize: [markerWidth, markerHeight],
         iconAnchor: [markerWidth / 2, markerHeight],
-        html: getIconHtml(geoPoint)
+        html: getIconHtml(geocache)
       });
 
-      const marker = L.marker(toLatLngExpression([geoPoint.latitude, geoPoint.longitude]), { icon: customIcon });
+      const marker = L.marker(toLatLngExpression([geocache.latitude, geocache.longitude]), { icon: customIcon });
       if (map.current) {
         marker.addTo(map.current);
       }
       
-      marker.bindPopup(getPopupHtml(geoPoint))
+      marker.bindPopup(getPopupHtml(geocache))
         .on('click', () => { marker.openPopup(); });
     });
   }

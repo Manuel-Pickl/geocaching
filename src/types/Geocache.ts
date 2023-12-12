@@ -1,4 +1,4 @@
-export class GeoPoint {
+export class Geocache {
     name: string;
     latitude: number;
     longitude: number;
