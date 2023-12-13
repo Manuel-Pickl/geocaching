@@ -20,7 +20,11 @@ export class GeocacheManager
         return defaultGeocaches;
     }
 
-    public onGeocacheFound(geocacheName: string, geocaches: Geocache[]): boolean
+    public findGeocache(
+        geocacheName: string,
+        geocaches: Geocache[],
+        setGeocaches: (value: Geocache[]) => void
+    ): boolean
     {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
         if (!geocache)
@@ -36,15 +40,19 @@ export class GeocacheManager
         geocache.found = true;
         geocache.time = new Date().toLocaleDateString('de-DE');
 
+        setGeocaches([...geocaches])
+        
         return true;
     };
 
-    public addGeocache(
+    public hideGeocache(
         geocaches: Geocache[],
         geocacheName: string,
         position: [number, number] | null,
+        setGeocaches: (value: Geocache[]) => void,
         found: boolean = false,
-        time: string = ""): boolean
+        time: string = ""
+    ): boolean
     {
         if (!position)
         {
@@ -66,6 +74,7 @@ export class GeocacheManager
             false
         )
         geocaches.push(newGeocache);
+        setGeocaches([...geocaches]);
 
         return true;
     }

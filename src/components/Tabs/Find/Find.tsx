@@ -19,15 +19,14 @@ function Find({ isOpen, geocacheManager, geocaches, setGeocaches, setActiveTab }
 {
     function onScanResult(geocacheName: string): void
     {
-        setActiveTab(Tab.Explore);
-    
-        const result: boolean = geocacheManager.onGeocacheFound(geocacheName, geocaches);
-        const message: string = result
-            ? `Herzlichen Glückwunsch! Du hast den Geocache '${geocacheName}' gefunden.`
-            : `Schade! Den Geocache '${geocacheName}' hast du bereits gefunden.`;
+        const successfullyFound: boolean = geocacheManager.findGeocache(geocacheName, geocaches, setGeocaches);
+        
+        const message: string = successfullyFound
+        ? `Herzlichen Glückwunsch! Du hast den Geocache '${geocacheName}' gefunden.`
+        : `Schade! Den Geocache '${geocacheName}' hast du bereits gefunden.`;
         toast(message);
         
-        setGeocaches([...geocaches])
+        setActiveTab(Tab.Explore);
     }
     
     return (

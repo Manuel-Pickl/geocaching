@@ -20,17 +20,16 @@ function Hide({ isOpen, geocacheManager, geocaches, setGeocaches, userPosition, 
 {
     function onScanResult(geocacheName: string): void
     {
-        setActiveTab(Tab.Explore);
-    
-        const result: boolean = geocacheManager.addGeocache(geocaches, geocacheName, userPosition);
-        const message: string = result
-            ? `Super! Du hast den Geocache '${geocacheName}' versteckt.`
-            : `Halt stopp! Der Geocache '${geocacheName}' existiert bereits.`;
+        const successfullyHidden: boolean = geocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches);
+        
+        const message: string = successfullyHidden
+        ? `Super! Du hast den Geocache '${geocacheName}' versteckt.`
+        : `Halt stopp! Der Geocache '${geocacheName}' existiert bereits.`;
         toast(message);
         
-        setGeocaches([...geocaches])
+        setActiveTab(Tab.Explore);
     }
-    
+
     return (
         <>
             {isOpen &&
