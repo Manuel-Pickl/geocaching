@@ -34,7 +34,7 @@ function Settings({ isOpen, geocaches, geocacheManager, radius, setRadius, voice
         <>
             {isOpen &&
                 <div className="tab settings">
-                    <span><b>Geochaches</b></span>
+                    <span><b>Geocaches</b></span>
                     <ul>
                         {geocaches
                             .filter(geocache => geocache.found)

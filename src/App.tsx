@@ -112,6 +112,9 @@ const App = () =>
         <Debugger
           geocaches={geocaches} setGeocaches={setGeocaches}
           userPosition={userPosition} setUserPosition={setUserPosition}
+          onGeocacheFound={onGeocacheFound}
+          onGeocacheHidden={onGeocacheHidden}
+          geocacheManager={geocacheManager}
         />
       }
 

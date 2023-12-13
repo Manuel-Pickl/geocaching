@@ -93,9 +93,17 @@ export class GeocacheManager
         return gpxData;
     }
 
-    private geocacheExists(geocacheName: string, geocaches: Geocache[]): boolean
+    public getGeocacheByName(geocacheName: string, geocaches: Geocache[]): Geocache | undefined
     {
-        const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
+        const geocache: Geocache | undefined = geocaches
+            .find(geocache => geocache.name === geocacheName);
+        
+        return geocache;
+    }
+
+    public geocacheExists(geocacheName: string, geocaches: Geocache[]): boolean
+    {
+        const geocache: Geocache | undefined = this.getGeocacheByName(geocacheName, geocaches);
         const geocacheExists: boolean = geocache != undefined;
 
         return geocacheExists;

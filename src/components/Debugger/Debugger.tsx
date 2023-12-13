@@ -1,8 +1,10 @@
 import "./Debugger.scss";
-import CheckboxList from './CheckboxList/CheckboxList';
+import FindGeocacheList from './FindGeocacheList/FindGeocacheList';
 import Joystick from './Joystick/Joystick';
 import { Geocache } from '../../types/Geocache';
 import Draggable from "react-draggable";
+import HideGeocacheList from "./HideGeocacheList/HideGeocacheList";
+import { GeocacheManager } from "../../services/GeocacheManager";
 
 interface DebuggerProps
 {
@@ -10,9 +12,12 @@ interface DebuggerProps
     setGeocaches: (geocaches: Geocache[]) => void;
     userPosition: [number, number] | null;
     setUserPosition: (value: [number, number]) => void;
+    onGeocacheFound: (geocacheName: string) => void;
+    onGeocacheHidden: (geocacheName: string) => void;
+    geocacheManager: GeocacheManager;
 }
 
-function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition }: DebuggerProps)
+function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGeocacheFound, onGeocacheHidden, geocacheManager }: DebuggerProps)
 {
     function clearLocalStorage()
     {
@@ -33,8 +38,14 @@ function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition }: De
                 >
                     clear localstorage
                 </button>
-                <CheckboxList
+                <FindGeocacheList
                     geocaches={geocaches} setGeocaches={setGeocaches}
+                    onGeocacheFound={onGeocacheFound}
+                />
+                <HideGeocacheList
+                    geocaches={geocaches} setGeocaches={setGeocaches}
+                    onGeocacheHidden={onGeocacheHidden}
+                    geocacheManager={geocacheManager}
                 />
             </div>
         </Draggable>

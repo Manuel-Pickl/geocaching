@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import "./CheckboxList.scss"
+import "./FindGeocacheList.scss"
 import { Geocache } from '../../../types/Geocache';
 
-interface CheckboxListProps
+interface FindGeocacheListProps
 {
   geocaches: Geocache[];
   setGeocaches: (value: Geocache[]) => void;
+  onGeocacheFound: (geocacheName: string) => void;
 }
 
-function CheckboxList({geocaches, setGeocaches }: CheckboxListProps)
+function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound }: FindGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
 
@@ -21,19 +22,26 @@ function CheckboxList({geocaches, setGeocaches }: CheckboxListProps)
         return;
     }
 
-    geocache.found = !geocache.found;
-    geocache.time = geocache.found 
-      ? new Date().toISOString()
-      : "";
-
-    setGeocaches([...geocaches]);
+    if (geocache.found)
+    {
+      geocache.found = !geocache.found;
+      geocache.time = geocache.found 
+        ? new Date().toISOString()
+        : "";
+  
+      setGeocaches([...geocaches]);
+    }
+    else
+    {
+      onGeocacheFound(geocacheName);
+    }
   };
 
   return (
-    <div className="checkboxList">
+    <div className="findGeocacheList">
       <div>
         <button onClick={() => {setListVisible(!listVisible)}}>
-          debug geocaches
+          find geocaches ▼
         </button>
         {listVisible && (
           <ul>
@@ -57,4 +65,4 @@ function CheckboxList({geocaches, setGeocaches }: CheckboxListProps)
   );
 };
 
-export default CheckboxList;
+export default FindGeocacheList;
