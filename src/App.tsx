@@ -13,6 +13,7 @@ import Find from './components/Tabs/Find/Find';
 import Hide from './components/Tabs/Hide/Hide';
 import { Result } from './types/Result';
 import { PermissionManager } from './services/PermissionManager';
+import Credits from './components/Tabs/Credits/Credits';
 
 /**
  * The main App component.
@@ -107,6 +108,10 @@ const App = () =>
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}
         debug={debug} setDebug={setDebug}
+      />
+
+      <Credits
+        isOpen={activeTab == Tab.Credits}
       />
       
       <ToastContainer

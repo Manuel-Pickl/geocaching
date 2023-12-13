@@ -1,0 +1,39 @@
+.credits {
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    ul {
+        list-style-type: none;
+
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            .icon {
+                width: 72px;
+                aspect-ratio: 1;
+                border-radius: 16px;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+            }
+        }
+    }
+}
