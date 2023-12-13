@@ -9,7 +9,6 @@ import LeafletMap from './components/LeafletMap/LeafletMap';
 import Settings from './components/Tabs/Settings/Settings';
 import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logoFromAssets from "./assets/globe.svg";
 import Find from './components/Tabs/Find/Find';
 import Hide from './components/Tabs/Hide/Hide';
 import { Result } from './types/Result';
@@ -122,7 +121,7 @@ const App = () =>
         transition={Flip}
         className={"toast"}
         bodyClassName={"toast-content"}
-        icon={<img src={logoFromAssets} alt="logo" />}
+        icon={<img src="logo.svg" alt="logo" />}
       />
     </div>
   );

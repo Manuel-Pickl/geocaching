@@ -18,7 +18,7 @@ export default defineConfig({
         start_url: '.',
         icons: [
           {
-            src: '/globe.svg',
+            src: '/logo.svg',
             sizes: '192x192',
             type: 'image/png',
           },
