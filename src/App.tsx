@@ -13,6 +13,7 @@ import logoFromAssets from "./assets/globe.svg";
 import Find from './components/Tabs/Find/Find';
 import Hide from './components/Tabs/Hide/Hide';
 import { Result } from './types/Result';
+import { PermissionManager } from './services/PermissionManager';
 
 /**
  * The main App component.
@@ -28,8 +29,6 @@ const App = () =>
   const [radius, setRadius] = useState<number>(50);
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
   const [debug, setDebug] = useState<boolean>(false);
-
-  const geocacheManager = new GeocacheManager();
   const [geocaches, setGeocaches] = useState<Geocache[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
@@ -37,7 +36,7 @@ const App = () =>
   useEffect(() =>
   {
     loadPersistentSettings();
-    requestPermissionGPS();
+    PermissionManager.requestPermissionGPS(setUserPosition, debug);
   }, []);
 
   useEffect(() => { serialize("geocaches", geocaches)}, [geocaches]);
@@ -56,52 +55,16 @@ const App = () =>
     setDebug(deserialize("debug") ?? debug);
   }
 
-  /**
-   * Initializes the watch on the user's GPS.
-   * When debug is false, the userPosition gets updated with the current GPS.
-   */
-  function initializeLocationWatcher(): void
-  {
-    navigator.geolocation.watchPosition((position: GeolocationPosition) =>
-    {
-      if (debug)
-      {
-        return;
-      }
-      
-      setUserPosition([position.coords.latitude, position.coords.longitude])
-    });
-  };
-
-  /**
-   * Requests the permission for GPS.
-   */
-  function requestPermissionGPS(): void
-  {
-    if (!('geolocation' in navigator))
-    {
-      return;
-    }
-    
-    navigator.geolocation.getCurrentPosition(
-      () => { 
-        console.log("'GPS' permission granted")
-        initializeLocationWatcher();
-      },
-      () => { console.log("'GPS' permission denied") },
-    );
-  }
-
   function onGeocacheFound(geocacheName: string): void
   {
-      const findGeocacheResult: Result = geocacheManager.findGeocache(geocacheName, geocaches, setGeocaches);
+      const findGeocacheResult: Result = GeocacheManager.findGeocache(geocacheName, geocaches, setGeocaches);
       toast(findGeocacheResult.message);
       setActiveTab(Tab.Explore);
   }
 
   function onGeocacheHidden(geocacheName: string): void
   {
-      const hideGeocacheResult: Result = geocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches);
+      const hideGeocacheResult: Result = GeocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches);
       toast(hideGeocacheResult.message);
       setActiveTab(Tab.Explore);
   }
@@ -114,7 +77,6 @@ const App = () =>
           userPosition={userPosition} setUserPosition={setUserPosition}
           onGeocacheFound={onGeocacheFound}
           onGeocacheHidden={onGeocacheHidden}
-          geocacheManager={geocacheManager}
         />
       }
 
@@ -143,7 +105,6 @@ const App = () =>
       <Settings 
         isOpen={activeTab == Tab.Settings}
         geocaches={geocaches}
-        geocacheManager={geocacheManager}
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}
         debug={debug} setDebug={setDebug}

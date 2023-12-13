@@ -8,10 +8,9 @@ interface HideGeocacheListProps
   geocaches: Geocache[];
   setGeocaches: (value: Geocache[]) => void;
   onGeocacheHidden: (geocacheName: string) => void;
-  geocacheManager: GeocacheManager;
 }
 
-function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden, geocacheManager }: HideGeocacheListProps)
+function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
   const [newGeocache, setNewGeocache] = useState<string>('');
@@ -28,7 +27,7 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden, geocacheMa
 
   function remove(geocacheName: string): void
   {
-    const geocache: Geocache | undefined = geocacheManager.getGeocacheByName(geocacheName, geocaches);
+    const geocache: Geocache | undefined = GeocacheManager.getGeocacheByName(geocacheName, geocaches);
     if (!geocache)
     {
       return;
@@ -40,7 +39,7 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden, geocacheMa
   function addIsDisabled(): boolean
   {
       const nameIsEmpty: boolean = newGeocache.trim().length === 0;
-      const nameIsAlreadyTaken: boolean = geocacheManager.geocacheExists(newGeocache, geocaches);
+      const nameIsAlreadyTaken: boolean = GeocacheManager.geocacheExists(newGeocache, geocaches);
 
       return nameIsEmpty || nameIsAlreadyTaken;
   }

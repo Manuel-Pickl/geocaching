@@ -11,17 +11,16 @@ interface SettingsProps
 {
     isOpen: boolean;
     geocaches: Geocache[];
-    geocacheManager: GeocacheManager;
     radius: number; setRadius: (value: number) => void;
     voiceIsOn: boolean; setVoiceIsOn: (value: boolean) => void;
     debug: boolean; setDebug: (value: boolean) => void;
 }
 
-function Settings({ isOpen, geocaches, geocacheManager, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }: SettingsProps)
+function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }: SettingsProps)
 {
     function exportGeocaches(): void
     {
-        const gpxExport = geocacheManager.getGpxExport(geocaches);
+        const gpxExport = GeocacheManager.getGpxExport(geocaches);
 
         const a = document.createElement('a');
         a.href = `data:application/gpx+xml,${encodeURIComponent(gpxExport)}`;
@@ -56,7 +55,7 @@ function Settings({ isOpen, geocaches, geocacheManager, radius, setRadius, voice
                         ))}
                     </ul>
                     <button onClick={exportGeocaches}>
-                        <span>Download </span>
+                        <span>Geocaches as .gpx </span>
                         <FontAwesomeIcon icon={faDownload} />
                     </button>
                     
@@ -89,25 +88,6 @@ function Settings({ isOpen, geocaches, geocacheManager, radius, setRadius, voice
                             checked={debug}
                             onChange={() => setDebug(!debug)}
                         />
-                    </div>
-                    
-                    <hr/>
-                    <span><b>Permissions</b></span>
-                    <div className="setting">
-                        <span className="name">GPS:</span>
-                        <button>Erlauben</button>
-                    </div>
-                    <div className="setting">
-                        <span className="name">Kamera:</span>
-                        <span className="allowed">✓ Erlaubt</span>
-                    </div>
-                    <div className="setting">
-                        <span className="name">Audio:</span>
-                        <span className="allowed">✓ Erlaubt</span>
-                    </div>
-                    <div className="setting">
-                        <span className="name">Dateien:</span>
-                        <button>Erlauben</button>
                     </div>
                 </div>
             }

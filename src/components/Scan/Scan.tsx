@@ -25,8 +25,7 @@ function Scan({ onScanResult }: ScanProps)
             (result) =>
             {
                 onScanResult(result.data);
-            },
-            {}
+            }, {}
         );
 
         qrScanner.start();

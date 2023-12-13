@@ -3,7 +3,7 @@ import { Result } from '../types/Result';
 
 export class GeocacheManager
 {
-    public findGeocache(
+    public static findGeocache(
         geocacheName: string,
         geocaches: Geocache[],
         setGeocaches: (value: Geocache[]) => void
@@ -27,7 +27,7 @@ export class GeocacheManager
         return new Result(true, `Herzlichen Glückwunsch! Du hast den Geocache '${geocacheName}' gefunden.`);
     };
 
-    public hideGeocache(
+    public static hideGeocache(
         geocaches: Geocache[],
         geocacheName: string,
         position: [number, number] | null,
@@ -61,7 +61,7 @@ export class GeocacheManager
         return new Result(true, `Super! Du hast den Geocache '${geocacheName}' versteckt.`);
     }
 
-    public getGpxExport(geocaches: Geocache[]): string
+    public static getGpxExport(geocaches: Geocache[]): string
     {
         const gpxHeader = 
 `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
@@ -93,7 +93,7 @@ export class GeocacheManager
         return gpxData;
     }
 
-    public getGeocacheByName(geocacheName: string, geocaches: Geocache[]): Geocache | undefined
+    public static getGeocacheByName(geocacheName: string, geocaches: Geocache[]): Geocache | undefined
     {
         const geocache: Geocache | undefined = geocaches
             .find(geocache => geocache.name === geocacheName);
@@ -101,7 +101,7 @@ export class GeocacheManager
         return geocache;
     }
 
-    public geocacheExists(geocacheName: string, geocaches: Geocache[]): boolean
+    public static geocacheExists(geocacheName: string, geocaches: Geocache[]): boolean
     {
         const geocache: Geocache | undefined = this.getGeocacheByName(geocacheName, geocaches);
         const geocacheExists: boolean = geocache != undefined;
@@ -109,7 +109,7 @@ export class GeocacheManager
         return geocacheExists;
     }
 
-    private geocacheAlreadyFound(geocacheName: string, geocaches: Geocache[]): boolean
+    private static geocacheAlreadyFound(geocacheName: string, geocaches: Geocache[]): boolean
     {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
         const geocacheAlreadyFound = geocache?.found ?? false;

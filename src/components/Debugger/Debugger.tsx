@@ -4,7 +4,6 @@ import Joystick from './Joystick/Joystick';
 import { Geocache } from '../../types/Geocache';
 import Draggable from "react-draggable";
 import HideGeocacheList from "./HideGeocacheList/HideGeocacheList";
-import { GeocacheManager } from "../../services/GeocacheManager";
 
 interface DebuggerProps
 {
@@ -14,10 +13,9 @@ interface DebuggerProps
     setUserPosition: (value: [number, number]) => void;
     onGeocacheFound: (geocacheName: string) => void;
     onGeocacheHidden: (geocacheName: string) => void;
-    geocacheManager: GeocacheManager;
 }
 
-function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGeocacheFound, onGeocacheHidden, geocacheManager }: DebuggerProps)
+function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGeocacheFound, onGeocacheHidden }: DebuggerProps)
 {
     function clearLocalStorage()
     {
@@ -45,7 +43,6 @@ function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGe
                 <HideGeocacheList
                     geocaches={geocaches} setGeocaches={setGeocaches}
                     onGeocacheHidden={onGeocacheHidden}
-                    geocacheManager={geocacheManager}
                 />
             </div>
         </Draggable>
