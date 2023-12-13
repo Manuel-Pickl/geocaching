@@ -20,25 +20,6 @@ export class GeocacheManager
         return defaultGeocaches;
     }
 
-    public geocacheExists(geocacheName: string, geocaches: Geocache[]): boolean
-    {
-        const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
-        const geocacheExists: boolean = geocache != undefined;
-
-        return geocacheExists;
-    }
-
-    public geocacheAlreadyFound(geocacheName: string, geocaches: Geocache[]): boolean
-    {
-        const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
-        if (!geocache)
-        {
-            return false;
-        }
-
-        return geocache.found
-    }
-
     public onGeocacheFound(geocacheName: string, geocaches: Geocache[]): boolean
     {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
@@ -63,20 +44,48 @@ export class GeocacheManager
         geocacheName: string,
         position: [number, number] | null,
         found: boolean = false,
-        time: string = ""): void
+        time: string = ""): boolean
     {
         if (!position)
         {
-            return;
+            return false;
         }
 
-        geocaches.push(new Geocache(
+        const geocacheExistsAlready = this.geocacheExists(geocacheName, geocaches);
+        if (geocacheExistsAlready)
+        {
+            return false;
+        }
+
+        const newGeocache = new Geocache(
             geocacheName,
             position[0],
             position[1],
             found,
             time,
             false
-        ));
+        )
+        geocaches.push(newGeocache);
+
+        return true;
+    }
+
+    private geocacheExists(geocacheName: string, geocaches: Geocache[]): boolean
+    {
+        const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
+        const geocacheExists: boolean = geocache != undefined;
+
+        return geocacheExists;
+    }
+
+    private geocacheAlreadyFound(geocacheName: string, geocaches: Geocache[]): boolean
+    {
+        const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
+        if (!geocache)
+        {
+            return false;
+        }
+
+        return geocache.found
     }
 }

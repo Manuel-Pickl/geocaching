@@ -1,8 +1,8 @@
 export enum Tab
 {
     Explore,
-    Scan,
-    Contribute,
+    Find,
+    Hide,
     Settings,
     Credits
 }

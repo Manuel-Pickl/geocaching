@@ -1,3 +1,7 @@
+/**
+ * class for Geocache objects
+ * @test
+ */
 export class Geocache
 {
     name: string;
@@ -7,6 +11,10 @@ export class Geocache
     time: string;
     isDefault: boolean;
   
+    /**
+     * Represents a book.
+     * @constructor
+     */
     constructor(name: string, latitude: number, longitude: number, found: boolean, time: string, isDefault: boolean)
     {
         this.name = name;

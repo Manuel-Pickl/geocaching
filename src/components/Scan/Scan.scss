@@ -1,0 +1,67 @@
+.camera {
+    z-index: 100;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 32px;
+    background-color: hsl(0, 0%, 10%);
+    z-index: 100;
+    
+    video {
+        z-index: 102;
+        position: absolute;
+        object-fit: cover;
+        background: none;
+    }
+    
+    .scanRegion {
+        --border-color: salmon;
+        --border-width: 6px;
+        --border-style: solid;
+        --inset-small: 12%;
+        --inset-big: 10%;
+
+        z-index: 103;
+        position: absolute;
+        inset: var(--inset-small);
+        animation: scanAnimation 2s linear infinite;
+        
+        @keyframes scanAnimation {
+            50% {
+                inset: var(--inset-big);}
+        }
+
+        &>* {
+            position: absolute;
+            width: 20%;
+            height: 20%;
+        }
+        
+        .top {
+            top: 0%;
+            border-top: var(--border-style) var(--border-width) var(--border-color);
+        }
+        .right {
+            right: 0%;
+            border-right: var(--border-style) var(--border-width) var(--border-color);
+        }
+        .bottom {
+            bottom: 0%;
+            border-bottom: var(--border-style) var(--border-width) var(--border-color);
+        }
+        .left {
+            left: 0%;
+            border-left: var(--border-style) var(--border-width) var(--border-color);
+        }
+    }
+
+    .fa-camera {
+        z-index: 101;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+        font-size: 64px;
+        color: hsl(0, 0%, 90%);
+    }
+}

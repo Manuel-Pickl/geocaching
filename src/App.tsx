@@ -6,14 +6,20 @@ import { Tab } from './types/Tab';
 import { serialize, deserialize } from './services/JsonHelper';
 import Debugger from './components/Debugger/Debugger';
 import LeafletMap from './components/LeafletMap/LeafletMap';
-import Contribute from './components/Tabs/Contribute/Contribute';
-import Scan from './components/Tabs/Scan/Scan';
 import Settings from './components/Tabs/Settings/Settings';
 import { Flip, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logoFromAssets from "./assets/globe.svg";
+import Find from './components/Tabs/Find/Find';
+import Hide from './components/Tabs/Hide/Hide';
 
-function App()
+/**
+ * The main App component.
+ *
+ * @component
+ * @category Component
+ */
+const App = () =>
 {
   // LGS-Gelände
   const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
@@ -34,11 +40,26 @@ function App()
   }, []);
 
   useEffect(() => { serialize("geocaches", geocaches)}, [geocaches]);
-  useEffect(() => {serialize("radius", radius); }, [radius]);
+  useEffect(() => { serialize("radius", radius); }, [radius]);
   useEffect(() => { serialize("voiceIsOn", voiceIsOn); }, [voiceIsOn]);
   useEffect(() => { serialize("debug", debug); }, [debug]);
-  
-  function initializeLocationWatcher()
+
+  /**
+   * Loads the persistent settings from LocalStorage
+   */
+  const loadPersistentSettings = (): void =>
+  {
+    setGeocaches(deserialize("geocaches") ?? geocacheManager.getDefaultGeocaches());
+    setRadius(deserialize("radius") ?? radius);
+    setVoiceIsOn(deserialize("voiceIsOn") ?? voiceIsOn);
+    setDebug(deserialize("debug") ?? debug);
+  }
+
+  /**
+   * Initializes the watch on the user's GPS.
+   * When debug is false, the userPosition gets updated with the current GPS.
+   */
+  function initializeLocationWatcher(): void
   {
     navigator.geolocation.watchPosition((position: GeolocationPosition) =>
     {
@@ -51,15 +72,10 @@ function App()
     });
   };
 
-  function loadPersistentSettings()
-  {
-    setGeocaches(deserialize("geocaches") ?? geocacheManager.getDefaultGeocaches());
-    setRadius(deserialize("radius") ?? radius);
-    setVoiceIsOn(deserialize("voiceIsOn") ?? voiceIsOn);
-    setDebug(deserialize("debug") ?? debug);
-  }
-
-  function requestPermissionGPS()
+  /**
+   * Requests the permission for GPS.
+   */
+  function requestPermissionGPS(): void
   {
     if (!('geolocation' in navigator))
     {
@@ -98,20 +114,21 @@ function App()
       />
 
       {/* tabs */}
-      <Scan
-        isOpen={activeTab == Tab.Scan}
+      <Find
+        isOpen={activeTab == Tab.Find}
         geocacheManager={geocacheManager}
         geocaches={geocaches}
         setGeocaches={setGeocaches}
         setActiveTab={setActiveTab}
       />
 
-      <Contribute
-        isOpen={activeTab == Tab.Contribute}
+      <Hide
+        isOpen={activeTab == Tab.Hide}
         geocacheManager={geocacheManager}
         geocaches={geocaches}
         setGeocaches={setGeocaches}
         userPosition={userPosition}
+        setActiveTab={setActiveTab}
       />
       
       <Settings 
