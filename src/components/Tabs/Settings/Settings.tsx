@@ -2,18 +2,34 @@ import Switch from 'react-switch';
 import './Settings.scss';
 import "../tabs.scss";
 import { Geocache } from '../../../types/Geocache';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { GeocacheManager } from '../../../services/GeocacheManager';
+import { TimeManager } from '../../../services/TimeManager';
 
 interface SettingsProps
 {
     isOpen: boolean;
     geocaches: Geocache[];
+    geocacheManager: GeocacheManager;
     radius: number; setRadius: (value: number) => void;
     voiceIsOn: boolean; setVoiceIsOn: (value: boolean) => void;
     debug: boolean; setDebug: (value: boolean) => void;
 }
 
-function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }: SettingsProps)
+function Settings({ isOpen, geocaches, geocacheManager, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }: SettingsProps)
 {
+    function exportGeocaches(): void
+    {
+        const gpxExport = geocacheManager.getGpxExport(geocaches);
+
+        const a = document.createElement('a');
+        a.href = `data:application/gpx+xml,${encodeURIComponent(gpxExport)}`;
+        a.download = 'geocaches.gpx';
+        
+        a.click();
+    };
+
     return (
         <>
             {isOpen &&
@@ -26,7 +42,7 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
                             <li key={index} className="found">
                                 <div>✓</div>
                                 <div className="name">{geocache.name}</div>
-                                <div>{geocache.time}</div>
+                                <div>{TimeManager.isoToLocal(geocache.time)}</div>
                             </li>
                         ))}
                         {geocaches
@@ -35,11 +51,15 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
                             <li key={index}>
                                 <div>✗</div>
                                 <div className="name">{geocache.name}</div>
-                                <div>{geocache.time}</div>
+                                <div>{TimeManager.isoToLocal(geocache.time)}</div>
                             </li>
                         ))}
                     </ul>
-
+                    <button onClick={exportGeocaches}>
+                        <span>Download </span>
+                        <FontAwesomeIcon icon={faDownload} />
+                    </button>
+                    
                     <hr/>
                     <span><b>Settings</b></span>
                     <div className="setting">

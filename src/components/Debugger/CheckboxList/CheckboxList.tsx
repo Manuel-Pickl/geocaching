@@ -23,7 +23,7 @@ function CheckboxList({geocaches, setGeocaches }: CheckboxListProps)
 
     geocache.found = !geocache.found;
     geocache.time = geocache.found 
-      ? new Date().toLocaleDateString('de-DE')
+      ? new Date().toISOString()
       : "";
 
     setGeocaches([...geocaches]);

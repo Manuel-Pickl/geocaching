@@ -7,6 +7,7 @@ import { Geocache } from '../../types/Geocache';
 import { toast } from 'react-toastify';
 import { MapType } from '../../types/MapType';
 import { getDistance } from 'geolib';
+import { TimeManager } from '../../services/TimeManager';
 
 interface LeafletMapProps
 {
@@ -134,29 +135,22 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
     userMarker.current.setLatLng(toLatLngExpression(userPosition));
   }
 
-  function getIconHtml(geocache: Geocache): string
+  function getIconHtml(): string
   {
-    const markerImage: string = geocache.isDefault
-      ? "<img src='/markers/marker.png' class='marker-pin' alt='marker pin'/>"
-      : `<img src='/markers/marker${Math.floor(Math.random() * 5) + 1}.png' class='marker-pin' alt='marker pin'/>`;
-    const geocacheImage: string = geocache.isDefault
-      ? `<img src="/landmarks/${geocache.name}.jpg" class="marker-image" alt=${geocache.name}/>`
-      : "";
-    const iconHtml: string = `${markerImage}${geocacheImage}`;
+    const markerNumber = Math.floor(Math.random() * 5) + 1;
+    const iconHtml: string = `
+      <img src='/markers/marker${markerNumber}.png' class='marker-pin' alt='marker pin'/>
+    `;
   
     return iconHtml;
   }
 
   function getPopupHtml(geocache: Geocache): string
   {
-    const geocacheImage: string = geocache.isDefault
-      ? `<img src="/landmarks/${geocache.name}.jpg" class="popup-image" alt=${geocache.name}/>`
-      : "";
-      const popupHtml: string = `
+    const popupHtml: string = `
       <div class="popup">
         <b>${geocache.name}</b>
-        ${geocacheImage}
-        ✪ ${geocache.time}
+        ✪ ${TimeManager.isoToLocal(geocache.time)}
       </div>
     `;
 
@@ -185,7 +179,7 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
         className: 'marker',
         iconSize: [markerWidth, markerHeight],
         iconAnchor: [markerWidth / 2, markerHeight],
-        html: getIconHtml(geocache)
+        html: getIconHtml()
       });
 
       const marker = L.marker(toLatLngExpression([geocache.latitude, geocache.longitude]), { icon: customIcon });

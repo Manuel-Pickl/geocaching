@@ -7,11 +7,12 @@ import { serialize, deserialize } from './services/JsonHelper';
 import Debugger from './components/Debugger/Debugger';
 import LeafletMap from './components/LeafletMap/LeafletMap';
 import Settings from './components/Tabs/Settings/Settings';
-import { Flip, ToastContainer } from 'react-toastify';
+import { Flip, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logoFromAssets from "./assets/globe.svg";
 import Find from './components/Tabs/Find/Find';
 import Hide from './components/Tabs/Hide/Hide';
+import { Result } from './types/Result';
 
 /**
  * The main App component.
@@ -49,7 +50,7 @@ const App = () =>
    */
   const loadPersistentSettings = (): void =>
   {
-    setGeocaches(deserialize("geocaches") ?? geocacheManager.getDefaultGeocaches());
+    setGeocaches(deserialize("geocaches") ?? geocaches);
     setRadius(deserialize("radius") ?? radius);
     setVoiceIsOn(deserialize("voiceIsOn") ?? voiceIsOn);
     setDebug(deserialize("debug") ?? debug);
@@ -91,11 +92,24 @@ const App = () =>
     );
   }
 
+  function onGeocacheFound(geocacheName: string): void
+  {
+      const findGeocacheResult: Result = geocacheManager.findGeocache(geocacheName, geocaches, setGeocaches);
+      toast(findGeocacheResult.message);
+      setActiveTab(Tab.Explore);
+  }
+
+  function onGeocacheHidden(geocacheName: string): void
+  {
+      const hideGeocacheResult: Result = geocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches);
+      toast(hideGeocacheResult.message);
+      setActiveTab(Tab.Explore);
+  }
+
   return (
     <div className="app">
       {debug &&
         <Debugger
-          geocacheManager={geocacheManager}
           geocaches={geocaches} setGeocaches={setGeocaches}
           userPosition={userPosition} setUserPosition={setUserPosition}
         />
@@ -113,27 +127,20 @@ const App = () =>
         activeTab={activeTab} setActiveTab={setActiveTab}
       />
 
-      {/* tabs */}
       <Find
         isOpen={activeTab == Tab.Find}
-        geocacheManager={geocacheManager}
-        geocaches={geocaches}
-        setGeocaches={setGeocaches}
-        setActiveTab={setActiveTab}
+        onGeocacheFound={onGeocacheFound}
       />
 
       <Hide
         isOpen={activeTab == Tab.Hide}
-        geocacheManager={geocacheManager}
-        geocaches={geocaches}
-        setGeocaches={setGeocaches}
-        userPosition={userPosition}
-        setActiveTab={setActiveTab}
+        onGeocacheHidden={onGeocacheHidden}
       />
       
       <Settings 
         isOpen={activeTab == Tab.Settings}
         geocaches={geocaches}
+        geocacheManager={geocacheManager}
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}
         debug={debug} setDebug={setDebug}
