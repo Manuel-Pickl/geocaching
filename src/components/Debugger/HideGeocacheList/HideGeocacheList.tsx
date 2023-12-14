@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import "./HideGeocacheList.scss"
 import { Geocache } from '../../../types/Geocache';
 import { GeocacheManager } from '../../../services/GeocacheManager';
@@ -14,15 +14,11 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
   const [newGeocache, setNewGeocache] = useState<string>('');
-  const inputRef = useRef<HTMLInputElement>(null);
 
   function add(): void
   {
     onGeocacheHidden(newGeocache);
     setNewGeocache("");
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
   }
 
   function remove(geocacheName: string): void
@@ -54,7 +50,6 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
           <>
             <div>
               <input
-                ref={inputRef}
                 type="text"
                 placeholder="Enter geocache name"
                 value={newGeocache}

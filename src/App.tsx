@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Geocache } from './types/Geocache';
 import { GeocacheManager } from './services/GeocacheManager';
 import { Tab } from './types/Tab';
-import { serialize, deserialize } from './services/JsonHelper';
 import Debugger from './components/Debugger/Debugger';
 import LeafletMap from './components/LeafletMap/LeafletMap';
 import Settings from './components/Tabs/Settings/Settings';
@@ -14,6 +13,7 @@ import Hide from './components/Tabs/Hide/Hide';
 import { Result } from './types/Result';
 import { PermissionManager } from './services/PermissionManager';
 import Credits from './components/Tabs/Credits/Credits';
+import { JsonHelper } from './services/JsonHelper';
 
 /**
  * The main App component.
@@ -38,20 +38,20 @@ const App = () =>
     PermissionManager.requestPermissionGPS(setUserPosition, debug);
   }, []);
 
-  useEffect(() => { serialize("geocaches", geocaches)}, [geocaches]);
-  useEffect(() => { serialize("radius", radius); }, [radius]);
-  useEffect(() => { serialize("voiceIsOn", voiceIsOn); }, [voiceIsOn]);
-  useEffect(() => { serialize("debug", debug); }, [debug]);
+  useEffect(() => { JsonHelper.serialize("geocaches", geocaches)}, [geocaches]);
+  useEffect(() => { JsonHelper.serialize("radius", radius); }, [radius]);
+  useEffect(() => { JsonHelper.serialize("voiceIsOn", voiceIsOn); }, [voiceIsOn]);
+  useEffect(() => { JsonHelper.serialize("debug", debug); }, [debug]);
 
   /**
    * Loads the persistent settings from LocalStorage.
    */
   function loadPersistentSettings(): void
   {
-    setGeocaches(deserialize("geocaches") ?? geocaches);
-    setRadius(deserialize("radius") ?? radius);
-    setVoiceIsOn(deserialize("voiceIsOn") ?? voiceIsOn);
-    setDebug(deserialize("debug") ?? debug);
+    setGeocaches(JsonHelper.deserialize("geocaches") ?? geocaches);
+    setRadius(JsonHelper.deserialize("radius") ?? radius);
+    setVoiceIsOn(JsonHelper.deserialize("voiceIsOn") ?? voiceIsOn);
+    setDebug(JsonHelper.deserialize("debug") ?? debug);
   }
 
   /**

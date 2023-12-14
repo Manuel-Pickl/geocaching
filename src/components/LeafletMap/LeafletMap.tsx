@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './LeafletMap.scss'
-import { read } from '../../services/SpeechSynthesis';
 import { Geocache } from '../../types/Geocache';
 import { toast } from 'react-toastify';
 import { MapType } from '../../types/MapType';
 import { getDistance } from 'geolib';
 import { TimeManager } from '../../services/TimeManager';
+import { SpeechSynthesiser } from '../../services/SpeechSynthesiser';
 
 interface LeafletMapProps
 {
@@ -84,17 +84,9 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
                 
       if (voiceIsOn)
       {
-        read(message);
+        SpeechSynthesiser.read(message);
       }
     }
-  }
-
-  // debug function
-  function handleMapClick(event: L.LeafletMouseEvent): void
-  {
-    // @ts-ignore
-    const clickedLatLng = event.latlng;
-    // console.log(`"latitude": ${clickedLatLng.lat}, "longitude": ${clickedLatLng.lng},`);
   }
 
   function addMap(): void
@@ -108,8 +100,6 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
       .map('map', {zoomControl: false})
       .setView(toLatLngExpression(position), startZoom);
     getTileLayer(MapType.Hybrid).addTo(map.current);
-
-    map.current.on('click', handleMapClick);
   }
 
   function updateUserMarker(): void
