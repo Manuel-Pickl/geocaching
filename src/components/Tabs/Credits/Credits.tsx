@@ -12,73 +12,49 @@ function Credits({ isOpen }: CreditsProps)
         { name: "React",   url: "https://react.dev/" },
         { name: "Vite", url: "https://vitejs.dev/" },
         { name: "Typescript", url: "https://www.typescriptlang.org/" },
-        { name: "Sass", url: "https://sass-lang.com/" }
+        { name: "Sass", url: "https://sass-lang.com/" },
     ];
     
     const libraries = [
         { name: "Leaflet", url: "https://leafletjs.com/" },
         { name: "qr-scanner", url: "https://www.npmjs.com/package/qr-scanner" },
+        { name: "fontawesome", url: "https://fontawesome.com/" },
         { name: "geolib", url: "https://deltares.github.io/GEOLib/latest/index.html" },
-        { name: "fontawesome", url: "https://fontawesome.com/" }
     ]
     
     const sources = [
-        { name: "SVG Repo", url: "https://www.svgrepo.com/" },
         { name: "React Learn", url: "https://react.dev/learn" },
-        { name: "Leaflet Docs", url: "https://leafletjs.com/reference.html" } 
+        { name: "Leaflet Docs", url: "https://leafletjs.com/reference.html" },
+        { name: "SVG Repo", url: "https://www.svgrepo.com/" },
     ]
 
-    return (
-        <>
-            {isOpen &&
-                <div className="tab credits">
-                    Credits
-                    
-                    <div>
-                        Technologien
-                        <ul>
-                        {technologies.map((technology, index) => (
-                            <a key={index} href={technology.url} target="_blank">
-                                <div className="icon">
-                                    <img src={`credits/technologies/${technology.name}.png`} alt={technology.name} />
-                                </div>
-                                <span>{technology.name}</span>
-                            </a>
-                        ))}
-                        </ul>
-                    </div>
+    const creditsData = [
+        { category: "Technologies", entries: technologies },
+        { category: "Libraries", entries: libraries },
+        { category: "Sources", entries: sources },
+      ];
 
-                    <div>
-                        Bibliotheken
-                        <ul>
-                        {libraries.map((library, index) => (
-                            <a key={index} href={library.url} target="_blank">
-                                <div className="icon">
-                                    <img src={`credits/libraries/${library.name}.png`} alt={library.name} />
-                                </div>
-                                <span>{library.name}</span>
-                            </a>
-                        ))}
-                        </ul>
-                    </div>
-
-                    <div>
-                        Quellen
-                        <ul>
-                        {sources.map((source, index) => (
-                            <a key={index} href={source.url} target="_blank">
-                                <div className="icon">
-                                    <img src={`credits/sources/${source.name}.png`} alt={source.name} />
-                                </div>
-                                <span>{source.name}</span>
-                            </a>
-                        ))}
-                        </ul>
-                    </div>
-                </div>
-            }
-        </>
-    );
+    return isOpen ? (
+        <div className="tab credits">
+            <h2>Credits</h2>
+            
+            {creditsData.map((credit, index) => (
+            <div key={index}>
+                <h3>{credit.category}</h3>
+                <ul>
+                    {credit.entries.map((entry, entryIndex) => (
+                    <a key={entryIndex} href={entry.url} target="_blank">
+                        <div className="icon">
+                            <img src={`credits/${credit.category.toLowerCase()}/${entry.name}.png`} alt={entry.name} />
+                        </div>
+                        <span>{entry.name}</span>
+                    </a>
+                    ))}
+                </ul>
+            </div>
+            ))}
+        </div>
+    ) : null;    
 };
 
 export default Credits;
