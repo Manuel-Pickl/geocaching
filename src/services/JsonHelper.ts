@@ -1,3 +1,9 @@
+/**
+ * Serializes the given value under the given key.
+ * 
+ * @param key - Key for storing the value.
+ * @param value - Value, which got saved with the given key.
+ */
 export function serialize(key: string, value: any): void
 {
     try
@@ -10,6 +16,12 @@ export function serialize(key: string, value: any): void
     }
 };
 
+/**
+ * Deserializes the value under the given key.
+ * 
+ * @param key - Key for which the values get deserialized.
+ * @returns - The deserialized data.
+ */
 export function deserialize(key: string): any
 {
     try

@@ -1,5 +1,15 @@
+/**
+ * Handles all operations relating permissions.
+ */
 export class PermissionManager
 {
+    /**
+     * Requests 'GPS' permission and initializes a location watcher.
+     *
+     * @param {function} setUserPosition - Callback function to set the user's position.
+     * @param {boolean} debug - Indicates whether debugging is enabled.
+     * @returns {void}
+     */
     public static requestPermissionGPS(
         setUserPosition: (value: [number, number]) => void,
         debug: boolean
@@ -20,8 +30,11 @@ export class PermissionManager
     }
 
     /**
-     * Initializes the watch on the user's GPS.
-     * When debug is false, the userPosition gets updated with the current GPS.
+     * Initializes a location watcher using the Geolocation API.
+     *
+     * @param {function} setUserPosition - Callback function to set the user's position.
+     * @param {boolean} debug - Indicates whether debugging is enabled.
+     * @returns {void}
      */
     private static initializeLocationWatcher(
         setUserPosition: (value: [number, number]) => void,

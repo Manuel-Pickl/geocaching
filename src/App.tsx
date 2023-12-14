@@ -19,7 +19,6 @@ import Credits from './components/Tabs/Credits/Credits';
  * The main App component.
  *
  * @component
- * @category Component
  */
 const App = () =>
 {
@@ -45,9 +44,9 @@ const App = () =>
   useEffect(() => { serialize("debug", debug); }, [debug]);
 
   /**
-   * Loads the persistent settings from LocalStorage
+   * Loads the persistent settings from LocalStorage.
    */
-  const loadPersistentSettings = (): void =>
+  function loadPersistentSettings(): void
   {
     setGeocaches(deserialize("geocaches") ?? geocaches);
     setRadius(deserialize("radius") ?? radius);
@@ -55,6 +54,11 @@ const App = () =>
     setDebug(deserialize("debug") ?? debug);
   }
 
+  /**
+   * Gets triggered, when a Geocache is found.
+   * A toast message gets displayed and all tabs closed.
+   * @param geocacheName Name of the Geocache.
+   */
   function onGeocacheFound(geocacheName: string): void
   {
       const findGeocacheResult: Result = GeocacheManager.findGeocache(geocacheName, geocaches, setGeocaches);
@@ -62,6 +66,11 @@ const App = () =>
       setActiveTab(Tab.Explore);
   }
 
+  /**
+   * Gets triggered, when a Geocache is hidden.
+   * A toast message gets displayed and all tabs closed.
+   * @param geocacheName Name of the Geocache.
+   */
   function onGeocacheHidden(geocacheName: string): void
   {
       const hideGeocacheResult: Result = GeocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches);

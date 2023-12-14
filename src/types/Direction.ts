@@ -1,3 +1,6 @@
+/**
+ * Directions for the Debugger Joystick.
+ */
 export enum Direction
 {
     None,
