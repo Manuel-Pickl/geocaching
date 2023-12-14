@@ -23,7 +23,7 @@ function Footer({ activeTab, setActiveTab }: FooterProps)
         { tab: Tab.Find, icon: faMagnifyingGlass, text: "Finden" },
         { tab: Tab.Hide, icon: faEyeSlash, text: "Verstecken" },
         { tab: Tab.Settings, icon: faGear, text: "Einstellungen" },
-        { tab: Tab.Credits, icon: faBookOpen, text: "Verweise" }
+        { tab: Tab.Credits, icon: faBookOpen, text: "Credits" }
     ];
 
     return (

@@ -37,7 +37,6 @@ function Credits({ isOpen }: CreditsProps)
     return isOpen ? (
         <div className="tab credits">
             <h2>Credits</h2>
-            
             {creditsData.map((credit, index) => (
             <div key={index}>
                 <h3>{credit.category}</h3>

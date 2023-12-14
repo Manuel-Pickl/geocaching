@@ -10,20 +10,18 @@ interface FindProps
 
 function Find({ isOpen, onGeocacheFound }: FindProps)
 {
-    return (
-        <>
-            {isOpen &&
-                <div className='tab find'>
-                    <p>
-                        Du hast einen Geocache gefunden?<br/>
-                        Scanne den QR-Code ein, um ihn zu speichern.
-                    </p>
-                    <Scan
-                        onScanResult={onGeocacheFound}/>
-                </div>
-            }
-        </>
-    );
+    return isOpen ? (
+        <div className='tab find'>
+            <h2>Finden</h2>
+            <p>
+                Du hast einen Geocache gefunden?<br/>
+                Scanne den QR-Code ein, um ihn zu speichern.
+            </p>
+            <Scan
+                onScanResult={onGeocacheFound}
+            />
+        </div>
+    ) : null;
 };
 
 export default Find;

@@ -29,70 +29,66 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
         a.click();
     };
 
-    return (
-        <>
-            {isOpen &&
-                <div className="tab settings">
-                    <span><b>Geocaches</b></span>
-                    <ul>
-                        {geocaches
-                            .filter(geocache => geocache.found)
-                            .map((geocache, index) => (
-                            <li key={index} className="found">
-                                <div>✓</div>
-                                <div className="name">{geocache.name}</div>
-                                <div>{TimeManager.isoToLocal(geocache.time)}</div>
-                            </li>
-                        ))}
-                        {geocaches
-                            .filter(geocache => !geocache.found)
-                            .map((geocache, index) => (
-                            <li key={index}>
-                                <div>✗</div>
-                                <div className="name">{geocache.name}</div>
-                                <div>{TimeManager.isoToLocal(geocache.time)}</div>
-                            </li>
-                        ))}
-                    </ul>
-                    <button onClick={exportGeocaches}>
-                        <span>Geocaches as .gpx </span>
-                        <FontAwesomeIcon icon={faDownload} />
-                    </button>
-                    
-                    <hr/>
-                    <span><b>Settings</b></span>
-                    <div className="setting">
-                        <span className="name">Radius:</span>
-                        <input
-                            type="range"
-                            min={10}
-                            max={100}
-                            step={1}
-                            value={radius}
-                            onChange={(event) => setRadius(parseFloat(event.target.value))}
-                        />
-                        <span>{radius}</span>
-                    </div>
-                    <div className="setting">
-                        <span className="name">Voice:</span>
-                        <Switch
-                            id='voiceIsOn'
-                            checked={voiceIsOn}
-                            onChange={() => setVoiceIsOn(!voiceIsOn)}
-                        />
-                    </div>
-                    <div className="setting">
-                        <span className="name">Debug:</span>
-                        <Switch
-                            id='debug'
-                            checked={debug}
-                            onChange={() => setDebug(!debug)}
-                        />
-                    </div>
-                </div>
-            }
-        </>
-    );
+    return isOpen ? (
+        <div className="tab settings">
+            <h2>Einstellungen</h2>
+            <h3>Geocaches</h3>
+            <ul>
+                {geocaches
+                    .filter(geocache => geocache.found)
+                    .map((geocache, index) => (
+                    <li key={index} className="found">
+                        <div>✓</div>
+                        <div className="name">{geocache.name}</div>
+                        <div>{TimeManager.isoToLocal(geocache.time)}</div>
+                    </li>
+                ))}
+                {geocaches
+                    .filter(geocache => !geocache.found)
+                    .map((geocache, index) => (
+                    <li key={index}>
+                        <div>✗</div>
+                        <div className="name">{geocache.name}</div>
+                        <div>{TimeManager.isoToLocal(geocache.time)}</div>
+                    </li>
+                ))}
+            </ul>
+            <button onClick={exportGeocaches}>
+                <span>Geocaches as .gpx </span>
+                <FontAwesomeIcon icon={faDownload} />
+            </button>
+            <hr/>
+            <h3>Optionen</h3>
+            <div className="setting">
+                <span className="name">Radius:</span>
+                <input
+                    type="range"
+                    min={10}
+                    max={100}
+                    step={1}
+                    value={radius}
+                    onChange={(event) => setRadius(parseFloat(event.target.value))}
+                />
+                <span>{radius}</span>
+            </div>
+            <div className="setting">
+                <span className="name">Voice:</span>
+                <Switch
+                    id='voiceIsOn'
+                    checked={voiceIsOn}
+                    onChange={() => setVoiceIsOn(!voiceIsOn)}
+                />
+            </div>
+            <div className="setting">
+                <span className="name">Debug:</span>
+                <Switch
+                    id='debug'
+                    checked={debug}
+                    onChange={() => setDebug(!debug)}
+                />
+            </div>
+        </div>
+    ) : null;
 };
 
 export default Settings;
