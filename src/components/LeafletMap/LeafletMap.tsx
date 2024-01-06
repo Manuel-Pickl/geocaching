@@ -9,6 +9,9 @@ import { getDistance } from 'geolib';
 import { TimeManager } from '../../services/TimeManager';
 import { SpeechSynthesiser } from '../../services/SpeechSynthesiser';
 
+/**
+ * Props for the LeafletMap component.
+ */
 interface LeafletMapProps
 {
   position: [number, number];
@@ -18,6 +21,12 @@ interface LeafletMapProps
   voiceIsOn: boolean;
 }
 
+/**
+ * Component for rendering a Leaflet map with geocache markers.
+ * 
+ * @param props - Props for the LeafletMap component.
+ * @component
+ */
 function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: LeafletMapProps)
 {
   const maxZoom: number = 21;
@@ -30,22 +39,34 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
   const map = useRef<Map | null>(null);
   const userMarker = useRef<L.CircleMarker | null>(null);
 
+  /**
+   * Initializes the map.
+   */
   useEffect(() =>
   {
     addMap();
   }, []);
 
+  /**
+   * Checks for nearby geocaches and updates the user's marker.
+   */
   useEffect(() =>
   {
     checkForNearGeocaches();
     updateUserMarker();
   }, [userPosition]);
 
+  /**
+   * Updates the markers for found geocaches.
+   */
   useEffect(() =>
   {
     updateFoundMarkers();
   }, [geocaches]);
 
+  /**
+   * Checks if there are any geocaches within the specified radius of the user's position.
+   */
   function checkForNearGeocaches(): void
   {
     if (!userPosition)
@@ -89,6 +110,9 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
     }
   }
 
+  /**
+   * Adds the map to the component.
+   */
   function addMap(): void
   {
     if (map.current)
@@ -102,6 +126,9 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
     getTileLayer(MapType.Hybrid).addTo(map.current);
   }
 
+  /**
+   * Updates the user's marker on the map.
+   */
   function updateUserMarker(): void
   {
     if (!userPosition
@@ -125,6 +152,11 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
     userMarker.current.setLatLng(toLatLngExpression(userPosition));
   }
 
+  /**
+   * Generates HTML for a custom map icon.
+   * 
+   * @returns string - HTML string for the icon.
+   */
   function getIconHtml(): string
   {
     const markerNumber = Math.floor(Math.random() * 5) + 1;
@@ -135,6 +167,12 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
     return iconHtml;
   }
 
+  /**
+   * Generates HTML for a popup associated with a geocache marker.
+   * 
+   * @param geocache - The geocache for which to generate the popup HTML.
+   * @returns string - HTML string for the popup.
+   */
   function getPopupHtml(geocache: Geocache): string
   {
     const popupHtml: string = `
@@ -147,6 +185,9 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
     return popupHtml;
   }
 
+  /**
+   * Updates markers on the map for found geocaches.
+   */
   function updateFoundMarkers(): void
   {
     if (!geocaches || !map.current)
@@ -184,11 +225,23 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
     });
   }
 
+  /**
+   * Converts coordinates to a LatLngExpression.
+   * 
+   * @param coordinates - Coordinates to be converted.
+   * @returns LatLngExpression - Leaflet LatLngExpression object.
+   */
   function toLatLngExpression(coordinates: [number, number]): LatLngExpression
   {
     return L.latLng(coordinates);;
   }
 
+  /**
+   * Retrieves the appropriate tile layer based on the specified map type.
+   * 
+   * @param mapType - Type of the map.
+   * @returns L.TileLayer - A Leaflet TileLayer object.
+   */
   function getTileLayer(mapType: MapType): L.TileLayer
   {
     // tileLayers found on https://stackoverflow.com/questions/33343881/leaflet-in-google-maps

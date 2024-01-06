@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import "./FindGeocacheList.scss"
 import { Geocache } from '../../../types/Geocache';
 
+/**
+ * Props for FindGeocacheList component.
+ */
 interface FindGeocacheListProps
 {
   geocaches: Geocache[];
@@ -9,10 +12,23 @@ interface FindGeocacheListProps
   onGeocacheFound: (geocacheName: string) => void;
 }
 
+/**
+ * A component that renders a list of geocaches.
+ * It allows users to mark geocaches as found and toggle the visibility of the list.
+ *
+ * @param props - Props for FindGeocacheList component.
+ * @component
+ */
 function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound }: FindGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
 
+  /**
+   * Handles change events on the checkbox inputs.
+   * Updates the found status of geocaches.
+   *
+   * @param event - The change event from the checkbox input.
+   */
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void
   {
     const geocacheName = event.target.name;
@@ -43,6 +59,7 @@ function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound }: FindGeoca
         <button onClick={() => {setListVisible(!listVisible)}}>
           find geocaches ▼
         </button>
+
         {listVisible && (
           <ul>
             {geocaches?.map((geocache, index) => (
@@ -54,6 +71,7 @@ function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound }: FindGeoca
                     checked={geocache.found}
                     onChange={onChange}
                   />
+                  
                   <span>{geocache.name}</span>
                 </label>
               </li>

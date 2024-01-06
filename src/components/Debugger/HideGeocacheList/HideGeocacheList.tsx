@@ -3,6 +3,9 @@ import "./HideGeocacheList.scss"
 import { Geocache } from '../../../types/Geocache';
 import { GeocacheManager } from '../../../services/GeocacheManager';
 
+/**
+ * Props for HideGeocacheList component.
+ */
 interface HideGeocacheListProps
 {
   geocaches: Geocache[];
@@ -10,17 +13,32 @@ interface HideGeocacheListProps
   onGeocacheHidden: (geocacheName: string) => void;
 }
 
+/**
+ * A component that renders a list of geocaches to be hidden.
+ * It allows users to add new geocaches to the list and remove existing ones.
+ *
+ * @param props - Props for HideGeocacheList component.
+ * @component
+ */
 function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
   const [newGeocache, setNewGeocache] = useState<string>('');
 
+  /**
+   * Handles the addition of a new geocache.
+   */
   function add(): void
   {
     onGeocacheHidden(newGeocache);
     setNewGeocache("");
   }
 
+  /**
+   * Handles the removal of an existing geocache.
+   * 
+   * @param geocacheName - The name of the geocache to be removed.
+   */
   function remove(geocacheName: string): void
   {
     const geocache: Geocache | undefined = GeocacheManager.getGeocacheByName(geocacheName, geocaches);
@@ -32,6 +50,11 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
     setGeocaches(geocaches.filter(x => x !== geocache));
   }
 
+  /**
+   * Determines if the add button should be disabled.
+   * 
+   * @returns boolean - Returns true if the name is empty or already taken.
+   */
   function addIsDisabled(): boolean
   {
       const nameIsEmpty: boolean = newGeocache.trim().length === 0;
@@ -46,6 +69,7 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
         <button onClick={() => {setListVisible(!listVisible)}}>
           hide geocaches ▼
         </button>
+
         {listVisible && (
           <>
             <div>
@@ -56,6 +80,7 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
                 maxLength={10}
                 onChange={(e) => setNewGeocache(e.target.value)}
               />
+
               <button
                 onClick={add}
                 disabled={addIsDisabled()}
@@ -63,6 +88,7 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
                 +
               </button>
             </div>
+            
             <ul>
               {geocaches.map((geocache, index) => (
                 <li key={index}>

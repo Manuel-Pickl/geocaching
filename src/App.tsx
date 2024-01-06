@@ -38,6 +38,7 @@ const App = () =>
     PermissionManager.requestPermissionGPS(setUserPosition, debug);
   }, []);
 
+  // save settings on change
   useEffect(() => { JsonHelper.serialize("geocaches", geocaches)}, [geocaches]);
   useEffect(() => { JsonHelper.serialize("radius", radius); }, [radius]);
   useEffect(() => { JsonHelper.serialize("voiceIsOn", voiceIsOn); }, [voiceIsOn]);

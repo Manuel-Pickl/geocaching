@@ -1,3 +1,6 @@
+/*
+ * this file holds all the imports of the used fontawesome icons
+ */
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faLocationDot,

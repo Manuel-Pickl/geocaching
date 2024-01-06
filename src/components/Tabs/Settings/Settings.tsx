@@ -7,6 +7,9 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { GeocacheManager } from '../../../services/GeocacheManager';
 import { TimeManager } from '../../../services/TimeManager';
 
+/**
+ * Props for the Settings component.
+ */
 interface SettingsProps
 {
     isOpen: boolean;
@@ -16,8 +19,18 @@ interface SettingsProps
     debug: boolean; setDebug: (value: boolean) => void;
 }
 
+/**
+ * Component for the 'Settings' tab in the application.
+ * Allows users to view and export found and unfound geocaches, and adjust application settings.
+ *
+ * @param props - Props for the Settings component.
+ * @component
+ */
 function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }: SettingsProps)
 {
+    /**
+     * Exports the found geocaches as a GPX file.
+     */
     function exportGeocaches(): void
     {
         const gpxExport = GeocacheManager.getGpxExport(geocaches);
@@ -32,7 +45,9 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
     return isOpen ? (
         <div className="tab settings">
             <h2>Einstellungen</h2>
+
             <h3>Geocaches</h3>
+
             <ul>
                 {geocaches
                     .filter(geocache => geocache.found)
@@ -43,6 +58,7 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
                         <div>{TimeManager.isoToLocal(geocache.time)}</div>
                     </li>
                 ))}
+
                 {geocaches
                     .filter(geocache => !geocache.found)
                     .map((geocache, index) => (
@@ -53,14 +69,18 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
                     </li>
                 ))}
             </ul>
+
             <button onClick={exportGeocaches}>
                 <span>Geocaches as .gpx </span>
                 <FontAwesomeIcon icon={faDownload} />
             </button>
+
             <hr/>
             <h3>Optionen</h3>
+
             <div className="setting">
                 <span className="name">Radius:</span>
+
                 <input
                     type="range"
                     min={10}
@@ -69,18 +89,23 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
                     value={radius}
                     onChange={(event) => setRadius(parseFloat(event.target.value))}
                 />
+
                 <span>{radius}</span>
             </div>
+
             <div className="setting">
                 <span className="name">Voice:</span>
+
                 <Switch
                     id='voiceIsOn'
                     checked={voiceIsOn}
                     onChange={() => setVoiceIsOn(!voiceIsOn)}
                 />
             </div>
+
             <div className="setting">
                 <span className="name">Debug:</span>
+
                 <Switch
                     id='debug'
                     checked={debug}
