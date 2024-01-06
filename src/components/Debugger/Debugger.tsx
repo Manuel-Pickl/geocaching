@@ -16,13 +16,7 @@ interface DebuggerProps
 }
 
 function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGeocacheFound, onGeocacheHidden }: DebuggerProps)
-{
-    function clearLocalStorage()
-    {
-        localStorage.clear();
-        setGeocaches([]);
-    }
-    
+{    
     return (
         <Draggable handle=".draggable">
             <div className='debugger'>
@@ -31,11 +25,6 @@ function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGe
                     userPosition={userPosition}
                     setUserPosition={setUserPosition}
                 />
-                <button
-                    onClick={clearLocalStorage}
-                >
-                    clear localstorage
-                </button>
                 <FindGeocacheList
                     geocaches={geocaches} setGeocaches={setGeocaches}
                     onGeocacheFound={onGeocacheFound}

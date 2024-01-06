@@ -51,7 +51,7 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
             <div>
               <input
                 type="text"
-                placeholder="Enter geocache name"
+                placeholder="geocache name"
                 value={newGeocache}
                 maxLength={10}
                 onChange={(e) => setNewGeocache(e.target.value)}
@@ -60,7 +60,7 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
                 onClick={add}
                 disabled={addIsDisabled()}
               >
-                Add
+                +
               </button>
             </div>
             <ul>

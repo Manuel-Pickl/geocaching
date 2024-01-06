@@ -2,5 +2,13 @@
     ul {
         background-color: white;
         list-style-type: none;
+
+        button {
+            float: right;
+        }
+    }
+
+    input {
+        width: 130px;
     }
 }

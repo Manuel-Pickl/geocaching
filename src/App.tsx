@@ -27,7 +27,7 @@ const App = () =>
 
   const [radius, setRadius] = useState<number>(50);
   const [voiceIsOn, setVoiceIsOn] = useState<boolean>(true);
-  const [debug, setDebug] = useState<boolean>(false);
+  const [debug, setDebug] = useState<boolean>(true);
   const [geocaches, setGeocaches] = useState<Geocache[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
