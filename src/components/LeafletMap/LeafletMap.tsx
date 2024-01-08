@@ -155,13 +155,13 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
   /**
    * Generates HTML for a custom map icon.
    * 
+   * @param geocache - The geocache for which to generate the icon HTML.
    * @returns string - HTML string for the icon.
    */
-  function getIconHtml(): string
+  function getIconHtml(geocache: Geocache): string
   {
-    const markerNumber = Math.floor(Math.random() * 5) + 1;
     const iconHtml: string = `
-      <img src='/markers/marker${markerNumber}.png' class='marker-pin' alt='marker pin'/>
+      <img src='/markers/marker${geocache.iconIndex}.png' class='marker-pin' alt='marker pin'/>
     `;
   
     return iconHtml;
@@ -210,7 +210,7 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
         className: 'marker',
         iconSize: [markerWidth, markerHeight],
         iconAnchor: [markerWidth / 2, markerHeight],
-        html: getIconHtml()
+        html: getIconHtml(geocache)
       });
 
       const marker = L.marker(toLatLngExpression([geocache.latitude, geocache.longitude]), { icon: customIcon });
