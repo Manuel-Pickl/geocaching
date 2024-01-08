@@ -20,7 +20,7 @@ import { JsonHelper } from './services/JsonHelper';
  *
  * @component
  */
-const App = () =>
+function App()
 {
   // LGS-Gelände
   const mapCenter: [number, number] = [49.43306480206603, 11.86834899582829];
