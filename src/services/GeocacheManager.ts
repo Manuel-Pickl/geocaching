@@ -1,4 +1,5 @@
 import { Geocache } from '../types/Geocache';
+import { GeocacheStatus } from '../types/GeocacheStatus';
 import { Result } from '../types/Result';
 
 /**
@@ -12,12 +13,14 @@ export class GeocacheManager
      * @param geocacheName - Name of the Geocache.
      * @param geocaches - All Geocaches of the app, found and hidden.
      * @param setGeocaches - Callback function for setting the Geocaches.
+     * @param setCurrentGeocache - Callback function for setting the current Geocache.
      * @returns - Result, holding information about find-operation success and the result message.
      */
     public static findGeocache(
         geocacheName: string,
         geocaches: Geocache[],
-        setGeocaches: (value: Geocache[]) => void
+        setGeocaches: (value: Geocache[]) => void,
+        setCurrentGeocache: (value: Geocache) => void,
     ): Result
     {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
@@ -33,7 +36,10 @@ export class GeocacheManager
 
         geocache.found = true;
         geocache.time = new Date().toISOString();
-        setGeocaches([...geocaches])
+        geocache.geocacheStatus = GeocacheStatus.Found;
+
+        setCurrentGeocache(geocache);
+        setGeocaches([...geocaches]);
         
         return new Result(true, `Herzlichen Glückwunsch! Du hast den Geocache '${geocacheName}' gefunden.`);
     };
@@ -45,6 +51,8 @@ export class GeocacheManager
      * @param geocacheName - Name of the Geocache.
      * @param position - Position of the Geocache.
      * @param setGeocaches - Callback function for setting the Geocaches.
+     * @param setCurrentGeocache - Callback function for setting the current Geocache.
+     * 
      * @returns - Result object, holding information about find-operation success and the result message. 
      */
     public static hideGeocache(
@@ -52,6 +60,7 @@ export class GeocacheManager
         geocacheName: string,
         position: [number, number] | null,
         setGeocaches: (value: Geocache[]) => void,
+        setCurrentGeocache: (value: Geocache) => void,
     ): Result
     {
         if (!position)
@@ -68,7 +77,9 @@ export class GeocacheManager
         const latitude: number = position[0];
         const longitude: number = position[1];
         const newGeocache = new Geocache(geocacheName, latitude, longitude)
+        newGeocache.geocacheStatus = GeocacheStatus.Hidden;
 
+        setCurrentGeocache(newGeocache);
         geocaches.push(newGeocache);
         setGeocaches([...geocaches]);
 

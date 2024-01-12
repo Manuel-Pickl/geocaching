@@ -8,6 +8,7 @@ import { MapType } from '../../types/MapType';
 import { getDistance } from 'geolib';
 import { TimeManager } from '../../services/TimeManager';
 import { SpeechSynthesiser } from '../../services/SpeechSynthesiser';
+import { GeocacheStatus } from '../../types/GeocacheStatus';
 
 /**
  * Props for the LeafletMap component.
@@ -19,6 +20,7 @@ interface LeafletMapProps
   geocaches: Geocache[];
   radius: number;
   voiceIsOn: boolean;
+  currentGeocache: Geocache | undefined;
 }
 
 /**
@@ -27,7 +29,7 @@ interface LeafletMapProps
  * @param props - Props for the LeafletMap component.
  * @component
  */
-function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: LeafletMapProps)
+function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn, currentGeocache }: LeafletMapProps)
 {
   const maxZoom: number = 21;
   const minZoom: number = 3;
@@ -38,6 +40,9 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
   const [nearGeocaches, _setNearGeocaches] = useState<Set<String>>(new Set());;
   const map = useRef<Map | null>(null);
   const userMarker = useRef<L.CircleMarker | null>(null);
+  const markersRef = useRef<Set<L.Marker<any>>>(new Set());
+  const geocachesInitialized = useRef<boolean>(false);
+  const geocachesLoaded = useRef<boolean>(false);
 
   /**
    * Initializes the map.
@@ -57,13 +62,57 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
   }, [userPosition]);
 
   /**
-   * Updates the markers for found geocaches.
+   * Updates the markers on the map.
    */
   useEffect(() =>
   {
-    updateFoundMarkers();
+    if (geocachesInitialized.current
+      && geocachesLoaded.current)
+    {
+      updateMarkerForCurrentGeocache();
+    }
+    else
+    {
+      initializeMarkers();
+    }
   }, [geocaches]);
 
+  /**
+   * Initialized the markers on startup.
+   */
+  function initializeMarkers() {
+    if (geocachesInitialized.current)
+    {
+      geocachesLoaded.current = true;
+    }
+    geocachesInitialized.current = true;
+
+    geocaches
+      .filter(geocache => geocache.found)
+      .forEach(geocache => 
+        markersRef.current.add(addMarker(geocache))
+      )
+  }
+
+  /**
+   * Updates the markers for the current geocache.
+   */
+  function updateMarkerForCurrentGeocache() {
+    switch (currentGeocache?.geocacheStatus)
+    {
+      case GeocacheStatus.Hidden:
+        onGeocacheHidden(currentGeocache);
+        break;
+      
+      case GeocacheStatus.Found:
+        onGeocacheFound(currentGeocache);
+        break;
+      
+      case GeocacheStatus.Removed:
+        onGeocacheRemoved(currentGeocache);
+        break;
+    }
+  }
   /**
    * Checks if there are any geocaches within the specified radius of the user's position.
    */
@@ -155,13 +204,19 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
   /**
    * Generates HTML for a custom map icon.
    * 
-   * @param geocache - The geocache for which to generate the icon HTML.
+   * @param aGeocache - The geocache for which to generate the icon HTML.
+   * @param aGeocacheStatus - The status of the geocache.
    * @returns string - HTML string for the icon.
    */
-  function getIconHtml(geocache: Geocache): string
+  function getIconHtml(aGeocache: Geocache, aGeocacheStatus: GeocacheStatus): string
   {
+    console.log(aGeocacheStatus)
     const iconHtml: string = `
-      <img src='/markers/marker${geocache.iconIndex}.png' class='marker-pin' alt='marker pin'/>
+      <img 
+        class='marker-pin ${aGeocacheStatus}' 
+        src='/markers/marker${aGeocache.iconIndex}.png'
+        alt='marker pin'
+      />
     `;
   
     return iconHtml;
@@ -187,42 +242,85 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: Le
 
   /**
    * Updates markers on the map for found geocaches.
-   */
-  function updateFoundMarkers(): void
+   * 
+   * @param aGeocache - The found geocache.
+  */
+  function onGeocacheFound(aGeocache: Geocache | undefined): void
   {
-    if (!geocaches || !map.current)
+    if (!aGeocache)
     {
       return;
     }
-  
-    // Remove existing markers before updating
-    map.current.eachLayer((layer) =>
-    {
-      if (layer instanceof L.Marker)
-      {
-        map.current?.removeLayer(layer);
-      }
-    });
-  
-    geocaches.filter(geocache => geocache.found).forEach(geocache =>
-    {
-      const customIcon = L.divIcon({
-        className: 'marker',
-        iconSize: [markerWidth, markerHeight],
-        iconAnchor: [markerWidth / 2, markerHeight],
-        html: getIconHtml(geocache)
-      });
 
-      const marker = L.marker(toLatLngExpression([geocache.latitude, geocache.longitude]), { icon: customIcon });
-      if (map.current)
-      {
-        marker.addTo(map.current);
-      }
-      
-      marker
-        .bindPopup(getPopupHtml(geocache))
-        .on('click', () => { marker.openPopup(); });
+    markersRef.current.add(addMarker(aGeocache, GeocacheStatus.Found));
+  }
+
+  /**
+   * Updates markers on the map for hidden geocaches.
+   * 
+   * @param aGeocache - The hidden geocache.
+  */
+  function onGeocacheHidden(aGeocache: Geocache | undefined)
+  {
+    if (!aGeocache)
+    {
+      return;
+    }
+
+    const marker = addMarker(aGeocache, GeocacheStatus.Hidden);
+    setTimeout(() => {
+      marker.remove();
+
+    }, 3000)
+  }
+
+  /**
+   * Updates markers on the map for removed geocaches.
+   * 
+   * @param aGeocache - The removed geocache.
+  */
+  function onGeocacheRemoved(aGeocache: Geocache | undefined)
+  {
+    const correspondingMarker = Array.from(markersRef.current)
+      // @ts-ignore
+      .find(marker => marker.name == aGeocache.name);
+    if (!correspondingMarker)
+    {
+      return;
+    }
+
+    markersRef.current.delete(correspondingMarker);
+    correspondingMarker?.remove();
+  }
+  
+  /**
+   * Add a marker on the map for the given geocache.
+   * 
+   * @param aGeocache - The geocache for which to add a marker.
+   * @param aGeocacheStatus - The status of the geocache.
+  */
+  function addMarker(aGeocache: Geocache, aGeocacheStatus: GeocacheStatus = GeocacheStatus.None): L.Marker<any>
+  {
+    const customIcon = L.divIcon({
+      className: "marker",
+      iconSize: [markerWidth, markerHeight],
+      iconAnchor: [markerWidth / 2, markerHeight],
+      html: getIconHtml(aGeocache, aGeocacheStatus)
     });
+
+    const marker = L.marker(toLatLngExpression([aGeocache.latitude, aGeocache.longitude]), { icon: customIcon });
+    // @ts-ignore
+    marker.name = aGeocache.name;
+    if (map.current)
+    {
+      marker.addTo(map.current);
+    }
+    
+    marker
+      .bindPopup(getPopupHtml(aGeocache))
+      .on('click', () => { marker.openPopup(); });
+
+    return marker;
   }
 
   /**

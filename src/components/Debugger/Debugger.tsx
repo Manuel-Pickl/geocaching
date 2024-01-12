@@ -16,6 +16,7 @@ interface DebuggerProps
     setUserPosition: (value: [number, number]) => void;
     onGeocacheFound: (geocacheName: string) => void;
     onGeocacheHidden: (geocacheName: string) => void;
+    setCurrentGeocache: (value: Geocache) => void;
 }
 
 /**
@@ -24,7 +25,7 @@ interface DebuggerProps
  * @param props - Props for Debugger component.
  * @component
  */
-function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGeocacheFound, onGeocacheHidden }: DebuggerProps)
+function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGeocacheFound, onGeocacheHidden, setCurrentGeocache }: DebuggerProps)
 {    
     return (
         <Draggable handle=".draggable">
@@ -39,11 +40,13 @@ function Debugger({ geocaches, setGeocaches, userPosition, setUserPosition, onGe
                 <FindGeocacheList
                     geocaches={geocaches} setGeocaches={setGeocaches}
                     onGeocacheFound={onGeocacheFound}
+                    setCurrentGeocache={setCurrentGeocache}
                 />
 
                 <HideGeocacheList
                     geocaches={geocaches} setGeocaches={setGeocaches}
                     onGeocacheHidden={onGeocacheHidden}
+                    setCurrentGeocache={setCurrentGeocache}
                 />
             </div>
         </Draggable>

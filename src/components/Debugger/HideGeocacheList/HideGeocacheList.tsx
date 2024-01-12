@@ -2,6 +2,7 @@ import { useState } from 'react';
 import "./HideGeocacheList.scss"
 import { Geocache } from '../../../types/Geocache';
 import { GeocacheManager } from '../../../services/GeocacheManager';
+import { GeocacheStatus } from '../../../types/GeocacheStatus';
 
 /**
  * Props for HideGeocacheList component.
@@ -11,6 +12,7 @@ interface HideGeocacheListProps
   geocaches: Geocache[];
   setGeocaches: (value: Geocache[]) => void;
   onGeocacheHidden: (geocacheName: string) => void;
+  setCurrentGeocache: (value: Geocache) => void;
 }
 
 /**
@@ -20,7 +22,7 @@ interface HideGeocacheListProps
  * @param props - Props for HideGeocacheList component.
  * @component
  */
-function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeocacheListProps)
+function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden, setCurrentGeocache }: HideGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
   const [newGeocache, setNewGeocache] = useState<string>('');
@@ -47,6 +49,8 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeoc
       return;
     }
 
+    geocache.geocacheStatus = GeocacheStatus.Removed;
+    setCurrentGeocache(geocache);
     setGeocaches(geocaches.filter(x => x !== geocache));
   }
 

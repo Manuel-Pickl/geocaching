@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "./FindGeocacheList.scss"
 import { Geocache } from '../../../types/Geocache';
+import { GeocacheStatus } from '../../../types/GeocacheStatus';
 
 /**
  * Props for FindGeocacheList component.
@@ -10,6 +11,7 @@ interface FindGeocacheListProps
   geocaches: Geocache[];
   setGeocaches: (value: Geocache[]) => void;
   onGeocacheFound: (geocacheName: string) => void;
+  setCurrentGeocache: (value: Geocache) => void;
 }
 
 /**
@@ -19,7 +21,7 @@ interface FindGeocacheListProps
  * @param props - Props for FindGeocacheList component.
  * @component
  */
-function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound }: FindGeocacheListProps)
+function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound, setCurrentGeocache }: FindGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
 
@@ -44,7 +46,9 @@ function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound }: FindGeoca
       geocache.time = geocache.found 
         ? new Date().toISOString()
         : "";
-  
+      geocache.geocacheStatus = GeocacheStatus.Removed;
+
+      setCurrentGeocache(geocache);
       setGeocaches([...geocaches]);
     }
     else

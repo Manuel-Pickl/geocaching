@@ -1,3 +1,5 @@
+import { GeocacheStatus } from "./GeocacheStatus";
+
 /**
  * Represents a Geocache.
  * It holds information about its name, coordinates, and the time it was found.
@@ -10,6 +12,7 @@ export class Geocache
     found: boolean;
     time: string;
     iconIndex: number;
+    geocacheStatus: GeocacheStatus;
   
     /**
      * Constructs a Geocache.
@@ -21,7 +24,8 @@ export class Geocache
         longitude: number,
         found: boolean = false,
         time: string = "",
-        iconIndex: number = Math.floor(Math.random() * 9)
+        iconIndex: number = Math.floor(Math.random() * 9),
+        geocacheStatus: GeocacheStatus = GeocacheStatus.Hidden,
     ) {
         this.name = name;
         this.latitude = latitude;
@@ -29,5 +33,6 @@ export class Geocache
         this.found = found;
         this.time = time;
         this.iconIndex = iconIndex;
+        this.geocacheStatus = geocacheStatus;
     }
 }

@@ -31,6 +31,7 @@ function App()
   const [geocaches, setGeocaches] = useState<Geocache[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
+  const [currentGeocache, setCurrentGeocache] = useState<Geocache | undefined>()
 
   useEffect(() =>
   {
@@ -62,7 +63,7 @@ function App()
    */
   function onGeocacheFound(geocacheName: string): void
   {
-      const findGeocacheResult: Result = GeocacheManager.findGeocache(geocacheName, geocaches, setGeocaches);
+      const findGeocacheResult: Result = GeocacheManager.findGeocache(geocacheName, geocaches, setGeocaches, setCurrentGeocache);
       toast(findGeocacheResult.message);
       setActiveTab(Tab.Explore);
   }
@@ -74,7 +75,7 @@ function App()
    */
   function onGeocacheHidden(geocacheName: string): void
   {
-      const hideGeocacheResult: Result = GeocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches);
+      const hideGeocacheResult: Result = GeocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches, setCurrentGeocache);
       toast(hideGeocacheResult.message);
       setActiveTab(Tab.Explore);
   }
@@ -87,6 +88,7 @@ function App()
           userPosition={userPosition} setUserPosition={setUserPosition}
           onGeocacheFound={onGeocacheFound}
           onGeocacheHidden={onGeocacheHidden}
+          setCurrentGeocache={setCurrentGeocache}
         />
       }
 
@@ -96,6 +98,7 @@ function App()
           geocaches={geocaches}
           radius={radius}
           voiceIsOn={voiceIsOn}
+          currentGeocache={currentGeocache}
       />
       
       <Footer

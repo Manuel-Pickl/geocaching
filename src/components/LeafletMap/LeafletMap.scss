@@ -9,16 +9,6 @@
     position: absolute;
     height: 100%;
 }
-  
-.marker-image {
-    position: absolute;
-    top: 6%;
-    left: 50%;
-    translate: -50%;
-    height: 48%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-}
 
 .popup {
     display: flex;
@@ -27,7 +17,42 @@
     font-size: 16px;
 }
 
-.popup-image {
-    aspect-ratio: 1;
-    height: 100px;
+.found {
+    animation: appear 1s;
+    animation-fill-mode: forwards;
+    transform-origin: bottom;
 }
+
+.hidden {
+    animation: appear 1s, disappear 3s;
+    animation-fill-mode: forwards;
+    transform-origin: bottom;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    15% {
+        bottom: 8px;
+    }
+    25% {
+        opacity: 1;
+    }
+    50% {
+        bottom: 16px;
+    }
+    100% {
+        bottom: 0;
+    }
+}
+
+@keyframes disappear {
+    50% {
+        scale: 1;
+    }
+    100% {
+        scale: 0;
+    }
+}
+  
