@@ -210,7 +210,6 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn, curr
    */
   function getIconHtml(aGeocache: Geocache, aGeocacheStatus: GeocacheStatus): string
   {
-    console.log(aGeocacheStatus)
     const iconHtml: string = `
       <img 
         class='marker-pin ${aGeocacheStatus}' 
