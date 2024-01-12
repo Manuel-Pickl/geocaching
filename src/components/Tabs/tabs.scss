@@ -7,13 +7,13 @@
     color: var(--color-font);
     background-color: var(--background-color);
     padding: 1rem;
-    animation: appear 450ms;
+    animation: moveUp 450ms;
 
     h2 {
         text-align: center;
     }
 
-    @keyframes appear {
+    @keyframes moveUp {
         0% {
             bottom: -100%;
         }
