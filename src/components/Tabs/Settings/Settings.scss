@@ -24,26 +24,21 @@
         }
     }
 
+    button {
+        font-size: 1rem;
+        border: none;
+        border-radius: 1rem;
+        background-color: hsl(0, 0%, 30%);
+        color: hsl(0, 0%, 90%);
+        padding: 0.5rem;
+    }
+
     .setting {
         display: flex;
         gap: 8px;
 
         .name {
             flex: 1;
-        }
-
-        button {
-            font-size: 1rem;
-            color: white;
-            background-color: red;
-            padding-block: 8px;
-            padding-inline: 16px;
-            border-radius: 16px;
-            border: none;
-        }
-
-        .allowed {
-            color: greenyellow;
         }
     }
 }
