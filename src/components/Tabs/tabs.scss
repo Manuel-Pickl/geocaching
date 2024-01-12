@@ -7,8 +7,15 @@
     color: var(--color-font);
     background-color: var(--background-color);
     padding: 1rem;
+    animation: appear 450ms;
 
     h2 {
         text-align: center;
+    }
+
+    @keyframes appear {
+        0% {
+            bottom: -100%;
+        }
     }
 }
