@@ -3,7 +3,7 @@ import './Settings.scss';
 import "../tabs.scss";
 import { Geocache } from '../../../types/Geocache';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { GeocacheManager } from '../../../services/GeocacheManager';
 import { TimeManager } from '../../../services/TimeManager';
 
@@ -70,10 +70,17 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
                 ))}
             </ul>
 
-            <button onClick={exportGeocaches}>
-                <span>Geocaches as .gpx </span>
-                <FontAwesomeIcon icon={faDownload} />
-            </button>
+            <div className="buttons">
+                <button className="import">
+                    <span>Importieren </span>
+                    <FontAwesomeIcon icon={faUpload} />
+                </button>
+                    
+                <button onClick={exportGeocaches}>
+                    <span>Exportieren </span>
+                    <FontAwesomeIcon icon={faDownload} />
+                </button>
+            </div>
 
             <hr/>
             <h3>Optionen</h3>
@@ -90,11 +97,11 @@ function Settings({ isOpen, geocaches, radius, setRadius, voiceIsOn, setVoiceIsO
                     onChange={(event) => setRadius(parseFloat(event.target.value))}
                 />
 
-                <span>{radius}</span>
+                <span>{radius}m</span>
             </div>
 
             <div className="setting">
-                <span className="name">Voice:</span>
+                <span className="name">Stimme:</span>
 
                 <Switch
                     id='voiceIsOn'

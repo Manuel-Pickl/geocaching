@@ -9,7 +9,8 @@ import {
     faGear,
     faBookOpen,
     faCamera,
-    faDownload
+    faDownload,
+    faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -19,5 +20,6 @@ library.add(
     faGear,
     faBookOpen,
     faCamera,
-    faDownload
+    faDownload,
+    faUpload,
 );
