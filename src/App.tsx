@@ -14,6 +14,7 @@ import { Result } from './types/Result';
 import { PermissionManager } from './services/PermissionManager';
 import Credits from './components/Tabs/Credits/Credits';
 import { JsonHelper } from './services/JsonHelper';
+import { GeocacheStatus } from './types/GeocacheStatus';
 
 /**
  * The main App component.
@@ -31,7 +32,6 @@ function App()
   const [geocaches, setGeocaches] = useState<Geocache[]>([]);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Explore);
-  const [currentGeocache, setCurrentGeocache] = useState<Geocache | undefined>()
 
   useEffect(() =>
   {
@@ -50,10 +50,19 @@ function App()
    */
   function loadPersistentSettings(): void
   {
-    setGeocaches(JsonHelper.deserialize("geocaches") ?? geocaches);
     setRadius(JsonHelper.deserialize("radius") ?? radius);
     setVoiceIsOn(JsonHelper.deserialize("voiceIsOn") ?? voiceIsOn);
     setDebug(JsonHelper.deserialize("debug") ?? debug);
+    
+    const persistentGeocaches: Geocache[] = JsonHelper.deserialize("geocaches") ?? geocaches;
+    persistentGeocaches.forEach(geocache =>
+    {
+      if (geocache.found)
+      {
+        geocache.geocacheStatus = GeocacheStatus.Instant;  
+      }
+    });
+    setGeocaches(persistentGeocaches);
   }
 
   /**
@@ -63,7 +72,7 @@ function App()
    */
   function onGeocacheFound(geocacheName: string): void
   {
-      const findGeocacheResult: Result = GeocacheManager.findGeocache(geocacheName, geocaches, setGeocaches, setCurrentGeocache);
+      const findGeocacheResult: Result = GeocacheManager.findGeocache(geocacheName, geocaches, setGeocaches);
       toast(findGeocacheResult.message);
       setActiveTab(Tab.Explore);
   }
@@ -75,7 +84,7 @@ function App()
    */
   function onGeocacheHidden(geocacheName: string): void
   {
-      const hideGeocacheResult: Result = GeocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches, setCurrentGeocache);
+      const hideGeocacheResult: Result = GeocacheManager.hideGeocache(geocaches, geocacheName, userPosition, setGeocaches);
       toast(hideGeocacheResult.message);
       setActiveTab(Tab.Explore);
   }
@@ -88,7 +97,6 @@ function App()
           userPosition={userPosition} setUserPosition={setUserPosition}
           onGeocacheFound={onGeocacheFound}
           onGeocacheHidden={onGeocacheHidden}
-          setCurrentGeocache={setCurrentGeocache}
         />
       }
 
@@ -98,7 +106,6 @@ function App()
           geocaches={geocaches}
           radius={radius}
           voiceIsOn={voiceIsOn}
-          currentGeocache={currentGeocache}
       />
       
       <Footer
@@ -117,7 +124,7 @@ function App()
       
       <Settings 
         isOpen={activeTab == Tab.Settings}
-        geocaches={geocaches}
+        geocaches={geocaches} setGeocaches={setGeocaches}
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}
         debug={debug} setDebug={setDebug}

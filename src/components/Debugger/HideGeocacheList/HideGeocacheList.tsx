@@ -12,7 +12,6 @@ interface HideGeocacheListProps
   geocaches: Geocache[];
   setGeocaches: (value: Geocache[]) => void;
   onGeocacheHidden: (geocacheName: string) => void;
-  setCurrentGeocache: (value: Geocache) => void;
 }
 
 /**
@@ -22,7 +21,7 @@ interface HideGeocacheListProps
  * @param props - Props for HideGeocacheList component.
  * @component
  */
-function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden, setCurrentGeocache }: HideGeocacheListProps)
+function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden }: HideGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
   const [newGeocache, setNewGeocache] = useState<string>('');
@@ -50,8 +49,12 @@ function HideGeocacheList({geocaches, setGeocaches, onGeocacheHidden, setCurrent
     }
 
     geocache.geocacheStatus = GeocacheStatus.Removed;
-    setCurrentGeocache(geocache);
-    setGeocaches(geocaches.filter(x => x !== geocache));
+    setGeocaches([...geocaches]);
+
+    // we have to wait, so the first setGeocaches gets executed
+    setTimeout(() => 
+      setGeocaches(geocaches.filter(x => x !== geocache))
+    , 100)
   }
 
   /**

@@ -13,14 +13,12 @@ export class GeocacheManager
      * @param geocacheName - Name of the Geocache.
      * @param geocaches - All Geocaches of the app, found and hidden.
      * @param setGeocaches - Callback function for setting the Geocaches.
-     * @param setCurrentGeocache - Callback function for setting the current Geocache.
      * @returns - Result, holding information about find-operation success and the result message.
      */
     public static findGeocache(
         geocacheName: string,
         geocaches: Geocache[],
         setGeocaches: (value: Geocache[]) => void,
-        setCurrentGeocache: (value: Geocache) => void,
     ): Result
     {
         const geocache: Geocache | undefined = geocaches.find(geocache => geocache.name == geocacheName);
@@ -38,7 +36,6 @@ export class GeocacheManager
         geocache.time = new Date().toISOString();
         geocache.geocacheStatus = GeocacheStatus.Found;
 
-        setCurrentGeocache(geocache);
         setGeocaches([...geocaches]);
         
         return new Result(true, `Herzlichen Glückwunsch! Du hast den Geocache '${geocacheName}' gefunden.`);
@@ -51,7 +48,6 @@ export class GeocacheManager
      * @param geocacheName - Name of the Geocache.
      * @param position - Position of the Geocache.
      * @param setGeocaches - Callback function for setting the Geocaches.
-     * @param setCurrentGeocache - Callback function for setting the current Geocache.
      * 
      * @returns - Result object, holding information about find-operation success and the result message. 
      */
@@ -60,7 +56,6 @@ export class GeocacheManager
         geocacheName: string,
         position: [number, number] | null,
         setGeocaches: (value: Geocache[]) => void,
-        setCurrentGeocache: (value: Geocache) => void,
     ): Result
     {
         if (!position)
@@ -79,11 +74,57 @@ export class GeocacheManager
         const newGeocache = new Geocache(geocacheName, latitude, longitude)
         newGeocache.geocacheStatus = GeocacheStatus.Hidden;
 
-        setCurrentGeocache(newGeocache);
         geocaches.push(newGeocache);
         setGeocaches([...geocaches]);
 
         return new Result(true, `Super! Du hast den Geocache '${geocacheName}' versteckt.`);
+    }
+
+    /**
+     * Generates GPX data based on the given Geocaches.
+     * 
+     * @param gpxContent - The content of the GPX file as string.
+     * @param geocaches - All Geocaches of the app, found and hidden.
+     * @returns - Result, holding information about import success and the result message.
+     */
+    public static async importGpx(
+        gpxContent: string,
+        setGeocaches: (value: Geocache[]) => void,
+    ): Promise<Result> {
+        return new Promise((resolve) => {
+            try
+            {
+                const domParser: DOMParser = new DOMParser();
+                const xml: Document = domParser.parseFromString(gpxContent, "text/xml");
+                const wptNodes: HTMLCollectionOf<Element> = xml.getElementsByTagName("wpt");
+                
+                const geocaches: Geocache[] = [];
+
+                for (let i = 0; i < wptNodes.length; i++) {
+                    const wptNode: Element = wptNodes[i];
+                    const latitude: number = parseFloat(wptNode.getAttribute("lat") ?? "");
+                    const longitude: number = parseFloat(wptNode.getAttribute("lon") ?? "");
+                    const name: string = wptNode.getElementsByTagName("name")[0]?.textContent ?? "";
+                    const found: boolean = !!wptNode.getElementsByTagName("desc")[0]?.textContent;
+                    const time = wptNode.getElementsByTagName("time")[0]?.textContent ?? "";
+                    
+                    const geocacheStatus: GeocacheStatus = found
+                        ? GeocacheStatus.Found
+                        : GeocacheStatus.Hidden;
+
+                        const geocache: Geocache = new Geocache(name, latitude, longitude, found, time, geocacheStatus);
+
+                    geocaches.push(geocache);
+                }
+
+                setGeocaches(geocaches);
+                resolve(new Result(true, "Die GPX Datei wurde erfolgreich importiert."));
+            }
+            catch (error)
+            {
+                resolve(new Result(false, "Die GPX Datei konnte nicht importiert werden!"));
+            }
+        });
     }
 
     /**
@@ -97,7 +138,7 @@ export class GeocacheManager
         const gpxHeader = 
 `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <gpx version="1.1" creator="Manuel Pickl">`;
-    
+
         const gpxWaypoints = geocaches.map(cache =>
         {
             const gpxTime = cache.time != ""

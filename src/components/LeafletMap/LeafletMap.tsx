@@ -20,7 +20,6 @@ interface LeafletMapProps
   geocaches: Geocache[];
   radius: number;
   voiceIsOn: boolean;
-  currentGeocache: Geocache | undefined;
 }
 
 /**
@@ -29,7 +28,7 @@ interface LeafletMapProps
  * @param props - Props for the LeafletMap component.
  * @component
  */
-function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn, currentGeocache }: LeafletMapProps)
+function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn }: LeafletMapProps)
 {
   const maxZoom: number = 21;
   const minZoom: number = 3;
@@ -41,8 +40,6 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn, curr
   const map = useRef<Map | null>(null);
   const userMarker = useRef<L.CircleMarker | null>(null);
   const markersRef = useRef<Set<L.Marker<any>>>(new Set());
-  const geocachesInitialized = useRef<boolean>(false);
-  const geocachesLoaded = useRef<boolean>(false);
 
   /**
    * Initializes the map.
@@ -66,53 +63,38 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn, curr
    */
   useEffect(() =>
   {
-    if (geocachesInitialized.current
-      && geocachesLoaded.current)
-    {
-      updateMarkerForCurrentGeocache();
-    }
-    else
-    {
-      initializeMarkers();
-    }
+    geocaches.forEach(updateMarkerForGeocache)
   }, [geocaches]);
-
-  /**
-   * Initialized the markers on startup.
-   */
-  function initializeMarkers() {
-    if (geocachesInitialized.current)
-    {
-      geocachesLoaded.current = true;
-    }
-    geocachesInitialized.current = true;
-
-    geocaches
-      .filter(geocache => geocache.found)
-      .forEach(geocache => 
-        markersRef.current.add(addMarker(geocache))
-      )
-  }
 
   /**
    * Updates the markers for the current geocache.
    */
-  function updateMarkerForCurrentGeocache() {
-    switch (currentGeocache?.geocacheStatus)
+  function updateMarkerForGeocache(geocache: Geocache)
+  {
+    if (!geocache)
+    {
+      return;
+    }
+
+    switch (geocache.geocacheStatus)
     {
       case GeocacheStatus.Hidden:
-        onGeocacheHidden(currentGeocache);
+        onGeocacheHidden(geocache);
         break;
       
       case GeocacheStatus.Found:
-        onGeocacheFound(currentGeocache);
+      case GeocacheStatus.Instant:
+        markersRef.current.add(addMarker(geocache, geocache.geocacheStatus));
         break;
       
       case GeocacheStatus.Removed:
-        onGeocacheRemoved(currentGeocache);
+        onGeocacheRemoved(geocache);
         break;
     }
+
+    geocache.geocacheStatus = GeocacheStatus.None;
   }
+
   /**
    * Checks if there are any geocaches within the specified radius of the user's position.
    */
@@ -240,21 +222,6 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn, curr
   }
 
   /**
-   * Updates markers on the map for found geocaches.
-   * 
-   * @param aGeocache - The found geocache.
-  */
-  function onGeocacheFound(aGeocache: Geocache | undefined): void
-  {
-    if (!aGeocache)
-    {
-      return;
-    }
-
-    markersRef.current.add(addMarker(aGeocache, GeocacheStatus.Found));
-  }
-
-  /**
    * Updates markers on the map for hidden geocaches.
    * 
    * @param aGeocache - The hidden geocache.
@@ -288,6 +255,7 @@ function LeafletMap({ position, userPosition, geocaches, radius, voiceIsOn, curr
       return;
     }
 
+    
     markersRef.current.delete(correspondingMarker);
     correspondingMarker?.remove();
   }

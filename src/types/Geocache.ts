@@ -11,8 +11,8 @@ export class Geocache
     longitude: number;
     found: boolean;
     time: string;
-    iconIndex: number;
     geocacheStatus: GeocacheStatus;
+    iconIndex: number;
   
     /**
      * Constructs a Geocache.
@@ -24,15 +24,15 @@ export class Geocache
         longitude: number,
         found: boolean = false,
         time: string = "",
+        geocacheStatus: GeocacheStatus = GeocacheStatus.None,
         iconIndex: number = Math.floor(Math.random() * 9),
-        geocacheStatus: GeocacheStatus = GeocacheStatus.Hidden,
     ) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.found = found;
         this.time = time;
-        this.iconIndex = iconIndex;
         this.geocacheStatus = geocacheStatus;
+        this.iconIndex = iconIndex;
     }
 }

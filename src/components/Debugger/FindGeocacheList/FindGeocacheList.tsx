@@ -11,7 +11,6 @@ interface FindGeocacheListProps
   geocaches: Geocache[];
   setGeocaches: (value: Geocache[]) => void;
   onGeocacheFound: (geocacheName: string) => void;
-  setCurrentGeocache: (value: Geocache) => void;
 }
 
 /**
@@ -21,7 +20,7 @@ interface FindGeocacheListProps
  * @param props - Props for FindGeocacheList component.
  * @component
  */
-function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound, setCurrentGeocache }: FindGeocacheListProps)
+function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound }: FindGeocacheListProps)
 {
   const [listVisible, setListVisible] = useState<boolean>(true);
 
@@ -48,7 +47,6 @@ function FindGeocacheList({geocaches, setGeocaches, onGeocacheFound, setCurrentG
         : "";
       geocache.geocacheStatus = GeocacheStatus.Removed;
 
-      setCurrentGeocache(geocache);
       setGeocaches([...geocaches]);
     }
     else
