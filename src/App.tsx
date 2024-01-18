@@ -36,7 +36,7 @@ function App()
   useEffect(() =>
   {
     loadPersistentSettings();
-    PermissionManager.requestPermissionGPS(setUserPosition, debug);
+    PermissionManager.requestPermissionGPS(updateUserPosition);
   }, []);
 
   // save settings on change
@@ -44,6 +44,27 @@ function App()
   useEffect(() => { JsonHelper.serialize("radius", radius); }, [radius]);
   useEffect(() => { JsonHelper.serialize("voiceIsOn", voiceIsOn); }, [voiceIsOn]);
   useEffect(() => { JsonHelper.serialize("debug", debug); }, [debug]);
+
+  /**
+   * Update the user position depending on the debug state
+   * 
+   * @param position - Position of the user retrieved from the geo watcher
+   */
+  function updateUserPosition(position: [number, number])
+  {
+    //#region variable wrapper
+    // we need to do this, so we have the current state in the callback function
+    setDebug(currentDebug => {
+    //#endregion
+    console.log({currentDebug})
+    if (!currentDebug)
+    {
+      setUserPosition(position);
+    } 
+    //#region variable wrapper
+    return currentDebug});
+    //#endregion
+  }
 
   /**
    * Loads the persistent settings from LocalStorage.

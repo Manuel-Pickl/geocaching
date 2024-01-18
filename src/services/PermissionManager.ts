@@ -6,13 +6,11 @@ export class PermissionManager
     /**
      * Requests 'GPS' permission and initializes a location watcher.
      *
-     * @param {function} setUserPosition - Callback function to set the user's position.
-     * @param {boolean} debug - Indicates whether debugging is enabled.
+     * @param {function} updateUserPosition - Callback function to update the user's position.
      * @returns {void}
      */
     public static requestPermissionGPS(
-        setUserPosition: (value: [number, number]) => void,
-        debug: boolean
+        updateUserPosition: (value: [number, number]) => void,
     ): void
     {
         if (!('geolocation' in navigator))
@@ -23,7 +21,7 @@ export class PermissionManager
         navigator.geolocation.getCurrentPosition(
             () => { 
             console.log("'GPS' permission granted")
-            this.initializeLocationWatcher(setUserPosition, debug);
+            this.initializeLocationWatcher(updateUserPosition);
             },
             () => { console.log("'GPS' permission denied") },
         );
@@ -32,23 +30,16 @@ export class PermissionManager
     /**
      * Initializes a location watcher using the Geolocation API.
      *
-     * @param {function} setUserPosition - Callback function to set the user's position.
-     * @param {boolean} debug - Indicates whether debugging is enabled.
+     * @param {function} updateUserPosition - Callback function to update the user's position.
      * @returns {void}
      */
     private static initializeLocationWatcher(
-        setUserPosition: (value: [number, number]) => void,
-        debug: boolean
+        updateUserPosition: (value: [number, number]) => void,
     ): void
     {
         navigator.geolocation.watchPosition((position: GeolocationPosition) =>
         {
-            if (debug)
-            {
-                return;
-            }
-            
-            setUserPosition([position.coords.latitude, position.coords.longitude])
+            updateUserPosition([position.coords.latitude, position.coords.longitude])
         });
     };
 }
