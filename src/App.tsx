@@ -128,6 +128,7 @@ function App()
         radius={radius} setRadius={setRadius}
         voiceIsOn={voiceIsOn} setVoiceIsOn={setVoiceIsOn}
         debug={debug} setDebug={setDebug}
+        setActiveTab={setActiveTab}
       />
 
       <Credits

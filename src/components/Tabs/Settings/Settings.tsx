@@ -9,6 +9,7 @@ import { TimeManager } from '../../../services/TimeManager';
 import { useRef } from 'react';
 import { Result } from '../../../types/Result';
 import { toast } from 'react-toastify';
+import { Tab } from '../../../types/Tab';
 
 /**
  * Props for the Settings component.
@@ -21,6 +22,7 @@ interface SettingsProps
     radius: number; setRadius: (value: number) => void;
     voiceIsOn: boolean; setVoiceIsOn: (value: boolean) => void;
     debug: boolean; setDebug: (value: boolean) => void;
+    setActiveTab: (value: Tab) => void;
 }
 
 /**
@@ -30,7 +32,7 @@ interface SettingsProps
  * @param props - Props for the Settings component.
  * @component
  */
-function Settings({ isOpen, geocaches, setGeocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug }: SettingsProps)
+function Settings({ isOpen, geocaches, setGeocaches, radius, setRadius, voiceIsOn, setVoiceIsOn, debug, setDebug, setActiveTab }: SettingsProps)
 {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -53,6 +55,11 @@ function Settings({ isOpen, geocaches, setGeocaches, radius, setRadius, voiceIsO
             const gpxContent: string = e.target?.result as string;
             const importGpxResult: Result = await GeocacheManager.importGpx(gpxContent, setGeocaches);
             toast(importGpxResult.message);
+
+            if (importGpxResult.success)
+            {
+                setActiveTab(Tab.Explore);
+            }
         };
         fileReader.readAsText(gpxFile);
     };
