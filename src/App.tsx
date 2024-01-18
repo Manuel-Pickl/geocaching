@@ -56,7 +56,6 @@ function App()
     // we need to do this, so we have the current state in the callback function
     setDebug(currentDebug => {
     //#endregion
-    console.log({currentDebug})
     if (!currentDebug)
     {
       setUserPosition(position);
